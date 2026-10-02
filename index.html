@@ -1,4 +1,433 @@
-<script>
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>netjes TATTOO | Daria Wąs - Studio Tatuażu & Rezerwacja Online</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            light: '#E6C894',
+                            DEFAULT: '#C5A059',
+                            dark: '#9A7B3E',
+                            glow: 'rgba(197, 160, 89, 0.25)'
+                        },
+                        dark: {
+                            base: '#0B0B0B',
+                            card: '#141414',
+                            surface: '#1A1A1A',
+                            border: '#262626',
+                            hover: '#222222'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0B0B0B;
+            color: #E5E5E5;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+        .font-serif-title { font-family: 'Cormorant Garamond', serif; }
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #F3E5AB 0%, #C5A059 50%, #9A7B3E 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-gradient-bg {
+            background: linear-gradient(135deg, #C5A059 0%, #9A7B3E 100%);
+        }
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .calendar-day-btn.selected-day {
+            background-color: #C5A059 !important;
+            color: #000000 !important;
+            font-weight: 700;
+        }
+        .time-slot-btn.selected-slot {
+            background-color: #C5A059 !important;
+            color: #000000 !important;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-dark-base text-gray-300 min-h-screen flex flex-col justify-between">
+
+    <!-- NAV BAR -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-dark-base/90 backdrop-blur-md border-b border-dark-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="#" onclick="window.location.hash=''" class="flex items-center">
+                    <img src="netjes-logo.png" alt="netjes TATTOO Logo" class="h-10 sm:h-12 w-auto object-contain">
+                </a>
+                <div class="hidden md:flex items-center space-x-8 text-xs uppercase tracking-widest">
+                    <a href="#about" class="hover:text-gold transition">O mnie</a>
+                    <a href="#portfolio" class="hover:text-gold transition">Portfolio</a>
+                    <a href="#rezerwacja" class="text-gold font-medium hover:underline">Rezerwacja Online</a>
+                    <a href="#contact" class="hover:text-gold transition">Kontakt</a>
+                </div>
+                <a href="#rezerwacja" class="gold-gradient-bg text-black font-semibold px-5 py-2.5 rounded-full text-xs uppercase tracking-widest hover:opacity-90 transition">
+                    Zarezerwuj Wizytę
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN PAGE CONTENT CONTAINER -->
+    <div id="client-view-container">
+        
+        <!-- HERO SECTION -->
+        <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+            <div class="absolute inset-0 z-0 bg-[url('https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center opacity-20"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-dark-base/60 via-dark-base/80 to-dark-base z-0"></div>
+            
+            <div class="relative z-10 max-w-4xl mx-auto text-center px-4 py-20">
+                <span class="text-xs uppercase tracking-[0.3em] text-gold font-semibold block mb-3">Studio Tatuażu • Daria Wąs</span>
+                <h1 class="font-serif-title text-5xl sm:text-7xl font-normal text-white mb-6 leading-tight">
+                    Precyzja, Delikatność i <span class="gold-gradient-text italic">Sztuka</span> na Twojej Skórze
+                </h1>
+                <p class="text-sm sm:text-base text-gray-400 max-w-2xl mx-auto font-light mb-10 leading-relaxed">
+                    Specjalizuję się w autorskich tatuażach typu Fineline, mikrorealizmie oraz delikatnych kompozycjach roślinnych i geometrycznych.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <a href="#rezerwacja" class="w-full sm:w-auto gold-gradient-bg text-black font-semibold px-8 py-4 rounded-full text-xs uppercase tracking-widest hover:shadow-lg hover:shadow-gold/20 transition">
+                        Zarezerwuj Termin
+                    </a>
+                    <a href="#portfolio" class="w-full sm:w-auto border border-dark-border hover:border-gold text-white font-medium px-8 py-4 rounded-full text-xs uppercase tracking-widest transition">
+                        Zobacz Portfolio
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about" class="py-24 border-t border-dark-border bg-dark-surface/30">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="relative">
+                        <div class="aspect-[4/5] rounded-2xl overflow-hidden border border-dark-border">
+                            <img src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=1000&auto=format&fit=crop" alt="Daria Wąs" class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute -bottom-6 -right-6 glass-panel p-6 rounded-2xl border border-gold/30 hidden sm:block">
+                            <span class="font-serif-title text-3xl text-gold block font-bold">100%</span>
+                            <span class="text-[10px] text-gray-400 uppercase tracking-wider">Sterylność & Pasja</span>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <span class="text-xs uppercase tracking-widest text-gold font-semibold block">O Mnie</span>
+                        <h2 class="font-serif-title text-4xl text-white">Daria Wąs — netjes TATTOO</h2>
+                        <p class="text-sm text-gray-400 font-light leading-relaxed">
+                            Cześć! Nazywam się Daria i tworzę tatuaże, które stają się subtelną ozdobą Twojego ciała. W mojej pracy najważniejsza jest precyzja cienkiej linii (fineline) oraz komfort i bezpieczeństwo podczas każdej sesji.
+                        </p>
+                        <p class="text-sm text-gray-400 font-light leading-relaxed">
+                            Dbam o kameralną i przyjazną atmosferę w studiu, tak aby każda wizyta była dla Ciebie przyjemnym doświadczeniem.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 pt-4 border-t border-dark-border">
+                            <div>
+                                <h4 class="text-xs font-semibold text-white uppercase tracking-wider">Cienka Linia</h4>
+                                <p class="text-xs text-gray-500 mt-1">Precyzyjne, subtelne detale</p>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-semibold text-white uppercase tracking-wider">Indywidualność</h4>
+                                <p class="text-xs text-gray-500 mt-1">Projekt dopasowany do Ciebie</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PORTFOLIO SECTION -->
+        <section id="portfolio" class="py-24 border-t border-dark-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <span class="text-xs uppercase tracking-widest text-gold font-semibold block">Moje Prace</span>
+                    <h2 class="font-serif-title text-4xl text-white mt-1">Galeria Portfolio</h2>
+                    <div class="w-12 h-[1px] bg-gold mx-auto mt-3"></div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="aspect-square rounded-2xl overflow-hidden border border-dark-border group relative cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center p-4">
+                            <span class="text-xs uppercase tracking-widest text-gold font-semibold">Fineline Flora</span>
+                        </div>
+                    </div>
+                    <div class="aspect-square rounded-2xl overflow-hidden border border-dark-border group relative cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center p-4">
+                            <span class="text-xs uppercase tracking-widest text-gold font-semibold">Mikrorealizm</span>
+                        </div>
+                    </div>
+                    <div class="aspect-square rounded-2xl overflow-hidden border border-dark-border group relative cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1565058130704-775836e9113f?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center p-4">
+                            <span class="text-xs uppercase tracking-widest text-gold font-semibold">Subtelny Napis</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BOOKING SYSTEM SECTION -->
+        <section id="rezerwacja" class="py-24 border-t border-dark-border bg-dark-surface/20">
+            <div class="max-w-5xl mx-auto px-4">
+                <div class="text-center mb-10">
+                    <span class="text-xs uppercase tracking-widest text-gold font-semibold">System Rezerwacji</span>
+                    <h2 class="font-serif-title text-4xl sm:text-5xl text-white mt-1">Zarezerwuj Termin Online</h2>
+                    <div class="w-12 h-[1px] bg-gold mx-auto mt-3"></div>
+                </div>
+
+                <div class="bg-dark-card border border-dark-border rounded-2xl shadow-2xl overflow-hidden glass-panel">
+                    
+                    <!-- Progress Bar Header -->
+                    <div class="border-b border-dark-border bg-dark-surface/60 p-4 sm:p-6">
+                        <div class="grid grid-cols-4 gap-2 text-center">
+                            <div id="step-tab-1" class="flex flex-col items-center opacity-100 transition-all">
+                                <div id="step-circle-1" class="w-8 h-8 rounded-full gold-gradient-bg text-black font-bold flex items-center justify-center text-xs mb-1">1</div>
+                                <span id="step-label-1" class="text-[10px] uppercase tracking-wider font-semibold text-gold hidden sm:block">Usługa</span>
+                            </div>
+                            <div id="step-tab-2" class="flex flex-col items-center opacity-40 transition-all">
+                                <div id="step-circle-2" class="w-8 h-8 rounded-full bg-dark-base border border-dark-border text-white font-bold flex items-center justify-center text-xs mb-1">2</div>
+                                <span id="step-label-2" class="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden sm:block">Termin</span>
+                            </div>
+                            <div id="step-tab-3" class="flex flex-col items-center opacity-40 transition-all">
+                                <div id="step-circle-3" class="w-8 h-8 rounded-full bg-dark-base border border-dark-border text-white font-bold flex items-center justify-center text-xs mb-1">3</div>
+                                <span id="step-label-3" class="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden sm:block">Szczegóły</span>
+                            </div>
+                            <div id="step-tab-4" class="flex flex-col items-center opacity-40 transition-all">
+                                <div id="step-circle-4" class="w-8 h-8 rounded-full bg-dark-base border border-dark-border text-white font-bold flex items-center justify-center text-xs mb-1">4</div>
+                                <span id="step-label-4" class="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden sm:block">Podsumowanie</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 sm:p-8">
+                        
+                        <!-- KROK 1: Wybór Usługi -->
+                        <div id="step-content-1" class="step-content space-y-6">
+                            <h3 class="font-serif-title text-2xl text-white">1. Wybierz Rodzaj Usługi</h3>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div onclick="selectService('small')" id="service-card-small" class="service-card p-5 rounded-xl border border-gold bg-gold/10 cursor-pointer transition-all flex justify-between items-start">
+                                    <div>
+                                        <span class="text-xs font-bold text-white block">Mały Tatuaż / Fineline</span>
+                                        <p class="text-xs text-gray-400 font-light mt-1">Rozmiar do ~7 cm. Proste symbole, napisy.</p>
+                                        <span class="text-[11px] text-gray-500 mt-2 block">Zaliczka: €30</span>
+                                    </div>
+                                    <span class="font-serif-title text-2xl text-gold font-bold">€80</span>
+                                </div>
+
+                                <div onclick="selectService('medium')" id="service-card-medium" class="service-card p-5 rounded-xl border border-dark-border bg-dark-base cursor-pointer transition-all flex justify-between items-start">
+                                    <div>
+                                        <span class="text-xs font-bold text-white block">Średni Tatuaż / Detal</span>
+                                        <p class="text-xs text-gray-400 font-light mt-1">Rozmiar 8-15 cm. Szczegółowy motyw.</p>
+                                        <span class="text-[11px] text-gray-500 mt-2 block">Zaliczka: €50</span>
+                                    </div>
+                                    <span class="font-serif-title text-2xl text-gold font-bold">€160</span>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end pt-4">
+                                <button onclick="goToStep(2)" class="gold-gradient-bg text-black font-semibold px-6 py-3 rounded-xl text-xs uppercase tracking-widest hover:opacity-90">
+                                    Dalej: Wybór Daty <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- KROK 2: Kalendarz i Godziny -->
+                        <div id="step-content-2" class="step-content space-y-6 hidden">
+                            <h3 class="font-serif-title text-2xl text-white">2. Wybierz Datę i Godzinę</h3>
+
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                                <div class="md:col-span-7 bg-dark-base p-5 rounded-xl border border-dark-border">
+                                    <div class="text-center font-serif-title text-lg text-white font-semibold mb-4">Październik 2026</div>
+                                    <div class="grid grid-cols-7 gap-1 text-center text-[10px] text-gray-500 uppercase font-bold mb-2">
+                                        <span>Pon</span><span>Wt</span><span>Śr</span><span>Czw</span><span>Pt</span><span>Sob</span><span>Niedz</span>
+                                    </div>
+                                    <div id="calendar-days-grid" class="grid grid-cols-7 gap-1.5 text-center"></div>
+                                </div>
+
+                                <div class="md:col-span-5 bg-dark-base p-5 rounded-xl border border-dark-border flex flex-col justify-between">
+                                    <div>
+                                        <h4 class="text-xs font-semibold uppercase tracking-wider text-gold mb-1">Godziny</h4>
+                                        <p id="selected-date-display" class="text-xs text-gray-400 mb-4">Kliknij dzień z kalendarza.</p>
+                                        <div id="time-slots-container" class="grid grid-cols-2 gap-2">
+                                            <div class="col-span-2 text-center py-6 text-xs text-gray-500 italic">Najpierw wybierz dzień</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between pt-4">
+                                <button onclick="goToStep(1)" class="border border-dark-border text-gray-300 px-6 py-3 rounded-xl text-xs uppercase tracking-widest">Wstecz</button>
+                                <button onclick="goToStep(3)" class="gold-gradient-bg text-black font-semibold px-6 py-3 rounded-xl text-xs uppercase tracking-widest">Dalej: Opis Tatuażu</button>
+                            </div>
+                        </div>
+
+                        <!-- KROK 3: Opis i Dane -->
+                        <div id="step-content-3" class="step-content space-y-6 hidden">
+                            <h3 class="font-serif-title text-2xl text-white">3. Opis Tatuażu & Twoje Dane</h3>
+
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs uppercase text-gray-300 mb-1">Miejsce na Ciele *</label>
+                                        <input type="text" id="input-body-placement" placeholder="np. Przedramię" class="w-full bg-dark-base border border-dark-border rounded-xl px-4 py-3 text-xs text-white focus:border-gold outline-none">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs uppercase text-gray-300 mb-1">Wymiar (cm)</label>
+                                        <input type="text" id="input-exact-size" placeholder="np. 10x5 cm" class="w-full bg-dark-base border border-dark-border rounded-xl px-4 py-3 text-xs text-white focus:border-gold outline-none">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs uppercase text-gray-300 mb-1">Opis Wzoru *</label>
+                                    <textarea id="input-description" rows="3" placeholder="Opisz pomysł na swój tatuaż..." class="w-full bg-dark-base border border-dark-border rounded-xl p-4 text-xs text-white focus:border-gold outline-none resize-none"></textarea>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs uppercase text-gray-300 mb-1">Imię i Nazwisko *</label>
+                                        <input type="text" id="input-client-name" placeholder="Jan Kowalski" class="w-full bg-dark-base border border-dark-border rounded-xl px-4 py-3 text-xs text-white focus:border-gold outline-none">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs uppercase text-gray-300 mb-1">Telefon *</label>
+                                        <input type="tel" id="input-client-phone" placeholder="+48 ..." class="w-full bg-dark-base border border-dark-border rounded-xl px-4 py-3 text-xs text-white focus:border-gold outline-none">
+                                    </div>
+                                    <div class="sm:col-span-2">
+                                        <label class="block text-xs uppercase text-gray-300 mb-1">Email *</label>
+                                        <input type="email" id="input-client-email" placeholder="email@example.com" class="w-full bg-dark-base border border-dark-border rounded-xl px-4 py-3 text-xs text-white focus:border-gold outline-none">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between pt-4">
+                                <button onclick="goToStep(2)" class="border border-dark-border text-gray-300 px-6 py-3 rounded-xl text-xs uppercase tracking-widest">Wstecz</button>
+                                <button onclick="goToStep(4)" class="gold-gradient-bg text-black font-semibold px-6 py-3 rounded-xl text-xs uppercase tracking-widest">Dalej: Podsumowanie</button>
+                            </div>
+                        </div>
+
+                        <!-- KROK 4: Podsumowanie -->
+                        <div id="step-content-4" class="step-content space-y-6 hidden">
+                            <h3 class="font-serif-title text-2xl text-white">4. Podsumowanie Rezerwacji</h3>
+
+                            <div class="bg-dark-base p-6 rounded-xl border border-dark-border space-y-4">
+                                <div class="flex justify-between items-center border-b border-dark-border pb-4">
+                                    <div>
+                                        <span class="text-[10px] uppercase text-gold block">Wybrana Usługa</span>
+                                        <h4 id="summary-service-title" class="text-sm font-semibold text-white"></h4>
+                                    </div>
+                                    <span id="summary-service-price" class="font-serif-title text-2xl text-gold font-bold"></span>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                                    <div><span class="text-gray-500 block text-[10px] uppercase">Data i Godzina:</span><span id="summary-datetime" class="text-gold font-medium"></span></div>
+                                    <div><span class="text-gray-500 block text-[10px] uppercase">Klient:</span><span id="summary-client" class="text-white"></span></div>
+                                    <div><span class="text-gray-500 block text-[10px] uppercase">Miejsce:</span><span id="summary-placement" class="text-white"></span></div>
+                                    <div><span class="text-gray-500 block text-[10px] uppercase">Kontakt:</span><span id="summary-contact" class="text-white"></span></div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between pt-4">
+                                <button onclick="goToStep(3)" class="border border-dark-border text-gray-300 px-6 py-3 rounded-xl text-xs uppercase tracking-widest">Wstecz</button>
+                                <button onclick="submitFinalBooking()" id="submit-btn" class="gold-gradient-bg text-black font-bold px-8 py-3.5 rounded-xl text-xs uppercase tracking-widest">
+                                    Potwierdzam & Rezerwuję
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER / CONTACT SECTION -->
+        <footer id="contact" class="bg-dark-surface border-t border-dark-border py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                    <div>
+                        <img src="netjes-logo.png" alt="netjes TATTOO Logo" class="h-10 w-auto object-contain mb-4">
+                        <p class="text-xs text-gray-400 font-light leading-relaxed">
+                            Autorskie studio tatuażu Darii Wąs. Precyzja, sterylność i wyjątkowa atmosfera.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="text-xs uppercase text-gold font-semibold tracking-wider mb-3">Kontakt & Lokalizacja</h4>
+                        <p class="text-xs text-gray-300 mb-1"><i class="fa-solid fa-envelope mr-2 text-gold"></i> kontakt@netjestattoo.pl</p>
+                        <p class="text-xs text-gray-300 mb-1"><i class="fa-solid fa-phone mr-2 text-gold"></i> +48 123 456 789</p>
+                        <p class="text-xs text-gray-300"><i class="fa-solid fa-location-dot mr-2 text-gold"></i> Polska / Holandia</p>
+                    </div>
+                    <div>
+                        <h4 class="text-xs uppercase text-gold font-semibold tracking-wider mb-3">Godziny Otwarcia</h4>
+                        <p class="text-xs text-gray-300">Poniedziałek – Piątek: 10:00 – 18:00</p>
+                        <p class="text-xs text-gray-300 mt-1">Sobota: Po wcześniejszym uzgodnieniu</p>
+                    </div>
+                </div>
+                <div class="border-t border-dark-border pt-8 text-center text-[11px] text-gray-500">
+                    © 2026 netjes TATTOO by Daria Wąs. Wszelkie prawa zastrzeżone.
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- ADMIN PANEL (/ #admin) -->
+    <div id="admin-view-container" class="pt-28 pb-16 max-w-7xl mx-auto px-4 hidden">
+        <div class="flex justify-between items-center mb-8 pb-4 border-b border-dark-border">
+            <div>
+                <h1 class="font-serif-title text-3xl text-white">Panel Zgłoszeń Darii</h1>
+                <p class="text-xs text-gray-400">Pobrano aktualne rezerwacje z chmury</p>
+            </div>
+            <button onclick="window.location.hash=''" class="gold-gradient-bg text-black font-semibold px-4 py-2 rounded-xl text-xs uppercase">
+                Wyjście
+            </button>
+        </div>
+
+        <div class="bg-dark-card border border-dark-border rounded-2xl overflow-hidden glass-panel">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-dark-surface border-b border-dark-border uppercase text-gray-400 font-semibold">
+                        <tr>
+                            <th class="p-4">Klient</th>
+                            <th class="p-4">Usługa</th>
+                            <th class="p-4">Termin</th>
+                            <th class="p-4">Miejsce & Opis</th>
+                            <th class="p-4 text-right">Usuń</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-bookings-table-body" class="divide-y divide-dark-border text-gray-300"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
         const ADMIN_PASSWORD = "daria";
 
         // KONFIGURACJA SUPABASE:
@@ -148,7 +577,7 @@
             const placeVal = document.getElementById('input-body-placement').value;
             const descVal = document.getElementById('input-description').value;
 
-            // Przygotowanie danych do Supabase (małe litery w nazwach kolumn)
+            // Dane przesyłane do Supabase (zgodne z nazwami kolumn w PostgreSQL)
             const payload = {
                 clientname: nameVal,
                 clientemail: emailVal,
@@ -160,17 +589,17 @@
                 description: descVal
             };
 
-            // Zapis do Supabase z informacją zwrotną o błędzie
+            // Zapis do bazy Supabase
             if (db) {
                 const { data, error } = await db.from('bookings').insert([payload]);
                 if (error) {
-                    console.error("Błąd zapisywania w Supabase:", error);
+                    console.error("Błąd zapisu w Supabase:", error);
                     alert("Błąd zapisu do bazy: " + error.message);
                 } else {
-                    alert("Dziękujemy! Rezerwacja została zapisana w bazie.");
+                    alert("Dziękujemy! Rezerwacja została przyjęta i zapisana w bazie.");
                 }
             } else {
-                alert("Brak połączenia z bazą Supabase!");
+                alert("Brak połączenia z bazą danych Supabase!");
             }
 
             // Kopia lokalna w przeglądarce
@@ -186,8 +615,8 @@
             };
             appBookings.unshift(localBooking);
             localStorage.setItem('netjes_tattoo_bookings', JSON.stringify(appBookings));
-            
-            // Czyszczenie formularza i powrót
+
+            // Czyszczenie pól po rezerwacji
             bookingState.selectedDate = null;
             bookingState.selectedTime = null;
             document.getElementById('input-client-name').value = '';
@@ -258,10 +687,10 @@
         }
 
         async function deleteBooking(idOrIndex) {
-            if (db && typeof idOrIndex === 'number' && idOrIndex > 100) {
+            if (db && typeof idOrIndex === 'number' && idOrIndex > 0) {
                 await db.from('bookings').delete().eq('id', idOrIndex);
             }
-            appBookings.splice(typeof idOrIndex === 'number' && idOrIndex < 100 ? idOrIndex : 0, 1);
+            appBookings.splice(typeof idOrIndex === 'number' && idOrIndex <= 100 ? idOrIndex : 0, 1);
             localStorage.setItem('netjes_tattoo_bookings', JSON.stringify(appBookings));
             fetchAndRenderBookings();
         }
@@ -272,3 +701,5 @@
             checkHashRoute();
         });
     </script>
+</body>
+</html>
