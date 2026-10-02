@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>netjes TATTOO | Daria Wąs - System Rezerwacji & Studio Tatuażu</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            light: '#E6C894',
+                            DEFAULT: '#C5A059',
+                            dark: '#9A7B3E',
+                            glow: 'rgba(197, 160, 89, 0.25)'
+                        },
+                        dark: {
+                            base: '#0B0B0B',
+                            card: '#141414',
+                            surface: '#1A1A1A',
+                            border: '#262626',
+                            hover: '#222222'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 3s infinite ease-in-out',
+                        'float': 'float 6s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.3', transform: 'scale(1)' },
+                            '50%': { opacity: '0.6', transform: 'scale(1.05)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0B0B0B;
+            color: #E5E5E5;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+        .font-serif-title {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #F3E5AB 0%, #C5A059 50%, #9A7B3E 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-gradient-bg {
+            background: linear-gradient(135deg, #C5A059 0%, #9A7B3E 100%);
+        }
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0B0B;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #262626;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C5A059;
+        }
+        /* Calendar selection styles */
+        .calendar-day-btn:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+            background-color: transparent !important;
+            border-color: transparent !important;
+        }
+        .calendar-day-btn.selected-day {
+            background-color: #C5A059 !important;
+            color: #000000 !important;
+            font-weight: 700;
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.4);
+        }
+        .time-slot-btn.selected-slot {
+            background-color: #C5A059 !important;
+            color: #000000 !important;
+            border-color: #C5A059 !important;
+            font-weight: 600;
+            box-shadow: 0 0 12px rgba(197, 160, 89, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-dark-base text-gray-300 antialiased selection:bg-gold selection:text-black min-h-screen flex flex-col justify-between">
+
+    <!-- Notification Toast -->
+    <div id="toast-notification" class="fixed top-24 right-5 z-50 transform translate-x-full transition-transform duration-500 max-w-sm w-full bg-dark-card border border-gold/40 text-white p-4 rounded-xl shadow-2xl flex items-start gap-3 glass-panel">
+        <div class="text-gold text-lg mt-0.5"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="flex-1">
+            <h5 id="toast-title" class="text-xs font-bold uppercase tracking-wider text-gold">Powiadomienie</h5>
+            <p id="toast-message" class="text-xs text-gray-300 mt-0.5">Operacja wykonana pomyślnie.</p>
+        </div>
+        <button onclick="hideToast()" class="text-gray-500 hover:text-white text-xs"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 w-full z-40 bg-dark-base/90 backdrop-blur-md border-b border-dark-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- Logo -->
+                <a href="#" onclick="switchMainView('client')" class="flex items-center space-x-3 group">
+                    <div class="text-center">
+                        <span class="block font-serif-title text-2xl tracking-[0.2em] text-white group-hover:text-gold transition-colors">netjes</span>
+                        <span class="block text-[9px] tracking-[0.4em] text-gold uppercase font-light">T A T T O O</span>
+                    </div>
+                </a>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8 text-xs uppercase tracking-widest font-light">
+                    <a href="#about" class="hover:text-gold transition-colors">O nas</a>
+                    <a href="#portfolio" class="hover:text-gold transition-colors">Portfolio</a>
+                    <a href="#pricing" class="hover:text-gold transition-colors">Cennik</a>
+                    <a href="#booksy-app" class="text-gold font-medium hover:underline transition-all">Rezerwacja Online</a>
+                </div>
+
+                <!-- Admin Switcher & Booking Quick Action -->
+                <div class="flex items-center gap-3">
+                    <button id="view-mode-btn" onclick="toggleAdminView()" class="border border-dark-border hover:border-gold text-xs px-3 py-2 rounded-lg text-gray-400 hover:text-gold transition flex items-center gap-2">
+                        <i class="fa-solid fa-user-shield text-gold"></i>
+                        <span id="view-mode-label" class="hidden sm:inline">Panel Darii (Admin)</span>
+                    </button>
+
+                    <a href="#booksy-app" class="gold-gradient-bg text-black font-semibold px-4 py-2 rounded-full text-xs uppercase tracking-widest transition-all shadow-md hover:shadow-[0_0_15px_rgba(197,160,89,0.4)]">
+                        Zarezerwuj
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CLIENT VIEW -->
+    <div id="client-view-container" class="pt-20">
+        
+        <!-- Hero Section -->
+        <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+            <!-- Dynamic Glowing Background -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gold/10 rounded-full blur-[140px] pointer-events-none animate-pulse-glow"></div>
+            
+            <div class="relative z-10 max-w-5xl mx-auto px-4 text-center py-12">
+                <!-- Visual Badge -->
+                <div class="inline-flex flex-col items-center justify-center p-6 mb-6 rounded-full border border-gold/30 bg-dark-card/60 backdrop-blur-md w-44 h-44 sm:w-48 sm:h-48 shadow-2xl animate-float">
+                    <span class="font-serif-title text-3xl sm:text-4xl text-white tracking-[0.2em] font-light">netjes</span>
+                    <div class="w-10 h-[1px] bg-gold/50 my-1.5 relative">
+                        <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[8px] text-gold">✦</span>
+                    </div>
+                    <span class="text-[9px] tracking-[0.4em] text-gold uppercase font-light">T A T T O O</span>
+                </div>
+
+                <h1 class="font-serif-title text-4xl sm:text-6xl md:text-7xl font-light text-white tracking-wide leading-tight mb-4">
+                    Elegancja i Sztuka Tatuażu w <span class="gold-gradient-text italic">Holandii</span>
+                </h1>
+                <p class="max-w-2xl mx-auto text-gray-400 text-xs sm:text-sm font-light tracking-wide mb-8 leading-relaxed">
+                    Studio prowadzone przez artystkę <strong class="text-white">Darię Wąs</strong>. Wybierz dogodny termin w autorskim systemie rezerwacji bez zbędnego oczekiwania na odpowiedź.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="#booksy-app" class="w-full sm:w-auto gold-gradient-bg text-black font-semibold px-8 py-3.5 rounded-full text-xs uppercase tracking-widest transition-all duration-300 shadow-xl hover:shadow-[0_0_25px_rgba(197,160,89,0.5)]">
+                        Przejdź do Rezerwacji Terminów
+                    </a>
+                    <a href="#portfolio" class="w-full sm:w-auto border border-dark-border hover:border-gold text-white hover:text-gold px-8 py-3.5 rounded-full text-xs uppercase tracking-widest transition duration-300 glass-panel">
+                        Zobacz Portfolio Darii
+                    </a>
+                </div>
+
+                <div class="mt-12 flex flex-wrap items-center justify-center gap-6 text-[11px] text-gray-500 uppercase tracking-widest">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-gold"></i> Holandia, ...</span>
+                    <span>•</span>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-gold"></i> 100% Bezpieczna Zaliczka</span>
+                    <span>•</span>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-star text-gold"></i> Subtelne Fineline & Realizm</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- BOOKSY STYLE SYSTEM REZERWACJI ONLINE -->
+        <section id="booksy-app" class="py-16 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="text-xs uppercase tracking-widest text-gold font-medium">Autonomiczny Kalendarz</span>
+                <h2 class="font-serif-title text-3xl sm:text-5xl text-white mt-1">Rezerwacja Wizyty</h2>
+                <div class="w-12 h-[1px] bg-gold mx-auto mt-2"></div>
+                <p class="text-gray-400 text-xs sm:text-sm mt-3 font-light">
+                    Wybierz usługę, termin oraz podaj szczegóły tatuażu. Wszystko w 4 prostych krokach.
+                </p>
+            </div>
+
+            <!-- Booking App Card -->
+            <div class="bg-dark-card border border-dark-border rounded-2xl shadow-2xl overflow-hidden glass-panel">
+                
+                <!-- Stepper Progress Header -->
+                <div class="border-b border-dark-border bg-dark-surface/60 p-4 sm:p-6">
+                    <div class="grid grid-cols-4 gap-2 text-center relative">
+                        <!-- Step 1 Indicator -->
+                        <div id="step-tab-1" class="step-indicator flex flex-col items-center cursor-pointer opacity-100" onclick="goToStep(1)">
+                            <div class="w-8 h-8 rounded-full bg-gold text-black font-bold flex items-center justify-center text-xs mb-1 transition-all shadow-md">1</div>
+                            <span class="text-[10px] uppercase tracking-wider font-medium text-gold hidden sm:block">Usługa</span>
+                        </div>
+                        <!-- Step 2 Indicator -->
+                        <div id="step-tab-2" class="step-indicator flex flex-col items-center cursor-pointer opacity-40" onclick="goToStep(2)">
+                            <div class="w-8 h-8 rounded-full bg-dark-base border border-dark-border text-white font-bold flex items-center justify-center text-xs mb-1 transition-all">2</div>
+                            <span class="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden sm:block">Termin i Godzina</span>
+                        </div>
+                        <!-- Step 3 Indicator -->
+                        <div id="step-tab-3" class="step-indicator flex flex-col items-center cursor-pointer opacity-40" onclick="goToStep(3)">
+                            <div class="w-8 h-8 rounded-full bg-dark-base border border-dark-border text-white font-bold flex items-center justify-center text-xs mb-1 transition-all">3</div>
+                            <span class="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden sm:block">Szczegóły Tatuażu</span>
+                        </div>
+                        <!-- Step 4 Indicator -->
+                        <div id="step-tab-4" class="step-indicator flex flex-col items-center cursor-pointer opacity-40" onclick="goToStep(4)">
+                            <div class="w-8 h-8 rounded-full bg-dark-base border border-dark-border text-white font-bold flex items-center justify-center text-xs mb-1 transition-all">4</div>
+                            <span class="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden sm:block">Podsumowanie</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Step Contents Container -->
+                <div class="p-6 sm:p-8">
+                    
+                    <!-- KROK 1: Wybór Usługi -->
+                    <div id="step-content-1" class="step-content space-y-6">
+                        <div>
+                            <h3 class="font-serif-title text-2xl text-white">Wybierz Usługę Tatuażu</h3>
+                            <p class="text-xs text-gray-400">Wyznacz zakres projektu, aby dopasować odpowiedni czas i cenę sesji.</p>
+                        </div>
+
+                        <!-- Artist Info Badge -->
+                        <div class="p-4 rounded-xl bg-dark-surface border border-gold/30 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full overflow-hidden border border-gold/50 flex-shrink-0">
+                                <img src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=200&auto=format&fit=crop" alt="Daria Wąs" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gold uppercase tracking-widest block font-medium">Tatuatorka Prowadząca</span>
+                                <h4 class="text-sm font-semibold text-white">Daria Wąs • netjes TATTOO</h4>
+                                <p class="text-[11px] text-gray-400">Specjalizacja: Fineline, Flora, Microrealizmy & Autorskie Kompozycje</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Service Option 1 -->
+                            <div onclick="selectService('small')" id="service-card-small" class="service-card p-5 rounded-xl border border-dark-border bg-dark-base hover:border-gold/60 cursor-pointer transition-all flex justify-between items-start group">
+                                <div class="space-y-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold text-white group-hover:text-gold transition-colors">Mały Tatuaż / Fineline</span>
+                                    </div>
+                                    <p class="text-xs text-gray-400 font-light">Rozmiar do ~7 cm. Proste symbole, napisy, kaligrafia, drobny element.</p>
+                                    <div class="flex items-center gap-3 text-[11px] text-gray-500 pt-1">
+                                        <span><i class="fa-regular fa-clock text-gold"></i> ok. 1.5 godz.</span>
+                                        <span>•</span>
+                                        <span>Zaliczka: €30</span>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-serif-title text-2xl text-gold font-bold">€80</span>
+                                    <span class="block text-[9px] text-gray-500 uppercase">cena od</span>
+                                </div>
+                            </div>
+
+                            <!-- Service Option 2 -->
+                            <div onclick="selectService('medium')" id="service-card-medium" class="service-card p-5 rounded-xl border border-dark-border bg-dark-base hover:border-gold/60 cursor-pointer transition-all flex justify-between items-start group">
+                                <div class="space-y-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold text-white group-hover:text-gold transition-colors">Średni Tatuaż / Detal</span>
+                                    </div>
+                                    <p class="text-xs text-gray-400 font-light">Rozmiar 8-15 cm. Bardziej szczegółowy motyw roślinny, cieniowanie.</p>
+                                    <div class="flex items-center gap-3 text-[11px] text-gray-500 pt-1">
+                                        <span><i class="fa-regular fa-clock text-gold"></i> ok. 3 godz.</span>
+                                        <span>•</span>
+                                        <span>Zaliczka: €50</span>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-serif-title text-2xl text-gold font-bold">€160</span>
+                                    <span class="block text-[9px] text-gray-500 uppercase">cena od</span>
+                                </div>
+                            </div>
+
+                            <!-- Service Option 3 -->
+                            <div onclick="selectService('full')" id="service-card-full" class="service-card p-5 rounded-xl border border-dark-border bg-dark-base hover:border-gold/60 cursor-pointer transition-all flex justify-between items-start group">
+                                <div class="space-y-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold text-white group-hover:text-gold transition-colors">Sesja Całodniowa / Duży Projekt</span>
+                                    </div>
+                                    <p class="text-xs text-gray-400 font-light">Pełne przedramię, udo, plecy. Skomplikowane kompozycje autorskie.</p>
+                                    <div class="flex items-center gap-3 text-[11px] text-gray-500 pt-1">
+                                        <span><i class="fa-regular fa-clock text-gold"></i> ok. 6 godz.</span>
+                                        <span>•</span>
+                                        <span>Zaliczka: €100</span>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-serif-title text-2xl text-gold font-bold">€450</span>
+                                    <span class="block text-[9px] text-gray-500 uppercase">cena od</span>
+                                </div>
+                            </div>
+
+                            <!-- Service Option 4 -->
+                            <div onclick="selectService('consult')" id="service-card-consult" class="service-card p-5 rounded-xl border border-dark-border bg-dark-base hover:border-gold/60 cursor-pointer transition-all flex justify-between items-start group">
+                                <div class="space-y-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-bold text-white group-hover:text-gold transition-colors">Konsultacja & Projekt</span>
+                                    </div>
+                                    <p class="text-xs text-gray-400 font-light">Omówienie pomysłu, przymiarka projektu i doradztwo przed zabiegiem.</p>
+                                    <div class="flex items-center gap-3 text-[11px] text-gray-500 pt-1">
+                                        <span><i class="fa-regular fa-clock text-gold"></i> ok. 30 min</span>
+                                        <span>•</span>
+                                        <span>Zaliczka: €0</span>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-serif-title text-2xl text-gold font-bold">Gratis</span>
+                                    <span class="block text-[9px] text-gray-500 uppercase">0 €</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end pt-4">
+                            <button onclick="goToStep(2)" class="gold-gradient-bg text-black font-semibold px-6 py-3 rounded-xl text-xs uppercase tracking-widest hover:opacity-90 transition">
+                                Przejdź do Wyboru Daty <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- KROK 2: Kalendarz i Godziny -->
+                    <div id="step-content-2" class="step-content space-y-6 hidden">
+                        <div>
+                            <h3 class="font-serif-title text-2xl text-white">Wybierz Datę i Godzinę</h3>
+                            <p class="text-xs text-gray-400">System pokazuje tylko faktycznie wolne terminy w grafiku Darii.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                            
+                            <!-- Calendar Month Widget (8 cols) -->
+                            <div class="md:col-span-7 bg-dark-base p-5 rounded-xl border border-dark-border">
+                                <div class="flex justify-between items-center mb-4">
+                                    <button onclick="changeMonth(-1)" class="p-2 text-gray-400 hover:text-gold text-xs"><i class="fa-solid fa-chevron-left"></i></button>
+                                    <span id="calendar-month-year" class="font-serif-title text-lg text-white font-semibold">Październik 2026</span>
+                                    <button onclick="changeMonth(1)" class="p-2 text-gray-400 hover:text-gold text-xs"><i class="fa-solid fa-chevron-right"></i></button>
+                                </div>
+
+                                <!-- Weekday Headers -->
+                                <div class="grid grid-cols-7 gap-1 text-center text-[10px] text-gray-500 uppercase font-bold mb-2">
+                                    <span>Pon</span><span>Wt</span><span>Śr</span><span>Czw</span><span>Pt</span><span>Sob</span><span>Niedz</span>
+                                </div>
+
+                                <!-- Calendar Grid Days -->
+                                <div id="calendar-days-grid" class="grid grid-cols-7 gap-1.5 text-center">
+                                    <!-- Populated dynamically via JS -->
+                                </div>
+                            </div>
+
+                            <!-- Time Slots Selection (5 cols) -->
+                            <div class="md:col-span-5 bg-dark-base p-5 rounded-xl border border-dark-border flex flex-col justify-between">
+                                <div>
+                                    <h4 class="text-xs font-semibold uppercase tracking-wider text-gold mb-1">Dostępne Godziny</h4>
+                                    <p id="selected-date-display" class="text-xs text-gray-400 mb-4">Wybierz dzień z kalendarza obok.</p>
+                                    
+                                    <div id="time-slots-container" class="grid grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1">
+                                        <div class="col-span-2 text-center py-8 text-xs text-gray-500 italic">
+                                            Proszę najpierw kliknąć dzień w kalendarzu.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 pt-3 border-t border-dark-border text-[10px] text-gray-500 flex items-center justify-between">
+                                    <span><i class="fa-solid fa-circle text-[8px] text-gold"></i> Wybrany termin</span>
+                                    <span><i class="fa-solid fa-lock text-[10px]"></i> Niedostępne</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="flex justify-between pt-4">
+                            <button onclick="goToStep(1)" class="border border-dark-border text-gray-300 hover:text-white px-6 py-3 rounded-xl text-xs uppercase tracking-widest transition">
+                                <i class="fa-solid fa-arrow-left mr-1"></i> Wstecz
+                            </button>
+                            <button onclick="goToStep(3)" class="gold-gradient-bg text-black font-semibold px-6 py-3 rounded-xl text-xs uppercase tracking-widest hover:opacity-90 transition">
+                                Przejdź do Opisu <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- KROK 3: Opis Tatuażu i Dane -->
+                    <div id="step-content-3" class="step-content space-y-6 hidden">
+                        <div>
+                            <h3 class="font-serif-title text-2xl text-white">Pomysł na Tatuaż & Informacje</h3>
+                            <p class="text-xs text-gray-400">Podaj szczegóły, aby Daria mogła przygotować dla Ciebie wstępne szkice.</p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Body Placement & Size Details -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wider text-gray-300 mb-1.5">Miejsce na Ciele *</label>
+                                    <input type="text" id="input-body-placement" placeholder="np. Przedramię lewe, żebra, kark..." required class="w-full bg-dark-base border border-dark-border rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-gold">
+                                </div>
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wider text-gray-300 mb-1.5">Dokładny Wymiar (cm)</label>
+                                    <input type="text" id="input-exact-size" placeholder="np. około 10x5 cm..." class="w-full bg-dark-base border border-dark-border rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-gold">
+                                </div>
+                            </div>
+
+                            <!-- Tattoo Idea Text -->
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-300 mb-1.5">Opis Motywu / Wizji *</label>
+                                <textarea id="input-description" rows="3" placeholder="Opisz co ma przedstawiać tatuaż, jaki styl preferujesz (np. fineline, kwiaty, motyw zwierzęcy)..." required class="w-full bg-dark-base border border-dark-border rounded-xl p-4 text-xs text-white focus:outline-none focus:border-gold resize-none"></textarea>
+                            </div>
+
+                            <!-- Simulated Image Upload -->
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-300 mb-1.5">Zdjęcie / Inspiracja (Opcjonalnie)</label>
+                                <div class="border-2 border-dashed border-dark-border hover:border-gold/50 rounded-xl p-4 text-center bg-dark-base/50 cursor-pointer transition">
+                                    <i class="fa-solid fa-cloud-arrow-up text-gold text-xl mb-1"></i>
+                                    <p class="text-xs text-gray-400">Kliknij lub przeciągnij grafikę referencyjną</p>
+                                    <input type="file" id="input-inspiration-file" accept="image/*" class="hidden" onchange="handleFileUpload(event)">
+                                    <span id="file-upload-status" class="text-[10px] text-gold mt-1 block font-medium"></span>
+                                </div>
+                            </div>
+
+                            <hr class="border-dark-border my-4">
+
+                            <!-- Client Info -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wider text-gray-300 mb-1.5">Imię i Nazwisko *</label>
+                                    <input type="text" id="input-client-name" placeholder="Jan Kowalski" required class="w-full bg-dark-base border border-dark-border rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-gold">
+                                </div>
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wider text-gray-300 mb-1.5">Numer Telefonu *</label>
+                                    <input type="tel" id="input-client-phone" placeholder="+31 ... lub +48 ..." required class="w-full bg-dark-base border border-dark-border rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-gold">
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <label class="block text-xs uppercase tracking-wider text-gray-300 mb-1.5">Adres E-mail *</label>
+                                    <input type="email" id="input-client-email" placeholder="twojemail@example.com" required class="w-full bg-dark-base border border-dark-border rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-gold">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between pt-4">
+                            <button onclick="goToStep(2)" class="border border-dark-border text-gray-300 hover:text-white px-6 py-3 rounded-xl text-xs uppercase tracking-widest transition">
+                                <i class="fa-solid fa-arrow-left mr-1"></i> Wstecz
+                            </button>
+                            <button onclick="goToStep(4)" class="gold-gradient-bg text-black font-semibold px-6 py-3 rounded-xl text-xs uppercase tracking-widest hover:opacity-90 transition">
+                                Przejdź do Podsumowania <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- KROK 4: Podsumowanie i Potwierdzenie -->
+                    <div id="step-content-4" class="step-content space-y-6 hidden">
+                        <div>
+                            <h3 class="font-serif-title text-2xl text-white">Podsumowanie Rezerwacji</h3>
+                            <p class="text-xs text-gray-400">Sprawdź czy wszystkie dane są poprawne przed ostatecznym złożeniem rezerwacji.</p>
+                        </div>
+
+                        <div class="bg-dark-base p-6 rounded-xl border border-dark-border space-y-4">
+                            
+                            <div class="flex justify-between items-center border-b border-dark-border pb-4">
+                                <div>
+                                    <span class="text-[10px] uppercase text-gold tracking-widest block font-medium">Wybrana Usługa</span>
+                                    <h4 id="summary-service-title" class="text-sm font-semibold text-white">Mały Tatuaż</h4>
+                                </div>
+                                <div class="text-right">
+                                    <span id="summary-service-price" class="font-serif-title text-2xl text-gold font-bold">€80</span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                                <div>
+                                    <span class="text-gray-500 block text-[10px] uppercase">Tatuatorka:</span>
+                                    <span class="text-white font-medium">Daria Wąs</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500 block text-[10px] uppercase">Data i Godzina:</span>
+                                    <span id="summary-datetime" class="text-gold font-medium">Wybierz termin</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500 block text-[10px] uppercase">Miejsce na ciele:</span>
+                                    <span id="summary-placement" class="text-white">Nie podano</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500 block text-[10px] uppercase">Klient:</span>
+                                    <span id="summary-client" class="text-white">Jan Kowalski</span>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-dark-border pt-4 text-xs space-y-1">
+                                <span class="text-gray-500 block text-[10px] uppercase">Opis wzoru:</span>
+                                <p id="summary-description" class="text-gray-300 italic">Brak opisu</p>
+                            </div>
+
+                            <div class="p-4 rounded-xl bg-gold/10 border border-gold/30 flex justify-between items-center text-xs">
+                                <div>
+                                    <span class="font-semibold text-gold block">Wymagana Zaliczka (Deposit)</span>
+                                    <span class="text-[11px] text-gray-400">Gwarantuje rezerwację terminu w kalendarzu.</span>
+                                </div>
+                                <span id="summary-deposit-price" class="font-serif-title text-2xl font-bold text-gold">€30</span>
+                            </div>
+
+                        </div>
+
+                        <div class="flex justify-between pt-4">
+                            <button onclick="goToStep(3)" class="border border-dark-border text-gray-300 hover:text-white px-6 py-3 rounded-xl text-xs uppercase tracking-widest transition">
+                                <i class="fa-solid fa-arrow-left mr-1"></i> Wstecz
+                            </button>
+                            <button onclick="submitFinalBooking()" class="gold-gradient-bg text-black font-bold px-8 py-3.5 rounded-xl text-xs uppercase tracking-widest shadow-xl hover:shadow-[0_0_20px_rgba(197,160,89,0.5)] transition">
+                                Potwierdzam & Rezerwuję
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Gallery -->
+        <section id="portfolio" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-dark-border">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-xs uppercase tracking-widest text-gold font-medium">Galeria Wykonanych Prac</span>
+                <h2 class="font-serif-title text-3xl sm:text-5xl text-white mt-1">Portfolio Darii Wąs</h2>
+                <div class="w-12 h-[1px] bg-gold mx-auto mt-2"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="group relative overflow-hidden rounded-xl bg-dark-card border border-dark-border aspect-[3/4] cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1590246814885-568b1c61e541?q=80&w=800&auto=format&fit=crop" alt="Work" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute bottom-4 left-4 right-4">
+                        <span class="text-[10px] text-gold uppercase tracking-widest">Fineline Botanical</span>
+                        <h4 class="font-serif-title text-xl text-white">Subtelne Kwiaty</h4>
+                    </div>
+                </div>
+                <div class="group relative overflow-hidden rounded-xl bg-dark-card border border-dark-border aspect-[3/4] cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?q=80&w=800&auto=format&fit=crop" alt="Work" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute bottom-4 left-4 right-4">
+                        <span class="text-[10px] text-gold uppercase tracking-widest">Microrealizm</span>
+                        <h4 class="font-serif-title text-xl text-white">Precyzyjny Portret</h4>
+                    </div>
+                </div>
+                <div class="group relative overflow-hidden rounded-xl bg-dark-card border border-dark-border aspect-[3/4] cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1542359649-31e03cd4d909?q=80&w=800&auto=format&fit=crop" alt="Work" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-80"></div>
+                    <div class="absolute bottom-4 left-4 right-4">
+                        <span class="text-[10px] text-gold uppercase tracking-widest">Kaligrafia</span>
+                        <h4 class="font-serif-title text-xl text-white">Napisy & Symbole</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- DEDIKOWANY PANEL ZARZĄDZANIA DARII (ADMIN PANEL) -->
+    <div id="admin-view-container" class="pt-24 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 hidden">
+        
+        <!-- Admin Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 pb-6 border-b border-dark-border">
+            <div>
+                <span class="text-xs font-semibold text-gold uppercase tracking-widest">Panel Artystki</span>
+                <h1 class="font-serif-title text-3xl sm:text-4xl text-white">System Rezerwacji - Daria Wąs</h1>
+                <p class="text-xs text-gray-400 mt-1">Zarządzaj terminami, przeglądaj napływające rezerwacje i ustawiaj dostępność.</p>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <button onclick="clearAllData()" class="border border-red-500/40 text-red-400 hover:bg-red-500/10 px-4 py-2 rounded-xl text-xs transition">
+                    <i class="fa-solid fa-trash mr-1"></i> Resetuj Dane
+                </button>
+                <button onclick="switchMainView('client')" class="gold-gradient-bg text-black font-semibold px-4 py-2 rounded-xl text-xs uppercase tracking-widest">
+                    <i class="fa-solid fa-eye mr-1"></i> Podgląd Klienta
+                </button>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard Stats -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="bg-dark-card border border-dark-border p-5 rounded-2xl">
+                <span class="text-[10px] uppercase text-gray-500 tracking-wider">Wszystkie Rezerwacje</span>
+                <div class="flex justify-between items-center mt-2">
+                    <span id="stat-total" class="font-serif-title text-3xl text-white font-bold">0</span>
+                    <i class="fa-solid fa-calendar-check text-gold text-xl"></i>
+                </div>
+            </div>
+            <div class="bg-dark-card border border-dark-border p-5 rounded-2xl">
+                <span class="text-[10px] uppercase text-gray-500 tracking-wider">Oczekujące na Potwierdzenie</span>
+                <div class="flex justify-between items-center mt-2">
+                    <span id="stat-pending" class="font-serif-title text-3xl text-yellow-500 font-bold">0</span>
+                    <i class="fa-solid fa-clock text-yellow-500 text-xl"></i>
+                </div>
+            </div>
+            <div class="bg-dark-card border border-dark-border p-5 rounded-2xl">
+                <span class="text-[10px] uppercase text-gray-500 tracking-wider">Potwierdzone</span>
+                <div class="flex justify-between items-center mt-2">
+                    <span id="stat-confirmed" class="font-serif-title text-3xl text-green-500 font-bold">0</span>
+                    <i class="fa-solid fa-circle-check text-green-500 text-xl"></i>
+                </div>
+            </div>
+            <div class="bg-dark-card border border-dark-border p-5 rounded-2xl">
+                <span class="text-[10px] uppercase text-gray-500 tracking-wider">Suma Zaliczek</span>
+                <div class="flex justify-between items-center mt-2">
+                    <span id="stat-deposits" class="font-serif-title text-3xl text-gold font-bold">€0</span>
+                    <i class="fa-solid fa-piggy-bank text-gold text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Management Table -->
+        <div class="bg-dark-card border border-dark-border rounded-2xl overflow-hidden glass-panel shadow-2xl">
+            <div class="p-6 border-b border-dark-border flex justify-between items-center">
+                <h3 class="font-serif-title text-2xl text-white">Lista Złożonych Rezerwacji</h3>
+                <span class="text-xs text-gray-400">Dane zapisywane w pamięci przeglądarki (localStorage)</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-dark-surface border-b border-dark-border uppercase tracking-wider text-gray-400 font-semibold">
+                        <tr>
+                            <th class="p-4">Klient</th>
+                            <th class="p-4">Usługa</th>
+                            <th class="p-4">Termin</th>
+                            <th class="p-4">Miejsce & Opis</th>
+                            <th class="p-4">Zaliczka</th>
+                            <th class="p-4">Status</th>
+                            <th class="p-4 text-right">Akcje</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-bookings-table-body" class="divide-y divide-dark-border text-gray-300">
+                        <!-- Populated dynamically via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark-card border-t border-dark-border py-8 text-center text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="font-serif-title text-lg text-white tracking-widest mb-1">netjes TATTOO</p>
+            <p>&copy; 2026 netjes TATTOO • Daria Wąs Studio Holandia • Autonomiczny System Rezerwacji</p>
+        </div>
+    </footer>
+
+    <script>
+        /* STATE MANAGEMENT */
+        let bookingState = {
+            step: 1,
+            selectedServiceKey: 'small',
+            selectedServiceName: 'Mały Tatuaż / Fineline',
+            selectedPrice: 80,
+            selectedDeposit: 30,
+            selectedDate: null, // format: YYYY-MM-DD
+            selectedTime: null,
+            bodyPlacement: '',
+            exactSize: '',
+            description: '',
+            clientName: '',
+            clientPhone: '',
+            clientEmail: '',
+            inspirationFile: null
+        };
+
+        let currentCalendarDate = new Date();
+        let appBookings = JSON.parse(localStorage.getItem('netjes_tattoo_bookings')) || [];
+
+        const servicesData = {
+            'small': { name: 'Mały Tatuaż / Fineline', price: 80, deposit: 30 },
+            'medium': { name: 'Średni Tatuaż / Detal', price: 160, deposit: 50 },
+            'full': { name: 'Sesja Całodniowa', price: 450, deposit: 100 },
+            'consult': { name: 'Konsultacja & Projekt', price: 0, deposit: 0 }
+        };
+
+        const availableTimeSlots = ['10:00', '11:30', '13:00', '15:00', '16:30', '18:00'];
+
+        /* INITIALIZATION */
+        document.addEventListener('DOMContentLoaded', () => {
+            selectService('small');
+            renderCalendar();
+            renderAdminDashboard();
+        });
+
+        /* VIEW SWITCHER */
+        function switchMainView(mode) {
+            const clientContainer = document.getElementById('client-view-container');
+            const adminContainer = document.getElementById('admin-view-container');
+            const modeLabel = document.getElementById('view-mode-label');
+
+            if (mode === 'admin') {
+                clientContainer.classList.add('hidden');
+                adminContainer.classList.remove('hidden');
+                modeLabel.innerText = "Widok Klienta";
+                renderAdminDashboard();
+            } else {
+                adminContainer.classList.add('hidden');
+                clientContainer.classList.remove('hidden');
+                modeLabel.innerText = "Panel Darii (Admin)";
+            }
+        }
+
+        function toggleAdminView() {
+            const adminContainer = document.getElementById('admin-view-container');
+            if (adminContainer.classList.contains('hidden')) {
+                switchMainView('admin');
+            } else {
+                switchMainView('client');
+            }
+        }
+
+        /* STEPPER CONTROL */
+        function goToStep(stepNum) {
+            // Basic Validation before advancing
+            if (stepNum > bookingState.step) {
+                if (bookingState.step === 2 && (!bookingState.selectedDate || !bookingState.selectedTime)) {
+                    showToast("Błąd", "Proszę wybrać dzień oraz godzinę zabiegu.", "error");
+                    return;
+                }
+            }
+
+            bookingState.step = stepNum;
+
+            // Hide all steps, reveal active step
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`step-content-${stepNum}`).classList.remove('hidden');
+
+            // Update Tab Indicators UI
+            for (let i = 1; i <= 4; i++) {
+                const tab = document.getElementById(`step-tab-${i}`);
+                const circle = tab.querySelector('div');
+                const label = tab.querySelector('span');
+
+                if (i <= stepNum) {
+                    tab.classList.remove('opacity-40');
+                    tab.classList.add('opacity-100');
+                    circle.className = "w-8 h-8 rounded-full gold-gradient-bg text-black font-bold flex items-center justify-center text-xs mb-1 transition-all shadow-md";
+                    if (label) label.className = "text-[10px] uppercase tracking-wider font-semibold text-gold hidden sm:block";
+                } else {
+                    tab.classList.add('opacity-40');
+                    tab.classList.remove('opacity-100');
+                    circle.className = "w-8 h-8 rounded-full bg-dark-base border border-dark-border text-white font-bold flex items-center justify-center text-xs mb-1 transition-all";
+                    if (label) label.className = "text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden sm:block";
+                }
+            }
+
+            if (stepNum === 4) {
+                updateSummaryData();
+            }
+        }
+
+        /* SERVICE SELECTION */
+        function selectService(key) {
+            bookingState.selectedServiceKey = key;
+            bookingState.selectedServiceName = servicesData[key].name;
+            bookingState.selectedPrice = servicesData[key].price;
+            bookingState.selectedDeposit = servicesData[key].deposit;
+
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.classList.remove('border-gold', 'bg-gold/10');
+                card.classList.add('border-dark-border', 'bg-dark-base');
+            });
+
+            const selectedCard = document.getElementById(`service-card-${key}`);
+            if (selectedCard) {
+                selectedCard.classList.remove('border-dark-border', 'bg-dark-base');
+                selectedCard.classList.add('border-gold', 'bg-gold/10');
+            }
+        }
+
+        /* CALENDAR GENERATION */
+        function renderCalendar() {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            const monthNames = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
+            document.getElementById('calendar-month-year').innerText = `${monthNames[month]} ${year}`;
+
+            const grid = document.getElementById('calendar-days-grid');
+            grid.innerHTML = '';
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Offset for Monday starting week
+            const startOffset = (firstDayIndex === 0 ? 6 : firstDayIndex - 1);
+
+            for (let i = 0; i < startOffset; i++) {
+                const emptyCell = document.createElement('div');
+                grid.appendChild(emptyCell);
+            }
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDate = new Date(year, month, day);
+                const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                
+                const dayBtn = document.createElement('button');
+                dayBtn.className = "calendar-day-btn h-10 w-full rounded-lg border border-dark-border text-xs text-white hover:border-gold transition flex items-center justify-center font-medium";
+                dayBtn.innerText = day;
+
+                // Disable past dates
+                if (dayDate < today) {
+                    dayBtn.disabled = true;
+                } else {
+                    dayBtn.onclick = () => selectCalendarDay(dateString, dayBtn);
+                }
+
+                if (bookingState.selectedDate === dateString) {
+                    dayBtn.classList.add('selected-day');
+                }
+
+                grid.appendChild(dayBtn);
+            }
+        }
+
+        function changeMonth(delta) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        function selectCalendarDay(dateStr, btnElement) {
+            bookingState.selectedDate = dateStr;
+            bookingState.selectedTime = null; // reset time on date change
+
+            document.querySelectorAll('.calendar-day-btn').forEach(btn => btn.classList.remove('selected-day'));
+            btnElement.classList.add('selected-day');
+
+            document.getElementById('selected-date-display').innerText = `Wybrany dzień: ${dateStr}`;
+
+            renderTimeSlots(dateStr);
+        }
+
+        /* TIME SLOTS */
+        function renderTimeSlots(dateStr) {
+            const container = document.getElementById('time-slots-container');
+            container.innerHTML = '';
+
+            // Filter booked slots from appBookings
+            const bookedTimes = appBookings
+                .filter(b => b.date === dateStr && b.status !== 'Odrzucona')
+                .map(b => b.time);
+
+            availableTimeSlots.forEach(time => {
+                const slotBtn = document.createElement('button');
+                const isBooked = bookedTimes.includes(time);
+
+                slotBtn.className = `time-slot-btn py-2.5 px-3 rounded-lg border text-xs text-center transition ${
+                    isBooked 
+                    ? 'border-dark-border text-gray-600 bg-dark-base cursor-not-allowed opacity-40' 
+                    : 'border-dark-border text-white bg-dark-surface hover:border-gold'
+                }`;
+                slotBtn.innerText = time;
+
+                if (isBooked) {
+                    slotBtn.disabled = true;
+                    slotBtn.innerHTML += ` <i class="fa-solid fa-lock text-[9px]"></i>`;
+                } else {
+                    slotBtn.onclick = () => {
+                        bookingState.selectedTime = time;
+                        document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('selected-slot'));
+                        slotBtn.classList.add('selected-slot');
+                    };
+                }
+
+                if (bookingState.selectedTime === time) {
+                    slotBtn.classList.add('selected-slot');
+                }
+
+                container.appendChild(slotBtn);
+            });
+        }
+
+        /* FILE UPLOAD SIMULATION */
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                bookingState.inspirationFile = file.name;
+                document.getElementById('file-upload-status').innerText = `Załączono: ${file.name}`;
+            }
+        }
+
+        /* UPDATE SUMMARY */
+        function updateSummaryData() {
+            bookingState.bodyPlacement = document.getElementById('input-body-placement').value;
+            bookingState.exactSize = document.getElementById('input-exact-size').value;
+            bookingState.description = document.getElementById('input-description').value;
+            bookingState.clientName = document.getElementById('input-client-name').value;
+            bookingState.clientPhone = document.getElementById('input-client-phone').value;
+            bookingState.clientEmail = document.getElementById('input-client-email').value;
+
+            document.getElementById('summary-service-title').innerText = bookingState.selectedServiceName;
+            document.getElementById('summary-service-price').innerText = bookingState.selectedPrice === 0 ? "Gratis" : `€${bookingState.selectedPrice}`;
+            document.getElementById('summary-datetime').innerText = `${bookingState.selectedDate || 'Nie wybrano'} o godz. ${bookingState.selectedTime || '--:--'}`;
+            document.getElementById('summary-placement').innerText = bookingState.bodyPlacement || 'Nie podano';
+            document.getElementById('summary-client').innerText = bookingState.clientName || 'Brak danych';
+            document.getElementById('summary-description').innerText = bookingState.description || 'Brak dodatkowego opisu';
+            document.getElementById('summary-deposit-price').innerText = `€${bookingState.selectedDeposit}`;
+        }
+
+        /* SUBMIT BOOKING */
+        function submitFinalBooking() {
+            if (!bookingState.clientName || !bookingState.clientEmail || !bookingState.clientPhone) {
+                showToast("Niepełne dane", "Wypełnij swoje imię, e-mail oraz telefon.", "error");
+                goToStep(3);
+                return;
+            }
+
+            const newBooking = {
+                id: 'NETJES-' + Math.floor(100000 + Math.random() * 900000),
+                createdAt: new Date().toLocaleDateString('pl-PL'),
+                service: bookingState.selectedServiceName,
+                price: bookingState.selectedPrice,
+                deposit: bookingState.selectedDeposit,
+                date: bookingState.selectedDate,
+                time: bookingState.selectedTime,
+                placement: bookingState.bodyPlacement,
+                description: bookingState.description,
+                clientName: bookingState.clientName,
+                clientEmail: bookingState.clientEmail,
+                clientPhone: bookingState.clientPhone,
+                status: 'Oczekująca'
+            };
+
+            appBookings.unshift(newBooking);
+            localStorage.setItem('netjes_tattoo_bookings', JSON.stringify(appBookings));
+
+            showToast("Sukces!", "Rezerwacja została złożona. Daria Wąs została powiadomiona.");
+            
+            // Reset to Step 1 & clear inputs
+            bookingState.selectedDate = null;
+            bookingState.selectedTime = null;
+            goToStep(1);
+            renderCalendar();
+            renderAdminDashboard();
+        }
+
+        /* ADMIN DASHBOARD LOGIC */
+        function renderAdminDashboard() {
+            const tableBody = document.getElementById('admin-bookings-table-body');
+            tableBody.innerHTML = '';
+
+            let totalCount = appBookings.length;
+            let pendingCount = 0;
+            let confirmedCount = 0;
+            let totalDeposits = 0;
+
+            if (appBookings.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-gray-500 italic">Brak złożonych rezerwacji.</td></tr>`;
+            } else {
+                appBookings.forEach((b, index) => {
+                    if (b.status === 'Oczekująca') pendingCount++;
+                    if (b.status === 'Potwierdzona') {
+                        confirmedCount++;
+                        totalDeposits += b.deposit;
+                    }
+
+                    const row = document.createElement('tr');
+                    row.className = "hover:bg-dark-surface/50 transition";
+                    row.innerHTML = `
+                        <td class="p-4">
+                            <span class="font-bold text-white block">${b.clientName}</span>
+                            <span class="text-[10px] text-gray-500">${b.clientEmail} • ${b.clientPhone}</span>
+                        </td>
+                        <td class="p-4 font-medium text-gold">${b.service}</td>
+                        <td class="p-4">${b.date} <span class="text-gray-400">(${b.time})</span></td>
+                        <td class="p-4 max-w-xs truncate" title="${b.description}">
+                            <span class="block text-gray-300 font-medium">${b.placement}</span>
+                            <span class="text-[10px] text-gray-500">${b.description}</span>
+                        </td>
+                        <td class="p-4 font-bold text-white">€${b.deposit}</td>
+                        <td class="p-4">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold ${
+                                b.status === 'Potwierdzona' ? 'bg-green-500/10 text-green-400 border border-green-500/30' :
+                                b.status === 'Odrzucona' ? 'bg-red-500/10 text-red-400 border border-red-500/30' :
+                                'bg-yellow-500/10 text-yellow-400 border border-yellow-500/30'
+                            }">${b.status}</span>
+                        </td>
+                        <td class="p-4 text-right space-x-1">
+                            <button onclick="updateBookingStatus(${index}, 'Potwierdzona')" class="p-1.5 text-green-400 hover:text-white" title="Potwierdź"><i class="fa-solid fa-check"></i></button>
+                            <button onclick="updateBookingStatus(${index}, 'Odrzucona')" class="p-1.5 text-red-400 hover:text-white" title="Odrzuć"><i class="fa-solid fa-xmark"></i></button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+
+            document.getElementById('stat-total').innerText = totalCount;
+            document.getElementById('stat-pending').innerText = pendingCount;
+            document.getElementById('stat-confirmed').innerText = confirmedCount;
+            document.getElementById('stat-deposits').innerText = `€${totalDeposits}`;
+        }
+
+        function updateBookingStatus(index, newStatus) {
+            appBookings[index].status = newStatus;
+            localStorage.setItem('netjes_tattoo_bookings', JSON.stringify(appBookings));
+            renderAdminDashboard();
+            showToast("Zaktualizowano", `Zmieniono status na: ${newStatus}`);
+        }
+
+        function clearAllData() {
+            if (confirm("Czy na pewno chcesz usunąć wszystkie zapamiętane rezerwacje?")) {
+                localStorage.removeItem('netjes_tattoo_bookings');
+                appBookings = [];
+                renderAdminDashboard();
+                showToast("Reset", "Baza danych rezerwacji została wyczyszczona.");
+            }
+        }
+
+        /* TOAST NOTIFICATION HELPERS */
+        function showToast(title, message, type = 'success') {
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-message').innerText = message;
+
+            toast.classList.remove('translate-x-full');
+            setTimeout(hideToast, 4000);
+        }
+
+        function hideToast() {
+            document.getElementById('toast-notification').classList.add('translate-x-full');
+        }
+    </script>
+</body>
+</html>
