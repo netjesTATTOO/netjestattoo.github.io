@@ -21,6 +21,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Lenis Smooth Scroll CDN -->
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <script>
         tailwind.config = {
@@ -500,7 +502,12 @@
     </div>
 
     <script>
-        // DEKLARACJA STANU ZMIENNYCH NA SAMEJ GÓRZE SKRYPTU (ZAPOBIEGA REFERENCE ERROR)
+        // INICJALIZACJA EMAILJS PODANYM PUBLIC KEY
+        (function() {
+            emailjs.init("Zdb3EviGAr7ZNTaeA");
+        })();
+
+        // DEKLARACJA STANU ZMIENNYCH
         let bookingState = {
             step: 1,
             selectedServiceName: 'Mały Tatuaż / Fineline',
@@ -771,7 +778,7 @@
             document.getElementById('language-modal').classList.add('hidden');
         }
 
-        // INICJALIZACJA SMOOTH SCROLL (LENIS) Z ZABEZPIECZENIEM
+        // INICJALIZACJA SMOOTH SCROLL (LENIS)
         if (typeof Lenis !== 'undefined') {
             const lenis = new Lenis({
                 duration: 1.2,
@@ -933,7 +940,7 @@
             document.getElementById('summary-contact').innerText = `${document.getElementById('input-client-phone').value} • ${document.getElementById('input-client-email').value}`;
         }
 
-        /* FINALIZACJA I ZAPIS DO BAZY DANYCH */
+        /* FINALIZACJA, ZAPIS W BAZIE I WYSYŁANIE E-MAILA EMAILJS */
         async function submitFinalBooking() {
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.innerText = "Zapisywanie...";
@@ -945,7 +952,6 @@
             const placeVal = document.getElementById('input-body-placement').value;
             const descVal = document.getElementById('input-description').value;
 
-            // Dokładne dopasowanie nazw kolumn z bazy danych Supabase
             const payload = {
                 clientname: nameVal,
                 clientemail: emailVal,
@@ -957,32 +963,44 @@
                 description: descVal
             };
 
+            // 1. Zapis do bazy Supabase
             if (db) {
                 const { data, error } = await db.from('bookings').insert([payload]);
                 if (error) {
                     console.error("Error Supabase:", error);
                     alert("Błąd zapisu w bazie Supabase: " + error.message);
-                } else {
-                    alert("Dziękujemy! Twoja rezerwacja została pomyślnie złożona.");
                 }
-            } else {
-                alert("Brak połączenia z bazą Supabase. Dane zapisane lokalnie!");
             }
 
+            // 2. Wysyłanie powiadomienia e-mail na Twój Gmail za pomocą EmailJS
+            const templateParams = {
+                client_name: nameVal,
+                client_email: emailVal,
+                client_phone: phoneVal,
+                service_name: bookingState.selectedServiceName,
+                booking_date: bookingState.selectedDate,
+                booking_time: bookingState.selectedTime,
+                body_placement: placeVal,
+                description: descVal
+            };
+
+            try {
+                await emailjs.send('service_vf32q58', 'template_73a85e8', templateParams);
+                alert("Dziękujemy! Twoja rezerwacja została pomyślnie złożona.");
+            } catch (emailErr) {
+                console.error("Błąd wysyłania e-maila przez EmailJS:", emailErr);
+                alert("Rezerwacja została pomyślnie zapisana!");
+            }
+
+            // 3. Zapis w pamięci lokalnej przeglądarki
             const localBooking = {
                 created_at: new Date().toISOString(),
-                clientname: nameVal,
-                clientemail: emailVal,
-                clientphone: phoneVal,
-                service: bookingState.selectedServiceName,
-                date: bookingState.selectedDate,
-                time: bookingState.selectedTime,
-                placement: placeVal,
-                description: descVal
+                ...payload
             };
             appBookings.unshift(localBooking);
             localStorage.setItem('netjes_tattoo_bookings', JSON.stringify(appBookings));
 
+            // 4. Czyszczenie formularza i powrót do kroku 1
             bookingState.selectedDate = null;
             bookingState.selectedTime = null;
             document.getElementById('input-client-name').value = '';
