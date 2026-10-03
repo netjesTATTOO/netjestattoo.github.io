@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1.5 netjes TATTOO |Studio Tatuażu</title>
+    <title>1.6 netjes TATTOO |Studio Tatuażu</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -433,7 +433,6 @@
     </div>
 
     <script>
-        const ADMIN_PASSWORD = "daria";
 
         // KONFIGURACJA SUPABASE:
         const SUPABASE_URL = 'https://pykesrbrwvvxbyftbjoz.supabase.co';
@@ -664,11 +663,30 @@
             renderCalendar();
         }
 
-        /* LOGIKA PANELU ADMINA /#admin */
+        /* LOGIKA PANELU ADMINA /#admin SPRAWDZANA W SUPABASE */
         async function checkHashRoute() {
             if (window.location.hash === '#admin') {
                 const pass = prompt("Podaj hasło do panelu Darii:");
-                if (pass === ADMIN_PASSWORD) {
+                if (!pass) {
+                    window.location.hash = '';
+                    return;
+                }
+        
+                // Sprawdzamy hasło w bazie Supabase
+                let isPasswordCorrect = false;
+                if (db) {
+                    const { data, error } = await db
+                        .from('admin_config')
+                        .select('value')
+                        .eq('key', 'admin_password')
+                        .single();
+        
+                    if (!error && data && data.value === pass) {
+                        isPasswordCorrect = true;
+                    }
+                }
+        
+                if (isPasswordCorrect) {
                     document.getElementById('client-view-container').classList.add('hidden');
                     document.getElementById('admin-view-container').classList.remove('hidden');
                     await fetchAndRenderBookings();
