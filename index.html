@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1.7 netjes TATTOO | Studio Tatuażu</title>
+    <title>1.8 netjes TATTOO | Studio Tatuażu</title>
     <!-- Favicon / Logo w karcie przeglądarki -->
     <link rel="icon" href="netjes-logo.png" type="image/png">
 
@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Lenis Smooth Scroll CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
     
     <script>
         tailwind.config = {
@@ -47,6 +49,9 @@
     </script>
     
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
         body {
             background-color: #0B0B0B;
             color: #E5E5E5;
@@ -105,14 +110,14 @@
     <div id="client-view-container">
         
         <!-- HERO SECTION -->
-        <section class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden">
+        <section class="relative min-h-screen flex items-center justify-center pt-10 sm:pt-24 overflow-hidden">
             <div class="absolute inset-0 z-0 bg-[url('https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center opacity-20"></div>
             <div class="absolute inset-0 bg-gradient-to-b from-dark-base/60 via-dark-base/80 to-dark-base z-0"></div>
             
-            <div class="relative z-10 max-w-6xl mx-auto text-center px-6 py-24 flex flex-col items-center">
+            <div class="relative z-10 max-w-6xl mx-auto text-center px-6 pt-12 pb-24 flex flex-col items-center">
                 <!-- LOGO NAD NAPISEM -->
-                <div class="h-60 sm:h-[480px] w-auto overflow-hidden flex items-center justify-center -mb-4">
-                    <img src="netjes-logo.png" alt="netjes TATTOO" class="w-full max-w-2xl sm:max-w-4xl h-auto object-contain -my-12 sm:-my-20 drop-shadow-2xl">
+                <div class="h-52 sm:h-[480px] w-auto overflow-hidden flex items-center justify-center -mt-6 sm:mt-0 -mb-4">
+                    <img src="netjes-logo.png" alt="netjes TATTOO" class="w-full max-w-2xl sm:max-w-4xl h-auto object-contain -my-10 sm:-my-20 drop-shadow-2xl">
                 </div>
                 
                 <span class="text-[11px] sm:text-sm uppercase tracking-[0.35em] text-gold font-semibold block mb-4">Studio Tatuażu • Daria Wąs</span>
@@ -378,18 +383,18 @@
         <!-- FOOTER / CONTACT SECTION -->
         <footer id="contact" class="bg-dark-surface border-t border-dark-border py-20">
             <div class="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-                    <div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 text-center md:text-left">
+                    <div class="flex flex-col items-center md:items-start">
                         <img src="netjes-logo.png" alt="netjes TATTOO Logo" class="h-12 w-auto object-contain mb-6">
-                        <p class="text-xs text-gray-400 font-light leading-relaxed">
+                        <p class="text-xs text-gray-400 font-light leading-relaxed max-w-sm">
                             Autorskie studio tatuażu Darii Wąs. Precyzja, sterylność i wyjątkowa atmosfera.
                         </p>
                     </div>
                     <div>
                         <h4 class="text-xs uppercase text-gold font-semibold tracking-wider mb-4">Kontakt & Lokalizacja</h4>
-                        <p class="text-xs text-gray-300 mb-2"><i class="fa-solid fa-envelope mr-2 text-gold"></i> kontakt@netjestattoo.pl</p>
-                        <p class="text-xs text-gray-300 mb-2"><i class="fa-solid fa-phone mr-2 text-gold"></i> +48 123 456 789</p>
-                        <p class="text-xs text-gray-300"><i class="fa-solid fa-location-dot mr-2 text-gold"></i> Polska / Holandia</p>
+                        <p class="text-xs text-gray-300 mb-2 flex items-center justify-center md:justify-start"><i class="fa-solid fa-envelope mr-2 text-gold"></i> kontakt@netjestattoo.pl</p>
+                        <p class="text-xs text-gray-300 mb-2 flex items-center justify-center md:justify-start"><i class="fa-solid fa-phone mr-2 text-gold"></i> +48 123 456 789</p>
+                        <p class="text-xs text-gray-300 flex items-center justify-center md:justify-start"><i class="fa-solid fa-location-dot mr-2 text-gold"></i> Polska / Holandia</p>
                     </div>
                     <div>
                         <h4 class="text-xs uppercase text-gold font-semibold tracking-wider mb-4">Godziny Otwarcia</h4>
@@ -436,6 +441,19 @@
     </div>
 
     <script>
+        // INICJALIZACJA PŁYNNEGO SCROLLOWANIA (LENIS SMOOTH SCROLL)
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true,
+            touchMultiplier: 2
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
 
         // KONFIGURACJA SUPABASE:
         const SUPABASE_URL = 'https://pykesrbrwvvxbyftbjoz.supabase.co';
