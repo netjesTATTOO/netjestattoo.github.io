@@ -499,6 +499,24 @@
     </div>
 
     <script>
+        // DEKLARACJA STANU ZMIENNYCH NA SAMEJ GÓRZE SKRYPTU (ZAPOBIEGA REFERENCE ERROR)
+        let bookingState = {
+            step: 1,
+            selectedServiceName: 'Mały Tatuaż / Fineline',
+            selectedPrice: 80,
+            selectedDate: null,
+            selectedTime: null
+        };
+
+        let appBookings = JSON.parse(localStorage.getItem('netjes_tattoo_bookings')) || [];
+
+        const servicesData = {
+            'small': { name: 'Mały Tatuaż / Fineline', price: 80 },
+            'medium': { name: 'Średni Tatuaż / Detal', price: 160 }
+        };
+
+        const availableTimeSlots = ['10:00', '12:00', '14:30', '17:00'];
+
         // SŁOWNIK JĘZYKOWY (PL, EN, NL)
         const translations = {
             pl: {
@@ -752,45 +770,30 @@
             document.getElementById('language-modal').classList.add('hidden');
         }
 
-        // INICJALIZACJA SMOOTH SCROLL (LENIS)
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smoothWheel: true,
-            touchMultiplier: 2
-        });
+        // INICJALIZACJA SMOOTH SCROLL (LENIS) Z ZABEZPIECZENIEM
+        if (typeof Lenis !== 'undefined') {
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                smoothWheel: true,
+                touchMultiplier: 2
+            });
 
-        function raf(time) {
-            lenis.raf(time);
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
             requestAnimationFrame(raf);
         }
-        requestAnimationFrame(raf);
 
         // KONFIGURACJA SUPABASE:
         const SUPABASE_URL = 'https://pykesrbrwvvxbyftbjoz.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_to5aEQEHPjUjqmjIc33ulA_PgJqsjgD';
         
         let db = null;
-        if(SUPABASE_URL && SUPABASE_ANON_KEY) {
+        if(typeof supabase !== 'undefined' && SUPABASE_URL && SUPABASE_ANON_KEY) {
             db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         }
-
-        let bookingState = {
-            step: 1,
-            selectedServiceName: 'Mały Tatuaż / Fineline',
-            selectedPrice: 80,
-            selectedDate: null,
-            selectedTime: null
-        };
-
-        let appBookings = JSON.parse(localStorage.getItem('netjes_tattoo_bookings')) || [];
-
-        const servicesData = {
-            'small': { name: 'Mały Tatuaż / Fineline', price: 80 },
-            'medium': { name: 'Średni Tatuaż / Detal', price: 160 }
-        };
-
-        const availableTimeSlots = ['10:00', '12:00', '14:30', '17:00'];
 
         /* NAWIGACJA I WALIDACJA FORMULARZA REZERWACJI */
         function goToStep(stepNum) {
