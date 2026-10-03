@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3.1 netjes TATTOO | Studio Tatuażu</title>
+    <title>netjes TATTOO | Studio Tatuażu</title>
     <!-- Favicon / Logo w karcie przeglądarki -->
     <link rel="icon" href="netjes-logo.png" type="image/png">
 
@@ -132,16 +132,22 @@
                         <img src="netjes-logo.png" alt="netjes TATTOO Logo" class="h-10 sm:h-14 w-auto object-contain">
                     </a>
 
-                    <!-- INTERAKTYWNY PRZEŁĄCZNIK JĘZYKÓW (PRECYZYJNIE DOCIĘTY SUWAK) -->
-                    <div class="flex items-center bg-dark-surface border border-dark-border rounded-full p-1 relative cursor-pointer select-none" onclick="cycleLanguageSwitch()">
-                        <!-- TŁO SUWAKA -->
-                        <div id="switch-thumb" class="absolute top-1 bottom-1 w-6 h-6 gold-gradient-bg rounded-full transition-all duration-300 ease-in-out left-1"></div>
+                    <!-- PRECYZYJNY PRZEŁĄCZNIK JĘZYKÓW Z IDEALNIE WYCENTROWANYM KÓŁKIEM -->
+                    <div class="relative bg-dark-surface border border-dark-border rounded-full p-1 flex items-center select-none" style="width: 108px; height: 38px;">
+                        <!-- KÓŁKO PODŚWIETLAJĄCE (POINTER-EVENTS-NONE DLA PEWNOŚCI KLIKNIĘĆ) -->
+                        <div id="switch-thumb" class="absolute top-1 left-1 w-7 h-7 gold-gradient-bg rounded-full transition-transform duration-300 ease-in-out pointer-events-none z-0"></div>
                         
-                        <!-- FLAGI (PL - EN - NL) -->
-                        <div class="relative z-10 flex items-center space-x-2 px-0.5">
-                            <span class="fi fi-pl rounded-full w-5 h-5 flex items-center justify-center text-[10px] transition-opacity" id="flag-pl"></span>
-                            <span class="fi fi-gb rounded-full w-5 h-5 flex items-center justify-center text-[10px] transition-opacity" id="flag-en"></span>
-                            <span class="fi fi-nl rounded-full w-5 h-5 flex items-center justify-center text-[10px] transition-opacity" id="flag-nl"></span>
+                        <!-- DEDYKOWANE PRZYCISKI FLAG (PL, EN, NL) -->
+                        <div class="relative z-10 flex items-center justify-between w-full h-full">
+                            <button onclick="setLanguage('pl')" class="w-7 h-7 flex items-center justify-center rounded-full focus:outline-none" title="Polski">
+                                <span class="fi fi-pl rounded-full text-xs transition-opacity duration-300" id="flag-pl"></span>
+                            </button>
+                            <button onclick="setLanguage('en')" class="w-7 h-7 flex items-center justify-center rounded-full focus:outline-none" title="English">
+                                <span class="fi fi-gb rounded-full text-xs transition-opacity duration-300" id="flag-en"></span>
+                            </button>
+                            <button onclick="setLanguage('nl')" class="w-7 h-7 flex items-center justify-center rounded-full focus:outline-none" title="Nederlands">
+                                <span class="fi fi-nl rounded-full text-xs transition-opacity duration-300" id="flag-nl"></span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -153,7 +159,7 @@
                     <a href="#contact" data-i18n="nav_contact" class="hover:text-gold transition">Kontakt</a>
                 </div>
 
-                <!-- PRZYCISK REZERWACJI (BEZ ZAŁAMYWANIA TEKSTU I Z DOPASOWANĄ CZCIONKĄ) -->
+                <!-- PRZYCISK REZERWACJI -->
                 <a href="#rezerwacja" data-i18n="nav_book_btn" class="gold-gradient-bg text-black font-semibold px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-full text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest hover:opacity-90 transition whitespace-nowrap">
                     Zarezerwuj Wizytę
                 </a>
@@ -170,7 +176,6 @@
             <div class="absolute inset-0 bg-gradient-to-b from-dark-base/60 via-dark-base/80 to-dark-base z-0"></div>
             
             <div class="relative z-10 max-w-6xl mx-auto text-center px-6 pt-12 pb-24 flex flex-col items-center">
-                <!-- LOGO NAD NAPISEM -->
                 <div class="h-52 sm:h-[480px] w-auto overflow-hidden flex items-center justify-center mt-0 sm:mt-0 -mb-4">
                     <img src="netjes-logo.png" alt="netjes TATTOO" class="w-full max-w-2xl sm:max-w-4xl h-auto object-contain -my-10 sm:-my-20 drop-shadow-2xl">
                 </div>
@@ -254,7 +259,7 @@
                             <span data-i18n="portfolio_item_2" class="text-sm uppercase tracking-widest text-gold font-semibold">Mikrorealizm</span>
                         </div>
                     </div>
-                    <!-- ZDJĘCIE 3 (POPRAWIONY LINK) -->
+                    <!-- ZDJĘCIE 3 -->
                     <div class="aspect-square rounded-3xl overflow-hidden border border-dark-border group relative cursor-pointer">
                         <img src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center p-6">
@@ -265,7 +270,7 @@
             </div>
         </section>
 
-        <!-- BOOKING SYSTEM SECTION -->
+        <!-- BOOKING SYSTEM SECTION (NAPRAWIONA W PEŁNI INTERAKCJA I KLIKANIE) -->
         <section id="rezerwacja" class="py-28 border-t border-dark-border bg-dark-surface/20">
             <div class="max-w-6xl mx-auto px-6">
                 <div class="text-center mb-12">
@@ -274,38 +279,38 @@
                     <div class="w-16 h-[1px] bg-gold mx-auto mt-4"></div>
                 </div>
 
-                <div class="bg-dark-card border border-dark-border rounded-3xl shadow-2xl overflow-hidden glass-panel">
+                <div class="bg-dark-card border border-dark-border rounded-3xl shadow-2xl overflow-hidden glass-panel relative z-10">
                     
                     <!-- Progress Bar Header -->
                     <div class="border-b border-dark-border bg-dark-surface/60 p-6 sm:p-8">
                         <div class="grid grid-cols-4 gap-4 text-center">
-                            <div id="step-tab-1" class="flex flex-col items-center opacity-100 transition-all">
+                            <div id="step-tab-1" class="flex flex-col items-center opacity-100 transition-all cursor-pointer" onclick="goToStep(1)">
                                 <div id="step-circle-1" class="w-10 h-10 rounded-full gold-gradient-bg text-black font-bold flex items-center justify-center text-sm mb-2">1</div>
                                 <span id="step-label-1" data-i18n="step_1_tab" class="text-xs uppercase tracking-wider font-semibold text-gold hidden sm:block">Usługa</span>
                             </div>
-                            <div id="step-tab-2" class="flex flex-col items-center opacity-40 transition-all">
+                            <div id="step-tab-2" class="flex flex-col items-center opacity-40 transition-all cursor-pointer" onclick="goToStep(2)">
                                 <div id="step-circle-2" class="w-10 h-10 rounded-full bg-dark-base border border-dark-border text-white font-bold flex items-center justify-center text-sm mb-2">2</div>
                                 <span id="step-label-2" data-i18n="step_2_tab" class="text-xs uppercase tracking-wider font-medium text-gray-400 hidden sm:block">Termin</span>
                             </div>
-                            <div id="step-tab-3" class="flex flex-col items-center opacity-40 transition-all">
+                            <div id="step-tab-3" class="flex flex-col items-center opacity-40 transition-all cursor-pointer" onclick="goToStep(3)">
                                 <div id="step-circle-3" class="w-10 h-10 rounded-full bg-dark-base border border-dark-border text-white font-bold flex items-center justify-center text-sm mb-2">3</div>
                                 <span id="step-label-3" data-i18n="step_3_tab" class="text-xs uppercase tracking-wider font-medium text-gray-400 hidden sm:block">Szczegóły</span>
                             </div>
-                            <div id="step-tab-4" class="flex flex-col items-center opacity-40 transition-all">
+                            <div id="step-tab-4" class="flex flex-col items-center opacity-40 transition-all cursor-pointer" onclick="goToStep(4)">
                                 <div id="step-circle-4" class="w-10 h-10 rounded-full bg-dark-base border border-dark-border text-white font-bold flex items-center justify-center text-sm mb-2">4</div>
                                 <span id="step-label-4" data-i18n="step_4_tab" class="text-xs uppercase tracking-wider font-medium text-gray-400 hidden sm:block">Podsumowanie</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="p-8 sm:p-12">
+                    <div class="p-8 sm:p-12 relative z-20">
                         
                         <!-- KROK 1: Wybór Usługi -->
                         <div id="step-content-1" class="step-content space-y-8">
                             <h3 data-i18n="step_1_title" class="font-serif-title text-3xl text-white">1. Wybierz Rodzaj Usługi</h3>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div onclick="selectService('small')" id="service-card-small" class="service-card p-6 rounded-2xl border border-gold bg-gold/10 cursor-pointer transition-all flex justify-between items-start">
+                                <div onclick="selectService('small')" id="service-card-small" class="service-card p-6 rounded-2xl border border-gold bg-gold/10 cursor-pointer transition-all flex justify-between items-start select-none">
                                     <div>
                                         <span data-i18n="service_small_title" class="text-sm font-bold text-white block">Mały Tatuaż / Fineline</span>
                                         <p data-i18n="service_small_desc" class="text-xs text-gray-400 font-light mt-2">Rozmiar do ~7 cm. Proste symbole, napisy.</p>
@@ -314,7 +319,7 @@
                                     <span class="font-serif-title text-3xl text-gold font-bold">€80</span>
                                 </div>
 
-                                <div onclick="selectService('medium')" id="service-card-medium" class="service-card p-6 rounded-2xl border border-dark-border bg-dark-base cursor-pointer transition-all flex justify-between items-start">
+                                <div onclick="selectService('medium')" id="service-card-medium" class="service-card p-6 rounded-2xl border border-dark-border bg-dark-base cursor-pointer transition-all flex justify-between items-start select-none">
                                     <div>
                                         <span data-i18n="service_medium_title" class="text-sm font-bold text-white block">Średni Tatuaż / Detal</span>
                                         <p data-i18n="service_medium_desc" class="text-xs text-gray-400 font-light mt-2">Rozmiar 8-15 cm. Szczegółowy motyw.</p>
@@ -325,7 +330,7 @@
                             </div>
 
                             <div class="flex justify-end pt-6">
-                                <button onclick="goToStep(2)" class="gold-gradient-bg text-black font-semibold px-8 py-4 rounded-xl text-xs uppercase tracking-widest hover:opacity-90">
+                                <button type="button" onclick="goToStep(2)" class="gold-gradient-bg text-black font-semibold px-8 py-4 rounded-xl text-xs uppercase tracking-widest hover:opacity-90 cursor-pointer">
                                     <span data-i18n="btn_next_date">Dalej: Wybór Daty</span> <i class="fa-solid fa-arrow-right ml-2"></i>
                                 </button>
                             </div>
@@ -356,8 +361,8 @@
                             </div>
 
                             <div class="flex justify-between pt-6">
-                                <button onclick="goToStep(1)" data-i18n="btn_back" class="border border-dark-border text-gray-300 px-8 py-4 rounded-xl text-xs uppercase tracking-widest">Wstecz</button>
-                                <button onclick="goToStep(3)" data-i18n="btn_next_details" class="gold-gradient-bg text-black font-semibold px-8 py-4 rounded-xl text-xs uppercase tracking-widest">Dalej: Opis Tatuażu</button>
+                                <button type="button" onclick="goToStep(1)" data-i18n="btn_back" class="border border-dark-border text-gray-300 px-8 py-4 rounded-xl text-xs uppercase tracking-widest cursor-pointer">Wstecz</button>
+                                <button type="button" onclick="goToStep(3)" data-i18n="btn_next_details" class="gold-gradient-bg text-black font-semibold px-8 py-4 rounded-xl text-xs uppercase tracking-widest cursor-pointer">Dalej: Opis Tatuażu</button>
                             </div>
                         </div>
 
@@ -399,8 +404,8 @@
                             </div>
 
                             <div class="flex justify-between pt-6">
-                                <button onclick="goToStep(2)" data-i18n="btn_back" class="border border-dark-border text-gray-300 px-8 py-4 rounded-xl text-xs uppercase tracking-widest">Wstecz</button>
-                                <button onclick="goToStep(4)" data-i18n="btn_next_summary" class="gold-gradient-bg text-black font-semibold px-8 py-4 rounded-xl text-xs uppercase tracking-widest">Dalej: Podsumowanie</button>
+                                <button type="button" onclick="goToStep(2)" data-i18n="btn_back" class="border border-dark-border text-gray-300 px-8 py-4 rounded-xl text-xs uppercase tracking-widest cursor-pointer">Wstecz</button>
+                                <button type="button" onclick="goToStep(4)" data-i18n="btn_next_summary" class="gold-gradient-bg text-black font-semibold px-8 py-4 rounded-xl text-xs uppercase tracking-widest cursor-pointer">Dalej: Podsumowanie</button>
                             </div>
                         </div>
 
@@ -426,8 +431,8 @@
                             </div>
 
                             <div class="flex justify-between pt-6">
-                                <button onclick="goToStep(3)" data-i18n="btn_back" class="border border-dark-border text-gray-300 px-8 py-4 rounded-xl text-xs uppercase tracking-widest">Wstecz</button>
-                                <button onclick="submitFinalBooking()" id="submit-btn" data-i18n="btn_confirm_booking" class="gold-gradient-bg text-black font-bold px-10 py-4 rounded-xl text-xs uppercase tracking-widest">
+                                <button type="button" onclick="goToStep(3)" data-i18n="btn_back" class="border border-dark-border text-gray-300 px-8 py-4 rounded-xl text-xs uppercase tracking-widest cursor-pointer">Wstecz</button>
+                                <button type="button" onclick="submitFinalBooking()" id="submit-btn" data-i18n="btn_confirm_booking" class="gold-gradient-bg text-black font-bold px-10 py-4 rounded-xl text-xs uppercase tracking-widest cursor-pointer">
                                     Potwierdzam & Rezerwuję
                                 </button>
                             </div>
@@ -723,7 +728,7 @@
                 }
             });
 
-            // PRECYZYJNIE DOCIĘTA POZYCJA PODŚWIETLENIA POD FLAGAMI
+            // PERFEKCYJNIE DOCIĘTE PRZESUNIĘCIE KÓŁKA (PL: 0px, EN: 35px, NL: 70px)
             const thumb = document.getElementById('switch-thumb');
             const flagPl = document.getElementById('flag-pl');
             const flagEn = document.getElementById('flag-en');
@@ -738,20 +743,14 @@
                 flagPl.classList.remove('opacity-40');
                 flagPl.classList.add('opacity-100');
             } else if (lang === 'en') {
-                thumb.style.transform = 'translateX(28px)';
+                thumb.style.transform = 'translateX(35px)';
                 flagEn.classList.remove('opacity-40');
                 flagEn.classList.add('opacity-100');
             } else if (lang === 'nl') {
-                thumb.style.transform = 'translateX(56px)';
+                thumb.style.transform = 'translateX(70px)';
                 flagNl.classList.remove('opacity-40');
                 flagNl.classList.add('opacity-100');
             }
-        }
-
-        function cycleLanguageSwitch() {
-            if (currentLang === 'pl') setLanguage('en');
-            else if (currentLang === 'en') setLanguage('nl');
-            else setLanguage('pl');
         }
 
         function selectLanguageFromModal(lang) {
@@ -799,7 +798,7 @@
 
         const availableTimeSlots = ['10:00', '12:00', '14:30', '17:00'];
 
-        /* NAWIGACJA I WALIDACJA */
+        /* NAWIGACJA I WALIDACJA FORMULARZA REZERWACJI */
         function goToStep(stepNum) {
             if (stepNum > bookingState.step) {
                 if (bookingState.step === 2 && (!bookingState.selectedDate || !bookingState.selectedTime)) {
@@ -852,10 +851,10 @@
             bookingState.selectedPrice = servicesData[key].price;
 
             document.querySelectorAll('.service-card').forEach(card => {
-                card.className = "service-card p-6 rounded-2xl border border-dark-border bg-dark-base cursor-pointer transition-all flex justify-between items-start";
+                card.className = "service-card p-6 rounded-2xl border border-dark-border bg-dark-base cursor-pointer transition-all flex justify-between items-start select-none";
             });
 
-            document.getElementById(`service-card-${key}`).className = "service-card p-6 rounded-2xl border border-gold bg-gold/10 cursor-pointer transition-all flex justify-between items-start";
+            document.getElementById(`service-card-${key}`).className = "service-card p-6 rounded-2xl border border-gold bg-gold/10 cursor-pointer transition-all flex justify-between items-start select-none";
         }
 
         /* KALENDARZ */
@@ -867,7 +866,8 @@
             for (let day = 1; day <= 31; day++) {
                 const dateStr = `2026-10-${day < 10 ? '0' + day : day}`;
                 const btn = document.createElement('button');
-                btn.className = "calendar-day-btn h-12 w-full rounded-xl border border-dark-border text-xs text-white hover:border-gold transition flex items-center justify-center font-medium";
+                btn.type = "button";
+                btn.className = "calendar-day-btn h-12 w-full rounded-xl border border-dark-border text-xs text-white hover:border-gold transition flex items-center justify-center font-medium cursor-pointer";
                 btn.innerText = day;
 
                 btn.onclick = async () => {
@@ -875,17 +875,17 @@
                     bookingState.selectedTime = null;
                     document.querySelectorAll('.calendar-day-btn').forEach(b => b.classList.remove('selected-day'));
                     btn.classList.add('selected-day');
-                    document.getElementById('selected-date-display').innerText = `Selected date: ${dateStr}`;
+                    document.getElementById('selected-date-display').innerText = `Data: ${dateStr}`;
                     await renderTimeSlots();
                 };
                 grid.appendChild(btn);
             }
         }
 
-        /* GODZINY (Z SPRAWDZANIEM ZAJĘTYCH TERMINÓW W SUPABASE) */
+        /* GODZINY (Z SPRAWDZANIEM ZAJĘTYCH TERMINÓW) */
         async function renderTimeSlots() {
             const container = document.getElementById('time-slots-container');
-            container.innerHTML = '<div class="col-span-2 text-center py-4 text-xs text-gold">Checking availability...</div>';
+            container.innerHTML = '<div class="col-span-2 text-center py-4 text-xs text-gold">Sprawdzanie dostępności...</div>';
 
             let takenTimes = [];
 
@@ -905,13 +905,14 @@
             availableTimeSlots.forEach(time => {
                 const isTaken = takenTimes.includes(time);
                 const slotBtn = document.createElement('button');
+                slotBtn.type = "button";
                 
                 if (isTaken) {
                     slotBtn.className = 'py-3 px-4 rounded-xl border border-red-900/40 text-xs text-red-400/50 bg-red-950/20 cursor-not-allowed line-through';
-                    slotBtn.innerText = `${time} (Taken)`;
+                    slotBtn.innerText = `${time} (Zajęte)`;
                     slotBtn.disabled = true;
                 } else {
-                    slotBtn.className = 'time-slot-btn py-3 px-4 rounded-xl border border-dark-border text-xs text-white bg-dark-surface hover:border-gold';
+                    slotBtn.className = 'time-slot-btn py-3 px-4 rounded-xl border border-dark-border text-xs text-white bg-dark-surface hover:border-gold cursor-pointer';
                     slotBtn.innerText = time;
                     slotBtn.onclick = () => {
                         bookingState.selectedTime = time;
@@ -934,10 +935,10 @@
             document.getElementById('summary-contact').innerText = `${document.getElementById('input-client-phone').value} • ${document.getElementById('input-client-email').value}`;
         }
 
-        /* FINALIZACJA I ZAPIS DO BAZY DANYCH (SUPABASE) */
+        /* FINALIZACJA I ZAPIS DO BAZY DANYCH */
         async function submitFinalBooking() {
             const submitBtn = document.getElementById('submit-btn');
-            submitBtn.innerText = "Saving...";
+            submitBtn.innerText = "Zapisywanie...";
             submitBtn.disabled = true;
 
             const nameVal = document.getElementById('input-client-name').value;
@@ -961,12 +962,12 @@
                 const { data, error } = await db.from('bookings').insert([payload]);
                 if (error) {
                     console.error("Error:", error);
-                    alert("Database error: " + error.message);
+                    alert("Błąd bazy danych: " + error.message);
                 } else {
-                    alert("Thank you! Your booking has been recorded.");
+                    alert("Dziękujemy! Twoja rezerwacja została pomyślnie złożona.");
                 }
             } else {
-                alert("Database connection missing!");
+                alert("Brak połączenia z bazą danych!");
             }
 
             const localBooking = {
