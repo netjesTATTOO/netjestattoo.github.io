@@ -485,6 +485,7 @@
                 <table class="w-full text-left text-xs">
                     <thead class="bg-dark-surface border-b border-dark-border uppercase text-gray-400 font-semibold">
                         <tr>
+                            <th class="p-5">Data utworzenia</th>
                             <th class="p-5">Klient</th>
                             <th class="p-5">Usługa</th>
                             <th class="p-5">Termin</th>
@@ -944,13 +945,11 @@
             const placeVal = document.getElementById('input-body-placement').value;
             const descVal = document.getElementById('input-description').value;
 
+            // Dokładne dopasowanie nazw kolumn z bazy danych Supabase
             const payload = {
                 clientname: nameVal,
-                client_name: nameVal,
                 clientemail: emailVal,
-                client_email: emailVal,
                 clientphone: phoneVal,
-                client_phone: phoneVal,
                 service: bookingState.selectedServiceName,
                 date: bookingState.selectedDate,
                 time: bookingState.selectedTime,
@@ -971,9 +970,10 @@
             }
 
             const localBooking = {
-                clientName: nameVal,
-                clientEmail: emailVal,
-                clientPhone: phoneVal,
+                created_at: new Date().toISOString(),
+                clientname: nameVal,
+                clientemail: emailVal,
+                clientphone: phoneVal,
                 service: bookingState.selectedServiceName,
                 date: bookingState.selectedDate,
                 time: bookingState.selectedTime,
@@ -1055,21 +1055,25 @@
             const tableBody = document.getElementById('admin-bookings-table-body');
             tableBody.innerHTML = '';
             if(!appBookings || appBookings.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="5" class="p-5 text-center text-gray-500">Brak rezerwacji</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="6" class="p-5 text-center text-gray-500">Brak rezerwacji</td></tr>';
                 return;
             }
             appBookings.forEach((b, index) => {
-                const name = b.client_name || b.clientname || b.clientName || 'Brak danych';
-                const email = b.client_email || b.clientemail || b.clientEmail || '';
-                const phone = b.client_phone || b.clientphone || b.clientPhone || '';
+                const createdAt = b.created_at ? new Date(b.created_at).toLocaleString('pl-PL') : '—';
+                const name = b.clientname || 'Brak danych';
+                const email = b.clientemail || '';
+                const phone = b.clientphone || '';
+                const placement = b.placement || '—';
+                const description = b.description || '—';
                 const bookingId = b.id !== undefined ? b.id : index;
 
                 const row = document.createElement('tr');
                 row.innerHTML = `
+                    <td class="p-5 text-gray-400 font-mono text-[11px]">${createdAt}</td>
                     <td class="p-5 font-bold text-white">${name}<br><span class="text-xs text-gray-400 font-normal">${email} • ${phone}</span></td>
                     <td class="p-5 text-gold font-medium">${b.service}</td>
                     <td class="p-5">${b.date} (${b.time})</td>
-                    <td class="p-5">${b.placement} - ${b.description}</td>
+                    <td class="p-5">${placement} - ${description}</td>
                     <td class="p-5 text-right">
                         <button onclick="deleteBooking(${bookingId})" class="text-red-400 hover:text-white transition"><i class="fa-solid fa-trash"></i></button>
                     </td>
