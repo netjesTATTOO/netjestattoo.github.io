@@ -99,21 +99,21 @@
             <p class="text-xs text-gray-400 mb-8 font-light">Kies uw taal om verder te gaan op netjes TATTOO</p>
             
             <div class="space-y-4">
-                <button onclick="selectLanguageFromModal('pl')" class="w-full flex items-center justify-between p-4 rounded-2xl bg-dark-surface border border-dark-border hover:border-gold transition group">
+                <button onclick="selectLanguageFromModal('pl')" class="w-full flex items-center justify-between p-4 rounded-2xl bg-dark-surface border border-dark-border hover:border-gold transition group cursor-pointer">
                     <div class="flex items-center space-x-3">
                         <span class="fi fi-pl text-xl rounded-sm"></span>
                         <span class="text-sm font-semibold text-white group-hover:text-gold transition">Polski</span>
                     </div>
                     <i class="fa-solid fa-chevron-right text-xs text-gray-500 group-hover:text-gold transition"></i>
                 </button>
-                <button onclick="selectLanguageFromModal('en')" class="w-full flex items-center justify-between p-4 rounded-2xl bg-dark-surface border border-dark-border hover:border-gold transition group">
+                <button onclick="selectLanguageFromModal('en')" class="w-full flex items-center justify-between p-4 rounded-2xl bg-dark-surface border border-dark-border hover:border-gold transition group cursor-pointer">
                     <div class="flex items-center space-x-3">
                         <span class="fi fi-gb text-xl rounded-sm"></span>
                         <span class="text-sm font-semibold text-white group-hover:text-gold transition">English</span>
                     </div>
                     <i class="fa-solid fa-chevron-right text-xs text-gray-500 group-hover:text-gold transition"></i>
                 </button>
-                <button onclick="selectLanguageFromModal('nl')" class="w-full flex items-center justify-between p-4 rounded-2xl bg-dark-surface border border-dark-border hover:border-gold transition group">
+                <button onclick="selectLanguageFromModal('nl')" class="w-full flex items-center justify-between p-4 rounded-2xl bg-dark-surface border border-dark-border hover:border-gold transition group cursor-pointer">
                     <div class="flex items-center space-x-3">
                         <span class="fi fi-nl text-xl rounded-sm"></span>
                         <span class="text-sm font-semibold text-white group-hover:text-gold transition">Nederlands</span>
@@ -136,17 +136,17 @@
                     </a>
 
                     <!-- PRZEŁĄCZNIK JĘZYKÓW -->
-                    <div class="relative bg-dark-surface border border-dark-border rounded-full p-1 flex items-center select-none" style="width: 108px; height: 38px;">
+                    <div class="relative bg-dark-surface border border-dark-border rounded-full p-1 flex items-center select-none" style="width: 114px; height: 38px;">
                         <div id="switch-thumb" class="absolute top-1 left-1 w-7 h-7 gold-gradient-bg rounded-full transition-transform duration-300 ease-in-out pointer-events-none z-0"></div>
                         
                         <div class="relative z-10 flex items-center justify-between w-full h-full">
-                            <button onclick="setLanguage('pl')" class="w-7 h-7 flex items-center justify-center rounded-full focus:outline-none" title="Polski">
+                            <button onclick="setLanguage('pl')" class="w-9 h-7 flex items-center justify-center rounded-full focus:outline-none cursor-pointer" title="Polski">
                                 <span class="fi fi-pl rounded-full text-xs transition-opacity duration-300" id="flag-pl"></span>
                             </button>
-                            <button onclick="setLanguage('en')" class="w-7 h-7 flex items-center justify-center rounded-full focus:outline-none" title="English">
+                            <button onclick="setLanguage('en')" class="w-9 h-7 flex items-center justify-center rounded-full focus:outline-none cursor-pointer" title="English">
                                 <span class="fi fi-gb rounded-full text-xs transition-opacity duration-300" id="flag-en"></span>
                             </button>
-                            <button onclick="setLanguage('nl')" class="w-7 h-7 flex items-center justify-center rounded-full focus:outline-none" title="Nederlands">
+                            <button onclick="setLanguage('nl')" class="w-9 h-7 flex items-center justify-center rounded-full focus:outline-none cursor-pointer" title="Nederlands">
                                 <span class="fi fi-nl rounded-full text-xs transition-opacity duration-300" id="flag-nl"></span>
                             </button>
                         </div>
@@ -672,6 +672,14 @@
 
         let currentLang = 'pl';
 
+        function selectLanguageFromModal(lang) {
+            setLanguage(lang);
+            const modal = document.getElementById('language-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
         function setLanguage(lang) {
             currentLang = lang;
             const dict = translations[lang];
@@ -692,11 +700,11 @@
             flagEn.classList.remove('opacity-100'); flagEn.classList.add('opacity-40');
             flagNl.classList.remove('opacity-100'); flagNl.classList.add('opacity-40');
         
-            // Znajdź kliknięty/wybrany przycisk
+            // Znajdź kliknięty/wybrany przycisk i ustaw kciuk dokładnie wycentrowany
             const activeBtn = document.querySelector(`button[onclick="setLanguage('${lang}')"]`);
             if (activeBtn && thumb) {
-                // Ustaw pozycję podświetlenia na dokładnie taką samą, jaką ma wybrany przycisk
-                thumb.style.transform = `translateX(${activeBtn.offsetLeft - 4}px)`;
+                const targetLeft = activeBtn.offsetLeft + (activeBtn.offsetWidth / 2) - (thumb.offsetWidth / 2);
+                thumb.style.transform = `translateX(${targetLeft - 4}px)`;
             }
         
             if (lang === 'pl') {
