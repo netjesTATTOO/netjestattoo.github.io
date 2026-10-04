@@ -88,7 +88,7 @@
 </head>
 <body class="bg-dark-base text-gray-300 min-h-screen flex flex-col justify-between">
 
-    <!-- MODAL WYBORU JĘZYKA (POJAWIA SIĘ PO WEJŚCIU) -->
+    <!-- MODAL WYBORU JĘZYKA -->
     <div id="language-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
         <div class="glass-panel bg-dark-card border border-dark-border p-8 sm:p-10 rounded-3xl max-w-md w-full text-center shadow-2xl relative">
             <div class="w-12 h-12 gold-gradient-bg text-black rounded-full flex items-center justify-center mx-auto mb-6">
@@ -373,7 +373,7 @@
                             </div>
                         </div>
 
-                        <!-- KROK 3: Opis i Dane -->
+                        <!-- KROK 3: Opis, Zdjęcia i Dane -->
                         <div id="step-content-3" class="step-content space-y-8 hidden">
                             <h3 data-i18n="step_3_title" class="font-serif-title text-3xl text-white">3. Opis Tatuażu & Twoje Dane</h3>
 
@@ -391,7 +391,14 @@
 
                                 <div>
                                     <label data-i18n="label_desc" class="block text-xs uppercase text-gray-300 mb-2">Opis Wzoru *</label>
-                                    <textarea id="input-description" rows="4" placeholder="Opisz pomysł na swój tatuaż..." class="w-full bg-dark-base border border-dark-border rounded-xl p-5 text-xs text-white focus:border-gold outline-none resize-none"></textarea>
+                                    <textarea id="input-description" rows="3" placeholder="Opisz pomysł na swój tatuaż..." class="w-full bg-dark-base border border-dark-border rounded-xl p-5 text-xs text-white focus:border-gold outline-none resize-none"></textarea>
+                                </div>
+
+                                <!-- WYSYŁANIE ZDJĘĆ INSPIRACJI -->
+                                <div>
+                                    <label data-i18n="label_images" class="block text-xs uppercase text-gray-300 mb-2">Zdjęcia Inspiracji (Maksymalnie 3)</label>
+                                    <input type="file" id="input-inspiration-files" accept="image/*" multiple class="w-full bg-dark-base border border-dark-border rounded-xl p-3 text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-gold file:text-black hover:file:opacity-80 cursor-pointer">
+                                    <p data-i18n="label_images_hint" class="text-[10px] text-gray-500 mt-1">Wybierz do 3 plików ze swojego urządzenia (JPG, PNG).</p>
                                 </div>
 
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -434,6 +441,7 @@
                                     <div><span data-i18n="summary_client" class="text-gray-400 block text-xs uppercase mb-1">Klient:</span><span id="summary-client" class="text-white text-sm"></span></div>
                                     <div><span data-i18n="summary_place" class="text-gray-400 block text-xs uppercase mb-1">Miejsce:</span><span id="summary-placement" class="text-white text-sm"></span></div>
                                     <div><span data-i18n="summary_contact" class="text-gray-400 block text-xs uppercase mb-1">Kontakt:</span><span id="summary-contact" class="text-white text-sm"></span></div>
+                                    <div class="sm:col-span-2"><span data-i18n="summary_images_count" class="text-gray-400 block text-xs uppercase mb-1">Inspiracje:</span><span id="summary-images-count" class="text-gold font-medium text-sm"></span></div>
                                 </div>
                             </div>
 
@@ -502,6 +510,7 @@
                             <th class="p-5">Usługa</th>
                             <th class="p-5">Termin</th>
                             <th class="p-5">Miejsce & Opis</th>
+                            <th class="p-5">Inspiracje</th>
                             <th class="p-5 text-right">Usuń</th>
                         </tr>
                     </thead>
@@ -512,7 +521,7 @@
     </div>
 
     <script>
-        // INICJALIZACJA EMAILJS PODANYM PUBLIC KEY
+        // INICJALIZACJA EMAILJS
         (function() {
             emailjs.init("Zdb3EviGAr7ZNTaeA");
         })();
@@ -520,7 +529,7 @@
         // DEKLARACJA STANU ZMIENNYCH
         const todayDate = new Date();
         let calendarYear = todayDate.getFullYear();
-        let calendarMonth = todayDate.getMonth(); // 0-indexed
+        let calendarMonth = todayDate.getMonth();
 
         let bookingState = {
             step: 1,
@@ -545,211 +554,52 @@
             nl: ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December']
         };
 
-        // SŁOWNIK JĘZYKOWY (PL, EN, NL)
         const translations = {
             pl: {
-                nav_about: "O mnie",
-                nav_portfolio: "Portfolio",
-                nav_booking: "Rezerwacja Online",
-                nav_contact: "Kontakt",
-                nav_book_btn: "Zarezerwuj Wizytę",
-                hero_subtitle: "Studio Tatuażu • Daria Wąs",
-                hero_title_1: "Precyzja, Delikatność i",
-                hero_title_2: "Sztuka",
-                hero_title_3: "na Twojej Skórze",
+                nav_about: "O mnie", nav_portfolio: "Portfolio", nav_booking: "Rezerwacja Online", nav_contact: "Kontakt", nav_book_btn: "Zarezerwuj Wizytę",
+                hero_subtitle: "Studio Tatuażu • Daria Wąs", hero_title_1: "Precyzja, Delikatność i", hero_title_2: "Sztuka", hero_title_3: "na Twojej Skórze",
                 hero_desc: "Specjalizuję się w autorskich tatuażach typu Fineline, mikrorealizmie oraz delikatnych kompozycjach roślinnych i geometrycznych.",
-                hero_btn_book: "Zarezerwuj Termin",
-                hero_btn_portfolio: "Zobacz Portfolio",
-                about_tag: "O Mnie",
-                about_badge: "Sterylność & Pasja",
+                hero_btn_book: "Zarezerwuj Termin", hero_btn_portfolio: "Zobacz Portfolio", about_tag: "O Mnie", about_badge: "Sterylność & Pasja",
                 about_text_1: "Cześć! Nazywam się Daria i tworzę tatuaże, które stają się subtelną ozdobą Twojego ciała. W mojej pracy najważniejsza jest precyzja cienkiej linii (fineline) oraz komfort i bezpieczeństwo podczas każdej sesji.",
                 about_text_2: "Dbam o kameralną i przyjazną atmosferę w studiu, tak aby każda wizyta była dla Ciebie przyjemnym doświadczeniem.",
-                about_feature_1_title: "Cienka Linia",
-                about_feature_1_desc: "Precyzyjne, subtelne detale",
-                about_feature_2_title: "Indywidualność",
-                about_feature_2_desc: "Projekt dopasowany do Ciebie",
-                portfolio_tag: "Moje Prace",
-                portfolio_title: "Galeria Portfolio",
-                portfolio_item_2: "Mikrorealizm",
-                portfolio_item_3: "Subtelny Napis",
-                booking_tag: "System Rezerwacji",
-                booking_title: "Zarezerwuj Termin Online",
-                step_1_tab: "Usługa",
-                step_2_tab: "Termin",
-                step_3_tab: "Szczegóły",
-                step_4_tab: "Podsumowanie",
-                step_1_title: "1. Wybierz Rodzaj Usługi",
-                service_small_title: "Mały Tatuaż / Fineline",
-                service_small_desc: "Rozmiar do ~7 cm. Proste symbole, napisy.",
-                service_medium_title: "Średni Tatuaż / Detal",
-                service_medium_desc: "Rozmiar 8-15 cm. Szczegółowy motyw.",
-                deposit_label: "Zaliczka",
-                btn_next_date: "Dalej: Wybór Daty",
-                step_2_title: "2. Wybierz Datę i Godzinę",
-                day_mon: "Pon", day_tue: "Wt", day_wed: "Śr", day_thu: "Czw", day_fri: "Pt", day_sat: "Sob", day_sun: "Niedz",
-                hours_title: "Godziny",
-                click_day_prompt: "Kliknij dzień z kalendarza.",
-                first_select_day: "Najpierw wybierz dzień",
-                btn_back: "Wstecz",
-                btn_next_details: "Dalej: Opis Tatuażu",
-                step_3_title: "3. Opis Tatuażu & Twoje Dane",
-                label_placement: "Miejsce na Ciele *",
-                label_size: "Wymiar (cm)",
-                label_desc: "Opis Wzoru *",
-                label_fullname: "Imię i Nazwisko *",
-                label_phone: "Telefon *",
-                label_email: "Email *",
-                btn_next_summary: "Dalej: Podsumowanie",
-                step_4_title: "4. Podsumowanie Rezerwacji",
-                summary_selected_service: "Wybrana Usługa",
-                summary_datetime: "Data i Godzina:",
-                summary_client: "Klient:",
-                summary_place: "Miejsce:",
-                summary_contact: "Kontakt:",
-                btn_confirm_booking: "Potwierdzam & Rezerwuję",
-                footer_desc: "Autorskie studio tatuażu Darii Wąs. Precyzja, sterylność i wyjątkowa atmosfera.",
-                footer_contact_title: "Kontakt & Lokalizacja",
-                footer_location: "Polska / Holandia",
-                footer_hours_title: "Godziny Otwarcia",
-                footer_hours_week: "Poniedziałek – Piątek: 10:00 – 18:00",
-                footer_hours_sat: "Sobota: Po wcześniejszym uzgodnieniu",
-                footer_rights: "© 2026 netjes TATTOO by Daria Wąs. Wszelkie prawa zastrzeżone."
+                about_feature_1_title: "Cienka Linia", about_feature_1_desc: "Precyzyjne, subtelne detale", about_feature_2_title: "Indywidualność", about_feature_2_desc: "Projekt dopasowany do Ciebie",
+                portfolio_tag: "Moje Prace", portfolio_title: "Galeria Portfolio", portfolio_item_2: "Mikrorealizm", portfolio_item_3: "Subtelny Napis",
+                booking_tag: "System Rezerwacji", booking_title: "Zarezerwuj Termin Online", step_1_tab: "Usługa", step_2_tab: "Termin", step_3_tab: "Szczegóły", step_4_tab: "Podsumowanie",
+                step_1_title: "1. Wybierz Rodzaj Usługi", service_small_title: "Mały Tatuaż / Fineline", service_small_desc: "Rozmiar do ~7 cm. Proste symbole, napisy.", service_medium_title: "Średni Tatuaż / Detal", service_medium_desc: "Rozmiar 8-15 cm. Szczegółowy motyw.", deposit_label: "Zaliczka", btn_next_date: "Dalej: Wybór Daty",
+                step_2_title: "2. Wybierz Datę i Godzinę", day_mon: "Pon", day_tue: "Wt", day_wed: "Śr", day_thu: "Czw", day_fri: "Pt", day_sat: "Sob", day_sun: "Niedz", hours_title: "Godziny", click_day_prompt: "Kliknij dzień z kalendarza.", first_select_day: "Najpierw wybierz dzień", btn_back: "Wstecz", btn_next_details: "Dalej: Opis Tatuażu",
+                step_3_title: "3. Opis Tatuażu & Twoje Dane", label_placement: "Miejsce na Ciele *", label_size: "Wymiar (cm)", label_desc: "Opis Wzoru *", label_images: "Zdjęcia Inspiracji (Maksymalnie 3)", label_images_hint: "Wybierz do 3 plików ze swojego urządzenia (JPG, PNG).", label_fullname: "Imię i Nazwisko *", label_phone: "Telefon *", label_email: "Email *", btn_next_summary: "Dalej: Podsumowanie",
+                step_4_title: "4. Podsumowanie Rezerwacji", summary_selected_service: "Wybrana Usługa", summary_datetime: "Data i Godzina:", summary_client: "Klient:", summary_place: "Miejsce:", summary_contact: "Kontakt:", summary_images_count: "Inspiracje:", btn_confirm_booking: "Potwierdzam & Rezerwuję",
+                footer_desc: "Autorskie studio tatuażu Darii Wąs. Precyzja, sterylność i wyjątkowa atmosfera.", footer_contact_title: "Kontakt & Lokalizacja", footer_location: "Polska / Holandia", footer_hours_title: "Godziny Otwarcia", footer_hours_week: "Poniedziałek – Piątek: 10:00 – 18:00", footer_hours_sat: "Sobota: Po wcześniejszym uzgodnieniu", footer_rights: "© 2026 netjes TATTOO by Daria Wąs. Wszelkie prawa zastrzeżone."
             },
             en: {
-                nav_about: "About Me",
-                nav_portfolio: "Portfolio",
-                nav_booking: "Online Booking",
-                nav_contact: "Contact",
-                nav_book_btn: "Book Appointment",
-                hero_subtitle: "Tattoo Studio • Daria Wąs",
-                hero_title_1: "Precision, Delicacy and",
-                hero_title_2: "Art",
-                hero_title_3: "on Your Skin",
-                hero_desc: "Specializing in fine-line tattoos, micro-realism, and delicate floral or geometric designs.",
-                hero_btn_book: "Book Your Date",
-                hero_btn_portfolio: "View Portfolio",
-                about_tag: "About Me",
-                about_badge: "Sterility & Passion",
+                nav_about: "About Me", nav_portfolio: "Portfolio", nav_booking: "Online Booking", nav_contact: "Contact", nav_book_btn: "Book Appointment",
+                hero_subtitle: "Tattoo Studio • Daria Wąs", hero_title_1: "Precision, Delicacy and", hero_title_2: "Art", hero_title_3: "on Your Skin",
+                hero_desc: "Specializing in fine-line tattoos, micro-realism, and delicate floral or geometric designs.", hero_btn_book: "Book Your Date", hero_btn_portfolio: "View Portfolio", about_tag: "About Me", about_badge: "Sterility & Passion",
                 about_text_1: "Hi! My name is Daria and I create subtle tattoo art that enhances your body. My focus is on fine-line precision, comfort, and safety during every session.",
                 about_text_2: "I ensure a cozy, friendly atmosphere in the studio so every visit feels special and relaxed.",
-                about_feature_1_title: "Fine Line",
-                about_feature_1_desc: "Precise, subtle details",
-                about_feature_2_title: "Custom Designs",
-                about_feature_2_desc: "Tailored to your vision",
-                portfolio_tag: "My Works",
-                portfolio_title: "Portfolio Gallery",
-                portfolio_item_2: "Microrealism",
-                portfolio_item_3: "Subtle Script",
-                booking_tag: "Booking System",
-                booking_title: "Book Online",
-                step_1_tab: "Service",
-                step_2_tab: "Date",
-                step_3_tab: "Details",
-                step_4_tab: "Summary",
-                step_1_title: "1. Choose Service Type",
-                service_small_title: "Small Tattoo / Fineline",
-                service_small_desc: "Up to ~7 cm. Simple symbols, lettering.",
-                service_medium_title: "Medium Tattoo / Detail",
-                service_medium_desc: "8-15 cm. Detailed custom work.",
-                deposit_label: "Deposit",
-                btn_next_date: "Next: Choose Date",
-                step_2_title: "2. Select Date & Time",
-                day_mon: "Mon", day_tue: "Tue", day_wed: "Wed", day_thu: "Thu", day_fri: "Fri", day_sat: "Sat", day_sun: "Sun",
-                hours_title: "Time Slots",
-                click_day_prompt: "Select a date from calendar.",
-                first_select_day: "First choose a date",
-                btn_back: "Back",
-                btn_next_details: "Next: Tattoo Details",
-                step_3_title: "3. Tattoo Description & Info",
-                label_placement: "Body Placement *",
-                label_size: "Approx Size (cm)",
-                label_desc: "Design Idea *",
-                label_fullname: "Full Name *",
-                label_phone: "Phone Number *",
-                label_email: "Email Address *",
-                btn_next_summary: "Next: Summary",
-                step_4_title: "4. Booking Summary",
-                summary_selected_service: "Selected Service",
-                summary_datetime: "Date & Time:",
-                summary_client: "Client:",
-                summary_place: "Placement:",
-                summary_contact: "Contact:",
-                btn_confirm_booking: "Confirm & Reserve",
-                footer_desc: "Artistic tattoo studio by Daria Wąs. Precision, sterility, and unique atmosphere.",
-                footer_contact_title: "Contact & Location",
-                footer_location: "Poland / Netherlands",
-                footer_hours_title: "Opening Hours",
-                footer_hours_week: "Monday – Friday: 10:00 – 18:00",
-                footer_hours_sat: "Saturday: By appointment only",
-                footer_rights: "© 2026 netjes TATTOO by Daria Wąs. All rights reserved."
+                about_feature_1_title: "Fine Line", about_feature_1_desc: "Precise, subtle details", about_feature_2_title: "Custom Designs", about_feature_2_desc: "Tailored to your vision",
+                portfolio_tag: "My Works", portfolio_title: "Portfolio Gallery", portfolio_item_2: "Microrealism", portfolio_item_3: "Subtle Script",
+                booking_tag: "Booking System", booking_title: "Book Online", step_1_tab: "Service", step_2_tab: "Date", step_3_tab: "Details", step_4_tab: "Summary",
+                step_1_title: "1. Choose Service Type", service_small_title: "Small Tattoo / Fineline", service_small_desc: "Up to ~7 cm. Simple symbols, lettering.", service_medium_title: "Medium Tattoo / Detail", service_medium_desc: "8-15 cm. Detailed custom work.", deposit_label: "Deposit", btn_next_date: "Next: Choose Date",
+                step_2_title: "2. Select Date & Time", day_mon: "Mon", day_tue: "Tue", day_wed: "Wed", day_thu: "Thu", day_fri: "Fri", day_sat: "Sat", day_sun: "Sun", hours_title: "Time Slots", click_day_prompt: "Select a date from calendar.", first_select_day: "First choose a date", btn_back: "Back", btn_next_details: "Next: Tattoo Details",
+                step_3_title: "3. Tattoo Description & Info", label_placement: "Body Placement *", label_size: "Approx Size (cm)", label_desc: "Design Idea *", label_images: "Inspiration Photos (Max 3)", label_images_hint: "Select up to 3 files from your device (JPG, PNG).", label_fullname: "Full Name *", label_phone: "Phone Number *", label_email: "Email Address *", btn_next_summary: "Next: Summary",
+                step_4_title: "4. Booking Summary", summary_selected_service: "Selected Service", summary_datetime: "Date & Time:", summary_client: "Client:", summary_place: "Placement:", summary_contact: "Contact:", summary_images_count: "Inspirations:", btn_confirm_booking: "Confirm & Reserve",
+                footer_desc: "Artistic tattoo studio by Daria Wąs. Precision, sterility, and unique atmosphere.", footer_contact_title: "Contact & Location", footer_location: "Poland / Netherlands", footer_hours_title: "Opening Hours", footer_hours_week: "Monday – Friday: 10:00 – 18:00", footer_hours_sat: "Saturday: By appointment only", footer_rights: "© 2026 netjes TATTOO by Daria Wąs. All rights reserved."
             },
             nl: {
-                nav_about: "Over Mij",
-                nav_portfolio: "Portfolio",
-                nav_booking: "Online Boeken",
-                nav_contact: "Contact",
-                nav_book_btn: "Afspraak Maken",
-                hero_subtitle: "Tattoostudio • Daria Wąs",
-                hero_title_1: "Precisie, Subtielheid en",
-                hero_title_2: "Kunst",
-                hero_title_3: "op Jouw Huid",
-                hero_desc: "Gespecialiseerd in verfijnde Fineline-tattoos, micro-realisme en elegante botanische of geometrische ontwerpen.",
-                hero_btn_book: "Boek een Datum",
-                hero_btn_portfolio: "Bekijk Portfolio",
-                about_tag: "Over Mij",
-                about_badge: "Steriliteit & Passie",
+                nav_about: "Over Mij", nav_portfolio: "Portfolio", nav_booking: "Online Boeken", nav_contact: "Contact", nav_book_btn: "Afspraak Maken",
+                hero_subtitle: "Tattoostudio • Daria Wąs", hero_title_1: "Precisie, Subtielheid en", hero_title_2: "Kunst", hero_title_3: "op Jouw Huid",
+                hero_desc: "Gespecialiseerd in verfijnde Fineline-tattoos, micro-realisme en elegante botanische of geometrische ontwerpen.", hero_btn_book: "Boek een Datum", hero_btn_portfolio: "Bekijk Portfolio", about_tag: "Over Mij", about_badge: "Steriliteit & Passie",
                 about_text_1: "Hoi! Ik ben Daria en ik maak subtiele tatoeages die je lichaam sieren. In mijn werk staan fineline-precisie, comfort en hygiëne voorop.",
                 about_text_2: "Ik zorg voor een ontspannen en gastvrije sfeer in de studio, zodat elke afspraak een fijne ervaring is.",
-                about_feature_1_title: "Fine Line",
-                about_feature_1_desc: "Nauwkeurige, subtiele details",
-                about_feature_2_title: "Uniek Ontwerp",
-                about_feature_2_desc: "Aangepast aan jouw wensen",
-                portfolio_tag: "Mijn Werk",
-                portfolio_title: "Portfolio Galerij",
-                portfolio_item_2: "Micro-realisme",
-                portfolio_item_3: "Subtiele Tekst",
-                booking_tag: "Boekingssysteem",
-                booking_title: "Online Afspraak Maken",
-                step_1_tab: "Dienst",
-                step_2_tab: "Datum",
-                step_3_tab: "Details",
-                step_4_tab: "Overzicht",
-                step_1_title: "1. Kies Soort Tattoo",
-                service_small_title: "Kleine Tattoo / Fineline",
-                service_small_desc: "Tot ~7 cm. Eenvoudige symbolen, tekst.",
-                service_medium_title: "Middelgrote Tattoo / Detail",
-                service_medium_desc: "8-15 cm. Gedetailleerd ontwerp.",
-                deposit_label: "Aanbetaling",
-                btn_next_date: "Volgende: Datum Kiezen",
-                step_2_title: "2. Kies Datum & Tijd",
-                day_mon: "Ma", day_tue: "Di", day_wed: "Wo", day_thu: "Do", day_fri: "Vr", day_sat: "Za", day_sun: "Zo",
-                hours_title: "Tijdsloten",
-                click_day_prompt: "Kies een datum in de kalender.",
-                first_select_day: "Kies eerst een datum",
-                btn_back: "Terug",
-                btn_next_details: "Volgende: Details",
-                step_3_title: "3. Beschrijving & Gegevens",
-                label_placement: "Plek op het Lichaam *",
-                label_size: "Afmeting (cm)",
-                label_desc: "Beschrijving Wens *",
-                label_fullname: "Naam & Achternaam *",
-                label_phone: "Telefoonnummer *",
-                label_email: "E-mailadres *",
-                btn_next_summary: "Volgende: Overzicht",
-                step_4_title: "4. Overzicht Boeking",
-                summary_selected_service: "Gekozen Dienst",
-                summary_datetime: "Datum & Tijd:",
-                summary_client: "Klant:",
-                summary_place: "Plaatsing:",
-                summary_contact: "Contact:",
-                btn_confirm_booking: "Bevestigen & Boeken",
-                footer_desc: "Autentieke tattoostudio van Daria Wąs. Precisie, hygiëne en unieke sfeer.",
-                footer_contact_title: "Contact & Locatie",
-                footer_location: "Polen / Nederland",
-                footer_hours_title: "Openingstijden",
-                footer_hours_week: "Maandag – Vrijdag: 10:00 – 18:00",
-                footer_hours_sat: "Zaterdag: Alleen op afspraak",
-                footer_rights: "© 2026 netjes TATTOO door Daria Wąs. Alle rechten voorbehouden."
+                about_feature_1_title: "Fine Line", about_feature_1_desc: "Nauwkeurige, subtiele details", about_feature_2_title: "Uniek Ontwerp", about_feature_2_desc: "Aangepast aan jouw wensen",
+                portfolio_tag: "Mijn Werk", portfolio_title: "Portfolio Galerij", portfolio_item_2: "Micro-realisme", portfolio_item_3: "Subtiele Tekst",
+                booking_tag: "Boekingssysteem", booking_title: "Online Afspraak Maken", step_1_tab: "Dienst", step_2_tab: "Datum", step_3_tab: "Details", step_4_tab: "Overzicht",
+                step_1_title: "1. Kies Soort Tattoo", service_small_title: "Kleine Tattoo / Fineline", service_small_desc: "Tot ~7 cm. Eenvoudige symbolen, tekst.", service_medium_title: "Middelgrote Tattoo / Detail", service_medium_desc: "8-15 cm. Gedetailleerd ontwerp.", deposit_label: "Aanbetaling", btn_next_date: "Volgende: Datum Kiezen",
+                step_2_title: "2. Kies Datum & Tijd", day_mon: "Ma", day_tue: "Di", day_wed: "Wo", day_thu: "Do", day_fri: "Vr", day_sat: "Za", day_sun: "Zo", hours_title: "Tijdsloten", click_day_prompt: "Kies een datum in de kalender.", first_select_day: "Kies eerst een datum", btn_back: "Terug", btn_next_details: "Volgende: Details",
+                step_3_title: "3. Beschrijving & Gegevens", label_placement: "Plek op het Lichaam *", label_size: "Afmeting (cm)", label_desc: "Beschrijving Wens *", label_images: "Inspiratie Foto's (Max 3)", label_images_hint: "Kies maximaal 3 bestanden op je apparaat (JPG, PNG).", label_fullname: "Naam & Achternaam *", label_phone: "Telefoonnummer *", label_email: "E-mailadres *", btn_next_summary: "Volgende: Overzicht",
+                step_4_title: "4. Overzicht Boeking", summary_selected_service: "Gekozen Dienst", summary_datetime: "Datum & Tijd:", summary_client: "Klant:", summary_place: "Plaatsing:", summary_contact: "Contact:", summary_images_count: "Inspiraties:", btn_confirm_booking: "Bevestigen & Boeken",
+                footer_desc: "Autentieke tattoostudio van Daria Wąs. Precisie, hygiëne en unieke sfeer.", footer_contact_title: "Contact & Locatie", footer_location: "Polen / Nederland", footer_hours_title: "Openingstijden", footer_hours_week: "Maandag – Vrijdag: 10:00 – 18:00", footer_hours_sat: "Zaterdag: Alleen op afspraak", footer_rights: "© 2026 netjes TATTOO door Daria Wąs. Alle rechten voorbehouden."
             }
         };
 
@@ -777,16 +627,13 @@
 
             if (lang === 'pl') {
                 thumb.style.transform = 'translateX(0px)';
-                flagPl.classList.remove('opacity-40');
-                flagPl.classList.add('opacity-100');
+                flagPl.classList.remove('opacity-40'); flagPl.classList.add('opacity-100');
             } else if (lang === 'en') {
                 thumb.style.transform = 'translateX(35px)';
-                flagEn.classList.remove('opacity-40');
-                flagEn.classList.add('opacity-100');
+                flagEn.classList.remove('opacity-40'); flagEn.classList.add('opacity-100');
             } else if (lang === 'nl') {
                 thumb.style.transform = 'translateX(70px)';
-                flagNl.classList.remove('opacity-40');
-                flagNl.classList.add('opacity-100');
+                flagNl.classList.remove('opacity-40'); flagNl.classList.add('opacity-100');
             }
 
             renderCalendar();
@@ -797,7 +644,7 @@
             document.getElementById('language-modal').classList.add('hidden');
         }
 
-        // INICJALIZACJA SMOOTH SCROLL (LENIS)
+        // LENIS SMOOTH SCROLL
         if (typeof Lenis !== 'undefined') {
             const lenis = new Lenis({
                 duration: 1.2,
@@ -813,7 +660,7 @@
             requestAnimationFrame(raf);
         }
 
-        // KONFIGURACJA SUPABASE:
+        // SUPABASE CONFIG
         const SUPABASE_URL = 'https://pykesrbrwvvxbyftbjoz.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_to5aEQEHPjUjqmjIc33ulA_PgJqsjgD';
         
@@ -822,7 +669,7 @@
             db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         }
 
-        /* NAWIGACJA I WALIDACJA FORMULARZA REZERWACJI */
+        /* NAWIGACJA ZESTAWU KROKÓW */
         function goToStep(stepNum) {
             if (stepNum > bookingState.step) {
                 if (bookingState.step === 2 && (!bookingState.selectedDate || !bookingState.selectedTime)) {
@@ -881,12 +728,12 @@
             document.getElementById(`service-card-${key}`).className = "service-card p-6 rounded-2xl border border-gold bg-gold/10 cursor-pointer transition-all flex justify-between items-start select-none";
         }
 
-        /* LOGIKA PRZEŁĄCZANIA MIESIĘCY */
+        /* PRZEŁĄCZANIE MIESIĘCY (MAX 3 DO PRZODU, 1 W TYŁ) */
         function changeMonth(delta) {
             const currentTotal = calendarYear * 12 + calendarMonth;
             const todayTotal = todayDate.getFullYear() * 12 + todayDate.getMonth();
-            const minTotal = todayTotal - 1; // 1 miesiąc w tył
-            const maxTotal = todayTotal + 3; // 3 miesiące w przód
+            const minTotal = todayTotal - 1;
+            const maxTotal = todayTotal + 3;
 
             const newTotal = currentTotal + delta;
             if (newTotal >= minTotal && newTotal <= maxTotal) {
@@ -912,11 +759,8 @@
             monthDisplay.innerText = `${monthNames[currentLang][calendarMonth]} ${calendarYear}`;
 
             const today = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
-            
-            // Rezerwacja możliwa dokładnie na miesiąc do przodu od dzisiaj
             const maxAllowedBookingDate = new Date(todayDate.getFullYear(), todayDate.getMonth() + 1, todayDate.getDate());
 
-            // Pomiary ograniczników nawigacji (3 w przód, 1 w tył)
             const currentTotalMonths = calendarYear * 12 + calendarMonth;
             const todayTotalMonths = todayDate.getFullYear() * 12 + todayDate.getMonth();
             
@@ -925,24 +769,21 @@
             if (prevBtn) prevBtn.disabled = (currentTotalMonths <= todayTotalMonths - 1);
             if (nextBtn) nextBtn.disabled = (currentTotalMonths >= todayTotalMonths + 3);
 
-            // Dni w danym miesiącu
             const firstDayOfMonth = new Date(calendarYear, calendarMonth, 1);
-            let firstDayIndex = firstDayOfMonth.getDay() - 1; // Konwersja na Pon=0, Niedz=6
+            let firstDayIndex = firstDayOfMonth.getDay() - 1; 
             if (firstDayIndex === -1) firstDayIndex = 6;
 
             const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
 
-            // Puste komórki przed pierwszym dniem miesiąca
             for (let i = 0; i < firstDayIndex; i++) {
                 const emptyCell = document.createElement('div');
                 emptyCell.className = "h-12 w-full";
                 grid.appendChild(emptyCell);
             }
 
-            // Generowanie dni miesiąca
             for (let day = 1; day <= daysInMonth; day++) {
                 const dayDate = new Date(calendarYear, calendarMonth, day);
-                const dayOfWeek = dayDate.getDay(); // 0 = Niedziela
+                const dayOfWeek = dayDate.getDay();
                 
                 const m = String(calendarMonth + 1).padStart(2, '0');
                 const d = String(day).padStart(2, '0');
@@ -952,8 +793,6 @@
                 btn.type = "button";
                 btn.innerText = day;
 
-                // Sprawdzenie dostępności dnia:
-                // Nie wolno: daty z przeszłości, niedziele, daty powyżej 1 miesiąca od dzisiaj
                 const isPast = dayDate < today;
                 const isTooFar = dayDate > maxAllowedBookingDate;
                 const isSunday = (dayOfWeek === 0);
@@ -981,7 +820,7 @@
             }
         }
 
-        /* GODZINY (Z SPRAWDZANIEM ZAJĘTYCH TERMINÓW) */
+        /* GODZINY */
         async function renderTimeSlots() {
             const container = document.getElementById('time-slots-container');
             container.innerHTML = '<div class="col-span-2 text-center py-4 text-xs text-gold">Sprawdzanie dostępności...</div>';
@@ -1029,18 +868,50 @@
 
         /* PODSUMOWANIE */
         function updateSummaryData() {
+            const filesInput = document.getElementById('input-inspiration-files');
+            const filesCount = filesInput && filesInput.files ? Math.min(filesInput.files.length, 3) : 0;
+
             document.getElementById('summary-service-title').innerText = bookingState.selectedServiceName;
             document.getElementById('summary-service-price').innerText = `€${bookingState.selectedPrice}`;
             document.getElementById('summary-datetime').innerText = `${bookingState.selectedDate} @ ${bookingState.selectedTime}`;
             document.getElementById('summary-client').innerText = document.getElementById('input-client-name').value;
             document.getElementById('summary-placement').innerText = document.getElementById('input-body-placement').value;
             document.getElementById('summary-contact').innerText = `${document.getElementById('input-client-phone').value} • ${document.getElementById('input-client-email').value}`;
+            document.getElementById('summary-images-count').innerText = filesCount > 0 ? `${filesCount} załączone zdjęcia` : 'Brak załączonych zdjęć';
         }
 
-        /* FINALIZACJA, ZAPIS W BAZIE I WYSYŁANIE E-MAILA EMAILJS */
+        /* FUNKCJA PRZESYŁAJĄCA ZDJĘCIA DO SUPABASE STORAGE */
+        async function uploadInspirations(files) {
+            if (!db) return [];
+            const uploadedUrls = [];
+            const filesToUpload = Array.from(files).slice(0, 3); // Max 3 pliki
+
+            for (const file of filesToUpload) {
+                const cleanFileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+                
+                const { data, error } = await db.storage
+                    .from('tattoo-inspiration')
+                    .upload(cleanFileName, file);
+
+                if (!error) {
+                    const { data: publicUrlData } = db.storage
+                        .from('tattoo-inspiration')
+                        .getPublicUrl(cleanFileName);
+                    
+                    if (publicUrlData && publicUrlData.publicUrl) {
+                        uploadedUrls.push(publicUrlData.publicUrl);
+                    }
+                } else {
+                    console.error("Błąd przesyłania pliku do Storage:", error);
+                }
+            }
+            return uploadedUrls;
+        }
+
+        /* FINALIZACJA REZERWACJI I WYSYŁKA EMAIL */
         async function submitFinalBooking() {
             const submitBtn = document.getElementById('submit-btn');
-            submitBtn.innerText = "Zapisywanie...";
+            submitBtn.innerText = "Wysyłanie plików i rezerwacja...";
             submitBtn.disabled = true;
 
             const nameVal = document.getElementById('input-client-name').value;
@@ -1048,6 +919,15 @@
             const phoneVal = document.getElementById('input-client-phone').value;
             const placeVal = document.getElementById('input-body-placement').value;
             const descVal = document.getElementById('input-description').value;
+
+            // Przesyłanie zdjęć
+            const fileInput = document.getElementById('input-inspiration-files');
+            let imageUrls = [];
+            if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                imageUrls = await uploadInspirations(fileInput.files);
+            }
+
+            const imagesString = imageUrls.join(', ');
 
             const payload = {
                 clientname: nameVal,
@@ -1057,19 +937,17 @@
                 date: bookingState.selectedDate,
                 time: bookingState.selectedTime,
                 placement: placeVal,
-                description: descVal
+                description: descVal,
+                images: imagesString
             };
 
-            // 1. Zapis do bazy Supabase
+            // 1. Zapis do Bazy Supabase
             if (db) {
-                const { data, error } = await db.from('bookings').insert([payload]);
-                if (error) {
-                    console.error("Error Supabase:", error);
-                    alert("Błąd zapisu w bazie Supabase: " + error.message);
-                }
+                const { error } = await db.from('bookings').insert([payload]);
+                if (error) console.error("Error Supabase Insert:", error);
             }
 
-            // 2. Wysyłanie powiadomienia e-mail na Twój Gmail za pomocą EmailJS
+            // 2. Wysyłka Powiadomienia na Email (z linkami do zdjęć)
             const templateParams = {
                 client_name: nameVal,
                 client_email: emailVal,
@@ -1078,18 +956,19 @@
                 booking_date: bookingState.selectedDate,
                 booking_time: bookingState.selectedTime,
                 body_placement: placeVal,
-                description: descVal
+                description: descVal,
+                images_links: imageUrls.length > 0 ? imageUrls.join('\n') : 'Brak dołączonych zdjęć'
             };
 
             try {
                 await emailjs.send('service_vf32q58', 'template_73a85e8', templateParams);
-                alert("Dziękujemy! Twoja rezerwacja została pomyślnie złożona.");
+                alert("Dziękujemy! Twoja rezerwacja wraz z załączonymi zdjęciami została przesłana.");
             } catch (emailErr) {
-                console.error("Błąd wysyłania e-maila przez EmailJS:", emailErr);
-                alert("Rezerwacja została pomyślnie zapisana!");
+                console.error("Błąd wysyłania EmailJS:", emailErr);
+                alert("Rezerwacja została zapisana!");
             }
 
-            // 3. Zapis w pamięci lokalnej przeglądarki
+            // 3. Zapis w pamięci podręcznej przeglądarki
             const localBooking = {
                 created_at: new Date().toISOString(),
                 ...payload
@@ -1097,7 +976,7 @@
             appBookings.unshift(localBooking);
             localStorage.setItem('netjes_tattoo_bookings', JSON.stringify(appBookings));
 
-            // 4. Czyszczenie formularza i powrót do kroku 1
+            // Reset Formularza
             bookingState.selectedDate = null;
             bookingState.selectedTime = null;
             document.getElementById('input-client-name').value = '';
@@ -1105,6 +984,7 @@
             document.getElementById('input-client-email').value = '';
             document.getElementById('input-body-placement').value = '';
             document.getElementById('input-description').value = '';
+            if(fileInput) fileInput.value = '';
 
             submitBtn.innerText = translations[currentLang].btn_confirm_booking;
             submitBtn.disabled = false;
@@ -1138,7 +1018,7 @@
                             isPasswordCorrect = true;
                         }
                     } catch(e) {
-                        console.warn("Nie można zweryfikować hasła w Supabase", e);
+                        console.warn("Weryfikacja hasła Supabase", e);
                     }
                 }
 
@@ -1170,7 +1050,7 @@
             const tableBody = document.getElementById('admin-bookings-table-body');
             tableBody.innerHTML = '';
             if(!appBookings || appBookings.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="6" class="p-5 text-center text-gray-500">Brak rezerwacji</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="7" class="p-5 text-center text-gray-500">Brak rezerwacji</td></tr>';
                 return;
             }
             appBookings.forEach((b, index) => {
@@ -1182,6 +1062,21 @@
                 const description = b.description || '—';
                 const bookingId = b.id !== undefined ? b.id : index;
 
+                // Renderowanie miniaturek / linków do zdjęć
+                let imagesHtml = '<span class="text-gray-600 italic">Brak</span>';
+                if (b.images && b.images.trim() !== '') {
+                    const links = b.images.split(',').map(url => url.trim());
+                    imagesHtml = '<div class="flex items-center gap-2 flex-wrap">';
+                    links.forEach((link, i) => {
+                        imagesHtml += `
+                            <a href="${link}" target="_blank" rel="noopener noreferrer" class="block w-10 h-10 rounded-lg overflow-hidden border border-gold/40 hover:border-gold transition">
+                                <img src="${link}" class="w-full h-full object-cover" title="Inspiracja ${i+1}">
+                            </a>
+                        `;
+                    });
+                    imagesHtml += '</div>';
+                }
+
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td class="p-5 text-gray-400 font-mono text-[11px]">${createdAt}</td>
@@ -1189,6 +1084,7 @@
                     <td class="p-5 text-gold font-medium">${b.service}</td>
                     <td class="p-5">${b.date} (${b.time})</td>
                     <td class="p-5">${placement} - ${description}</td>
+                    <td class="p-5">${imagesHtml}</td>
                     <td class="p-5 text-right">
                         <button onclick="deleteBooking(${bookingId})" class="text-red-400 hover:text-white transition"><i class="fa-solid fa-trash"></i></button>
                     </td>
