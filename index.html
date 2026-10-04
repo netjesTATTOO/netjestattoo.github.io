@@ -339,7 +339,17 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
                                 <div class="md:col-span-7 bg-dark-base p-6 rounded-2xl border border-dark-border">
-                                    <div data-i18n="calendar_month" class="text-center font-serif-title text-xl text-white font-semibold mb-6">Październik 2026</div>
+                                    <!-- NAWIGACJA MIESIĄCAMI -->
+                                    <div class="flex items-center justify-between mb-6">
+                                        <button id="prev-month-btn" type="button" onclick="changeMonth(-1)" class="w-10 h-10 rounded-xl bg-dark-surface border border-dark-border text-white hover:border-gold hover:text-gold transition flex items-center justify-center cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
+                                            <i class="fa-solid fa-chevron-left text-sm"></i>
+                                        </button>
+                                        <div id="calendar-month-display" class="font-serif-title text-xl text-white font-semibold"></div>
+                                        <button id="next-month-btn" type="button" onclick="changeMonth(1)" class="w-10 h-10 rounded-xl bg-dark-surface border border-dark-border text-white hover:border-gold hover:text-gold transition flex items-center justify-center cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
+                                            <i class="fa-solid fa-chevron-right text-sm"></i>
+                                        </button>
+                                    </div>
+
                                     <div class="grid grid-cols-7 gap-2 text-center text-xs text-gray-400 uppercase font-bold mb-3">
                                         <span data-i18n="day_mon">Pon</span><span data-i18n="day_tue">Wt</span><span data-i18n="day_wed">Śr</span><span data-i18n="day_thu">Czw</span><span data-i18n="day_fri">Pt</span><span data-i18n="day_sat">Sob</span><span data-i18n="day_sun">Niedz</span>
                                     </div>
@@ -508,6 +518,10 @@
         })();
 
         // DEKLARACJA STANU ZMIENNYCH
+        const todayDate = new Date();
+        let calendarYear = todayDate.getFullYear();
+        let calendarMonth = todayDate.getMonth(); // 0-indexed
+
         let bookingState = {
             step: 1,
             selectedServiceName: 'Mały Tatuaż / Fineline',
@@ -524,6 +538,12 @@
         };
 
         const availableTimeSlots = ['10:00', '12:00', '14:30', '17:00'];
+
+        const monthNames = {
+            pl: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
+            en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            nl: ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December']
+        };
 
         // SŁOWNIK JĘZYKOWY (PL, EN, NL)
         const translations = {
@@ -566,7 +586,6 @@
                 deposit_label: "Zaliczka",
                 btn_next_date: "Dalej: Wybór Daty",
                 step_2_title: "2. Wybierz Datę i Godzinę",
-                calendar_month: "Październik 2026",
                 day_mon: "Pon", day_tue: "Wt", day_wed: "Śr", day_thu: "Czw", day_fri: "Pt", day_sat: "Sob", day_sun: "Niedz",
                 hours_title: "Godziny",
                 click_day_prompt: "Kliknij dzień z kalendarza.",
@@ -635,7 +654,6 @@
                 deposit_label: "Deposit",
                 btn_next_date: "Next: Choose Date",
                 step_2_title: "2. Select Date & Time",
-                calendar_month: "October 2026",
                 day_mon: "Mon", day_tue: "Tue", day_wed: "Wed", day_thu: "Thu", day_fri: "Fri", day_sat: "Sat", day_sun: "Sun",
                 hours_title: "Time Slots",
                 click_day_prompt: "Select a date from calendar.",
@@ -704,7 +722,6 @@
                 deposit_label: "Aanbetaling",
                 btn_next_date: "Volgende: Datum Kiezen",
                 step_2_title: "2. Kies Datum & Tijd",
-                calendar_month: "Oktober 2026",
                 day_mon: "Ma", day_tue: "Di", day_wed: "Wo", day_thu: "Do", day_fri: "Vr", day_sat: "Za", day_sun: "Zo",
                 hours_title: "Tijdsloten",
                 click_day_prompt: "Kies een datum in de kalender.",
@@ -771,6 +788,8 @@
                 flagNl.classList.remove('opacity-40');
                 flagNl.classList.add('opacity-100');
             }
+
+            renderCalendar();
         }
 
         function selectLanguageFromModal(lang) {
@@ -862,27 +881,102 @@
             document.getElementById(`service-card-${key}`).className = "service-card p-6 rounded-2xl border border-gold bg-gold/10 cursor-pointer transition-all flex justify-between items-start select-none";
         }
 
+        /* LOGIKA PRZEŁĄCZANIA MIESIĘCY */
+        function changeMonth(delta) {
+            const currentTotal = calendarYear * 12 + calendarMonth;
+            const todayTotal = todayDate.getFullYear() * 12 + todayDate.getMonth();
+            const minTotal = todayTotal - 1; // 1 miesiąc w tył
+            const maxTotal = todayTotal + 3; // 3 miesiące w przód
+
+            const newTotal = currentTotal + delta;
+            if (newTotal >= minTotal && newTotal <= maxTotal) {
+                calendarMonth += delta;
+                if (calendarMonth > 11) {
+                    calendarMonth = 0;
+                    calendarYear++;
+                } else if (calendarMonth < 0) {
+                    calendarMonth = 11;
+                    calendarYear--;
+                }
+                renderCalendar();
+            }
+        }
+
         /* KALENDARZ */
         function renderCalendar() {
             const grid = document.getElementById('calendar-days-grid');
-            if(!grid) return;
-            grid.innerHTML = '';
+            const monthDisplay = document.getElementById('calendar-month-display');
+            if(!grid || !monthDisplay) return;
 
-            for (let day = 1; day <= 31; day++) {
-                const dateStr = `2026-10-${day < 10 ? '0' + day : day}`;
+            grid.innerHTML = '';
+            monthDisplay.innerText = `${monthNames[currentLang][calendarMonth]} ${calendarYear}`;
+
+            const today = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
+            
+            // Rezerwacja możliwa dokładnie na miesiąc do przodu od dzisiaj
+            const maxAllowedBookingDate = new Date(todayDate.getFullYear(), todayDate.getMonth() + 1, todayDate.getDate());
+
+            // Pomiary ograniczników nawigacji (3 w przód, 1 w tył)
+            const currentTotalMonths = calendarYear * 12 + calendarMonth;
+            const todayTotalMonths = todayDate.getFullYear() * 12 + todayDate.getMonth();
+            
+            const prevBtn = document.getElementById('prev-month-btn');
+            const nextBtn = document.getElementById('next-month-btn');
+            if (prevBtn) prevBtn.disabled = (currentTotalMonths <= todayTotalMonths - 1);
+            if (nextBtn) nextBtn.disabled = (currentTotalMonths >= todayTotalMonths + 3);
+
+            // Dni w danym miesiącu
+            const firstDayOfMonth = new Date(calendarYear, calendarMonth, 1);
+            let firstDayIndex = firstDayOfMonth.getDay() - 1; // Konwersja na Pon=0, Niedz=6
+            if (firstDayIndex === -1) firstDayIndex = 6;
+
+            const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+
+            // Puste komórki przed pierwszym dniem miesiąca
+            for (let i = 0; i < firstDayIndex; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = "h-12 w-full";
+                grid.appendChild(emptyCell);
+            }
+
+            // Generowanie dni miesiąca
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDate = new Date(calendarYear, calendarMonth, day);
+                const dayOfWeek = dayDate.getDay(); // 0 = Niedziela
+                
+                const m = String(calendarMonth + 1).padStart(2, '0');
+                const d = String(day).padStart(2, '0');
+                const dateStr = `${calendarYear}-${m}-${d}`;
+
                 const btn = document.createElement('button');
                 btn.type = "button";
-                btn.className = "calendar-day-btn h-12 w-full rounded-xl border border-dark-border text-xs text-white hover:border-gold transition flex items-center justify-center font-medium cursor-pointer";
                 btn.innerText = day;
 
-                btn.onclick = async () => {
-                    bookingState.selectedDate = dateStr;
-                    bookingState.selectedTime = null;
-                    document.querySelectorAll('.calendar-day-btn').forEach(b => b.classList.remove('selected-day'));
-                    btn.classList.add('selected-day');
-                    document.getElementById('selected-date-display').innerText = `Data: ${dateStr}`;
-                    await renderTimeSlots();
-                };
+                // Sprawdzenie dostępności dnia:
+                // Nie wolno: daty z przeszłości, niedziele, daty powyżej 1 miesiąca od dzisiaj
+                const isPast = dayDate < today;
+                const isTooFar = dayDate > maxAllowedBookingDate;
+                const isSunday = (dayOfWeek === 0);
+                const isDisabled = isPast || isTooFar || isSunday;
+
+                if (isDisabled) {
+                    btn.className = "calendar-day-btn h-12 w-full rounded-xl border border-dark-border/40 text-xs text-gray-600 line-through bg-dark-base/40 cursor-not-allowed flex items-center justify-center font-medium select-none";
+                    btn.disabled = true;
+                } else {
+                    btn.className = "calendar-day-btn h-12 w-full rounded-xl border border-dark-border text-xs text-white hover:border-gold transition flex items-center justify-center font-medium cursor-pointer";
+                    if (bookingState.selectedDate === dateStr) {
+                        btn.classList.add('selected-day');
+                    }
+
+                    btn.onclick = async () => {
+                        bookingState.selectedDate = dateStr;
+                        bookingState.selectedTime = null;
+                        document.querySelectorAll('.calendar-day-btn').forEach(b => b.classList.remove('selected-day'));
+                        btn.classList.add('selected-day');
+                        document.getElementById('selected-date-display').innerText = `Data: ${dateStr}`;
+                        await renderTimeSlots();
+                    };
+                }
                 grid.appendChild(btn);
             }
         }
@@ -918,6 +1012,9 @@
                     slotBtn.disabled = true;
                 } else {
                     slotBtn.className = 'time-slot-btn py-3 px-4 rounded-xl border border-dark-border text-xs text-white bg-dark-surface hover:border-gold cursor-pointer';
+                    if (bookingState.selectedTime === time) {
+                        slotBtn.classList.add('selected-slot');
+                    }
                     slotBtn.innerText = time;
                     slotBtn.onclick = () => {
                         bookingState.selectedTime = time;
