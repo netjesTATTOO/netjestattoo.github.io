@@ -516,11 +516,11 @@
         </div>
 
         <!-- SEKCJA DANYCH DLA ZALOGOWANEGO ADMINA -->
-        <div id="admin-dashboard-content" class="hidden">
-            <div class="flex justify-between items-center mb-10 pb-6 border-b border-dark-border">
+        <div id="admin-dashboard-content" class="hidden space-y-12">
+            <div class="flex justify-between items-center pb-6 border-b border-dark-border">
                 <div>
                     <h1 class="font-serif-title text-4xl text-white">Panel Administratora • netjes</h1>
-                    <p class="text-xs text-gray-400 mt-1">Pobrano aktualne rezerwacje z chmury Supabase</p>
+                    <p class="text-xs text-gray-400 mt-1">Zarządzaj rezerwacjami i ich statusami</p>
                 </div>
                 <div class="flex items-center space-x-4">
                     <button onclick="logoutAdmin()" class="border border-red-900/50 text-red-400 hover:bg-red-950/30 font-semibold px-5 py-3 rounded-xl text-xs uppercase transition cursor-pointer">
@@ -532,24 +532,57 @@
                 </div>
             </div>
 
-            <div class="bg-dark-card border border-dark-border rounded-3xl overflow-hidden glass-panel">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs">
-                        <thead class="bg-dark-surface border-b border-dark-border uppercase text-gray-400 font-semibold">
-                            <tr>
-                                <th class="p-5">Data utworzenia</th>
-                                <th class="p-5">Klient</th>
-                                <th class="p-5">Usługa</th>
-                                <th class="p-5">Termin</th>
-                                <th class="p-5">Miejsce & Opis</th>
-                                <th class="p-5">Inspiracje</th>
-                                <th class="p-5 text-right">Usuń</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-bookings-table-body" class="divide-y divide-dark-border text-gray-300"></tbody>
-                    </table>
+            <!-- GRUPA 1: AKTYWNE REZERWACJE -->
+            <div class="space-y-4">
+                <h2 class="font-serif-title text-2xl text-gold flex items-center gap-2">
+                    <i class="fa-solid fa-clock"></i> Aktywne Rezerwacje (Oczekujące)
+                </h2>
+                <div class="bg-dark-card border border-dark-border rounded-3xl overflow-hidden glass-panel">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-dark-surface border-b border-dark-border uppercase text-gray-400 font-semibold">
+                                <tr>
+                                    <th class="p-5">Data utworzenia</th>
+                                    <th class="p-5">Klient</th>
+                                    <th class="p-5">Usługa</th>
+                                    <th class="p-5">Termin</th>
+                                    <th class="p-5">Miejsce & Opis</th>
+                                    <th class="p-5">Inspiracje</th>
+                                    <th class="p-5 text-right">Zmień Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-active-bookings-body" class="divide-y divide-dark-border text-gray-300"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+
+            <!-- GRUPA 2: HISTORIA REZERWACJI (ZREALIZOWANE I ANULOWANE) -->
+            <div class="space-y-4 pt-6">
+                <h2 class="font-serif-title text-2xl text-white flex items-center gap-2">
+                    <i class="fa-solid fa-box-archive"></i> Archiwum Rezerwacji
+                </h2>
+                <div class="bg-dark-card border border-dark-border rounded-3xl overflow-hidden glass-panel">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-dark-surface border-b border-dark-border uppercase text-gray-400 font-semibold">
+                                <tr>
+                                    <th class="p-5">Status</th>
+                                    <th class="p-5">Data utworzenia</th>
+                                    <th class="p-5">Klient</th>
+                                    <th class="p-5">Usługa</th>
+                                    <th class="p-5">Termin</th>
+                                    <th class="p-5">Miejsce & Opis</th>
+                                    <th class="p-5">Inspiracje</th>
+                                    <th class="p-5 text-right">Akcje</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-archive-bookings-body" class="divide-y divide-dark-border text-gray-300"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -809,7 +842,7 @@
 
             const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
 
-            // Pobranie danych rezerwacji dla całego widocznego miesiąca z Supabase
+            // Pobranie aktywne rezerwacji dla całego widocznego miesiąca z Supabase (pomijamy anulowane)
             let monthBookingsCount = {};
             if (db) {
                 const startDateStr = `${calendarYear}-${String(calendarMonth + 1).padStart(2, '0')}-01`;
@@ -817,9 +850,10 @@
                 
                 const { data, error } = await db
                     .from('bookings')
-                    .select('date')
+                    .select('date, status')
                     .gte('date', startDateStr)
-                    .lte('date', endDateStr);
+                    .lte('date', endDateStr)
+                    .neq('status', 'anulowana');
 
                 if (!error && data) {
                     data.forEach(b => {
@@ -834,7 +868,7 @@
                 grid.appendChild(emptyCell);
             }
 
-            const totalSlotsPerDay = availableTimeSlots.length; // np. 4 terminy
+            const totalSlotsPerDay = availableTimeSlots.length;
 
             for (let day = 1; day <= daysInMonth; day++) {
                 const dayDate = new Date(calendarYear, calendarMonth, day);
@@ -850,7 +884,7 @@
 
                 const isPast = dayDate < today;
                 const isTooFar = dayDate > maxAllowedBookingDate;
-                const isSunday = (dayOfWeek === 0); // Tylko Niedziela jest wyłączona
+                const isSunday = (dayOfWeek === 0);
                 const isDisabled = isPast || isTooFar || isSunday;
 
                 if (isDisabled) {
@@ -859,12 +893,12 @@
                 } else {
                     const bookedCount = monthBookingsCount[dateStr] || 0;
                     
-                    let bgBorderClass = "border-emerald-500/40 bg-emerald-950/20 text-emerald-200 hover:border-emerald-400"; // Zielony (brak rezerwacji)
+                    let bgBorderClass = "border-emerald-500/40 bg-emerald-950/20 text-emerald-200 hover:border-emerald-400";
 
                     if (bookedCount >= totalSlotsPerDay) {
-                        bgBorderClass = "border-red-500/40 bg-red-950/20 text-red-200 hover:border-red-400"; // Czerwony (całkowicie zajęty)
+                        bgBorderClass = "border-red-500/40 bg-red-950/20 text-red-200 hover:border-red-400";
                     } else if (bookedCount > 0) {
-                        bgBorderClass = "border-amber-500/40 bg-amber-950/20 text-amber-200 hover:border-amber-400"; // Żółty (częściowo zajęty)
+                        bgBorderClass = "border-amber-500/40 bg-amber-950/20 text-amber-200 hover:border-amber-400";
                     }
 
                     btn.className = `calendar-day-btn h-12 w-full rounded-xl border ${bgBorderClass} text-xs transition flex items-center justify-center font-semibold cursor-pointer shadow-sm`;
@@ -896,8 +930,9 @@
             if (db && bookingState.selectedDate) {
                 const { data, error } = await db
                     .from('bookings')
-                    .select('time')
-                    .eq('date', bookingState.selectedDate);
+                    .select('time, status')
+                    .eq('date', bookingState.selectedDate)
+                    .neq('status', 'anulowana');
 
                 if (!error && data) {
                     takenTimes = data.map(b => b.time);
@@ -1004,7 +1039,8 @@
                 time: bookingState.selectedTime,
                 placement: placeVal,
                 description: descVal,
-                images: imagesString
+                images: imagesString,
+                status: 'oczekujaca'
             };
 
             // 1. Zapis do Bazy Supabase
@@ -1126,7 +1162,7 @@
         async function fetchAndRenderBookings() {
             if (db) {
                 const { data, error } = await db.from('bookings').select('*').order('id', { ascending: false });
-                if (!error && data && data.length > 0) {
+                if (!error && data) {
                     appBookings = data;
                 }
             }
@@ -1134,62 +1170,142 @@
         }
 
         function renderAdminDashboard() {
-            const tableBody = document.getElementById('admin-bookings-table-body');
-            tableBody.innerHTML = '';
-            if(!appBookings || appBookings.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="7" class="p-5 text-center text-gray-500">Brak rezerwacji</td></tr>';
-                return;
+            const activeBody = document.getElementById('admin-active-bookings-body');
+            const archiveBody = document.getElementById('admin-archive-bookings-body');
+            activeBody.innerHTML = '';
+            archiveBody.innerHTML = '';
+
+            const activeBookings = appBookings.filter(b => !b.status || b.status === 'oczekujaca');
+            const archiveBookings = appBookings.filter(b => b.status === 'zrealizowana' || b.status === 'anulowana');
+
+            // Renderuj Aktywne Rezerwacje
+            if (activeBookings.length === 0) {
+                activeBody.innerHTML = '<tr><td colspan="7" class="p-5 text-center text-gray-500">Brak nowych / oczekujących rezerwacji</td></tr>';
+            } else {
+                activeBookings.forEach((b) => {
+                    const createdAt = b.created_at ? new Date(b.created_at).toLocaleString('pl-PL') : '—';
+                    const name = b.clientname || 'Brak danych';
+                    const email = b.clientemail || '';
+                    const phone = b.clientphone || '';
+                    const placement = b.placement || '—';
+                    const description = b.description || '—';
+                    const bookingId = b.id;
+
+                    const imagesHtml = renderImagesHtml(b.images);
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="p-5 text-gray-400 font-mono text-[11px]">${createdAt}</td>
+                        <td class="p-5 font-bold text-white">${name}<br><span class="text-xs text-gray-400 font-normal">${email} • ${phone}</span></td>
+                        <td class="p-5 text-gold font-medium">${b.service}</td>
+                        <td class="p-5">${b.date} (${b.time})</td>
+                        <td class="p-5">${placement} - ${description}</td>
+                        <td class="p-5">${imagesHtml}</td>
+                        <td class="p-5 text-right space-x-2">
+                            <button onclick="updateBookingStatus(${bookingId}, 'zrealizowana')" title="Oznacz jako zrealizowaną" class="bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-500 hover:text-black font-semibold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">
+                                <i class="fa-solid fa-check mr-1"></i> Zrealizowana
+                            </button>
+                            <button onclick="updateBookingStatus(${bookingId}, 'anulowana')" title="Oznacz jako anulowaną" class="bg-amber-950/60 border border-amber-500/50 text-amber-300 hover:bg-amber-500 hover:text-black font-semibold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">
+                                <i class="fa-solid fa-xmark mr-1"></i> Anulowana
+                            </button>
+                        </td>
+                    `;
+                    activeBody.appendChild(row);
+                });
             }
-            appBookings.forEach((b, index) => {
-                const createdAt = b.created_at ? new Date(b.created_at).toLocaleString('pl-PL') : '—';
-                const name = b.clientname || 'Brak danych';
-                const email = b.clientemail || '';
-                const phone = b.clientphone || '';
-                const placement = b.placement || '—';
-                const description = b.description || '—';
-                const bookingId = b.id !== undefined ? b.id : index;
 
-                // Renderowanie miniaturek / linków do zdjęć
-                let imagesHtml = '<span class="text-gray-600 italic">Brak</span>';
-                if (b.images && b.images.trim() !== '') {
-                    const links = b.images.split(',').map(url => url.trim());
-                    imagesHtml = '<div class="flex items-center gap-2 flex-wrap">';
-                    links.forEach((link, i) => {
-                        imagesHtml += `
-                            <a href="${link}" target="_blank" rel="noopener noreferrer" class="block w-10 h-10 rounded-lg overflow-hidden border border-gold/40 hover:border-gold transition">
-                                <img src="${link}" class="w-full h-full object-cover" title="Inspiracja ${i+1}">
-                            </a>
+            // Renderuj Archiwum Rezerwacji
+            if (archiveBookings.length === 0) {
+                archiveBody.innerHTML = '<tr><td colspan="8" class="p-5 text-center text-gray-500">Brak zrealizowanych lub anulowanych rezerwacji w archiwum</td></tr>';
+            } else {
+                archiveBookings.forEach((b) => {
+                    const createdAt = b.created_at ? new Date(b.created_at).toLocaleString('pl-PL') : '—';
+                    const name = b.clientname || 'Brak danych';
+                    const email = b.clientemail || '';
+                    const phone = b.clientphone || '';
+                    const placement = b.placement || '—';
+                    const description = b.description || '—';
+                    const bookingId = b.id;
+
+                    const imagesHtml = renderImagesHtml(b.images);
+
+                    // Kolorowanie w zależności od statusu
+                    let statusBadge = '';
+                    let deleteButtonHtml = '';
+
+                    if (b.status === 'zrealizowana') {
+                        statusBadge = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-950/80 text-emerald-400 border border-emerald-500/40"><i class="fa-solid fa-circle-check mr-1.5"></i> Zrealizowana</span>';
+                        deleteButtonHtml = '<span class="text-gray-600 text-[11px] italic">Brak akcji</span>';
+                    } else if (b.status === 'anulowana') {
+                        statusBadge = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-950/80 text-amber-400 border border-amber-500/40"><i class="fa-solid fa-ban mr-1.5"></i> Anulowana</span>';
+                        deleteButtonHtml = `
+                            <button onclick="deleteBooking(${bookingId})" title="Usuń trwale z bazy" class="bg-red-950/40 border border-red-500/40 text-red-400 hover:bg-red-600 hover:text-white font-semibold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">
+                                <i class="fa-solid fa-trash mr-1"></i> Usuń
+                            </button>
                         `;
-                    });
-                    imagesHtml += '</div>';
-                }
+                    }
 
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="p-5 text-gray-400 font-mono text-[11px]">${createdAt}</td>
-                    <td class="p-5 font-bold text-white">${name}<br><span class="text-xs text-gray-400 font-normal">${email} • ${phone}</span></td>
-                    <td class="p-5 text-gold font-medium">${b.service}</td>
-                    <td class="p-5">${b.date} (${b.time})</td>
-                    <td class="p-5">${placement} - ${description}</td>
-                    <td class="p-5">${imagesHtml}</td>
-                    <td class="p-5 text-right">
-                        <button onclick="deleteBooking(${bookingId})" class="text-red-400 hover:text-white transition"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="p-5">${statusBadge}</td>
+                        <td class="p-5 text-gray-400 font-mono text-[11px]">${createdAt}</td>
+                        <td class="p-5 font-bold text-white">${name}<br><span class="text-xs text-gray-400 font-normal">${email} • ${phone}</span></td>
+                        <td class="p-5 text-gold font-medium">${b.service}</td>
+                        <td class="p-5">${b.date} (${b.time})</td>
+                        <td class="p-5">${placement} - ${description}</td>
+                        <td class="p-5">${imagesHtml}</td>
+                        <td class="p-5 text-right">${deleteButtonHtml}</td>
+                    `;
+                    archiveBody.appendChild(row);
+                });
+            }
         }
 
-        async function deleteBooking(idOrIndex) {
-            if (!confirm("Czy na pewno chcesz usunąć tę rezerwację?")) return;
+        function renderImagesHtml(imagesStr) {
+            if (!imagesStr || imagesStr.trim() === '') {
+                return '<span class="text-gray-600 italic">Brak</span>';
+            }
+            const links = imagesStr.split(',').map(url => url.trim());
+            let html = '<div class="flex items-center gap-2 flex-wrap">';
+            links.forEach((link, i) => {
+                html += `
+                    <a href="${link}" target="_blank" rel="noopener noreferrer" class="block w-10 h-10 rounded-lg overflow-hidden border border-gold/40 hover:border-gold transition">
+                        <img src="${link}" class="w-full h-full object-cover" title="Inspiracja ${i+1}">
+                    </a>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
 
-            if (db && typeof idOrIndex === 'number') {
-                await db.from('bookings').delete().eq('id', idOrIndex);
+        async function updateBookingStatus(id, newStatus) {
+            if (db && typeof id === 'number') {
+                const { error } = await db.from('bookings').update({ status: newStatus }).eq('id', id);
+                if (error) {
+                    alert("Wystąpił błąd podczas aktualizacji statusu.");
+                    console.error("Error updating status:", error);
+                    return;
+                }
             }
 
-            appBookings = appBookings.filter((b, idx) => (b.id !== undefined ? b.id !== idOrIndex : idx !== idOrIndex));
+            const target = appBookings.find(b => b.id === id);
+            if (target) target.status = newStatus;
+
             localStorage.setItem('netjes_tattoo_bookings', JSON.stringify(appBookings));
-            fetchAndRenderBookings();
+            await fetchAndRenderBookings();
+            await renderCalendar();
+        }
+
+        async function deleteBooking(id) {
+            if (!confirm("Czy na pewno chcesz trwale usunąć tę anulowaną rezerwację z bazy danych?")) return;
+
+            if (db && typeof id === 'number') {
+                await db.from('bookings').delete().eq('id', id);
+            }
+
+            appBookings = appBookings.filter(b => b.id !== id);
+            localStorage.setItem('netjes_tattoo_bookings', JSON.stringify(appBookings));
+            await fetchAndRenderBookings();
             await renderCalendar();
         }
 
