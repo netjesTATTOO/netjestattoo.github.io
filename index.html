@@ -78,6 +78,7 @@
             background-color: #C5A059 !important;
             color: #000000 !important;
             font-weight: 700;
+            border-color: #C5A059 !important;
         }
         .time-slot-btn.selected-slot {
             background-color: #C5A059 !important;
@@ -470,14 +471,14 @@
                     </div>
                     <div>
                         <h4 data-i18n="footer_contact_title" class="text-xs uppercase text-gold font-semibold tracking-wider mb-4">Kontakt & Lokalizacja</h4>
-                        <p class="text-xs text-gray-300 mb-2 flex items-center justify-center"><i class="fa-solid fa-envelope mr-2 text-gold"></i> kontakt@netjestattoo.pl</p>
+                        <p class="text-xs text-gray-300 mb-2 flex items-center justify-center"><i class="fa-solid fa-envelope mr-2 text-gold"></i> netjes.contact@gmail.com</p>
                         <p class="text-xs text-gray-300 mb-2 flex items-center justify-center"><i class="fa-solid fa-phone mr-2 text-gold"></i> +48 123 456 789</p>
                         <p data-i18n="footer_location" class="text-xs text-gray-300 flex items-center justify-center"><i class="fa-solid fa-location-dot mr-2 text-gold"></i> Polska / Holandia</p>
                     </div>
                     <div>
                         <h4 data-i18n="footer_hours_title" class="text-xs uppercase text-gold font-semibold tracking-wider mb-4">Godziny Otwarcia</h4>
-                        <p data-i18n="footer_hours_week" class="text-xs text-gray-300">Poniedziałek – Piątek: 10:00 – 18:00</p>
-                        <p data-i18n="footer_hours_sat" class="text-xs text-gray-300 mt-2">Sobota: Po wcześniejszym uzgodnieniu</p>
+                        <p data-i18n="footer_hours_week" class="text-xs text-gray-300">Poniedziałek – Sobota: 10:00 – 18:00</p>
+                        <p data-i18n="footer_hours_sun" class="text-xs text-gray-300 mt-2">Niedziela: Zamknięte</p>
                     </div>
                 </div>
                 <div data-i18n="footer_rights" class="border-t border-dark-border pt-10 text-center text-xs text-gray-500">
@@ -518,7 +519,7 @@
         <div id="admin-dashboard-content" class="hidden">
             <div class="flex justify-between items-center mb-10 pb-6 border-b border-dark-border">
                 <div>
-                    <h1 class="font-serif-title text-4xl text-white">Panel Zgłoszeń Darii</h1>
+                    <h1 class="font-serif-title text-4xl text-white">Panel Administratora • netjes</h1>
                     <p class="text-xs text-gray-400 mt-1">Pobrano aktualne rezerwacje z chmury Supabase</p>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -602,7 +603,7 @@
                 step_2_title: "2. Wybierz Datę i Godzinę", day_mon: "Pon", day_tue: "Wt", day_wed: "Śr", day_thu: "Czw", day_fri: "Pt", day_sat: "Sob", day_sun: "Niedz", hours_title: "Godziny", click_day_prompt: "Kliknij dzień z kalendarza.", first_select_day: "Najpierw wybierz dzień", btn_back: "Wstecz", btn_next_details: "Dalej: Opis Tatuażu",
                 step_3_title: "3. Opis Tatuażu & Twoje Dane", label_placement: "Miejsce na Ciele *", label_size: "Wymiar (cm)", label_desc: "Opis Wzoru *", label_images: "Zdjęcia Inspiracji (Maksymalnie 3)", label_images_hint: "Wybierz do 3 plików ze swojego urządzenia (JPG, PNG).", label_fullname: "Imię i Nazwisko *", label_phone: "Telefon *", label_email: "Email *", btn_next_summary: "Dalej: Podsumowanie",
                 step_4_title: "4. Podsumowanie Rezerwacji", summary_selected_service: "Wybrana Usługa", summary_datetime: "Data i Godzina:", summary_client: "Klient:", summary_place: "Miejsce:", summary_contact: "Kontakt:", summary_images_count: "Inspiracje:", btn_confirm_booking: "Potwierdzam & Rezerwuję",
-                footer_desc: "Autorskie studio tatuażu Darii Wąs. Precyzja, sterylność i wyjątkowa atmosfera.", footer_contact_title: "Kontakt & Lokalizacja", footer_location: "Polska / Holandia", footer_hours_title: "Godziny Otwarcia", footer_hours_week: "Poniedziałek – Piątek: 10:00 – 18:00", footer_hours_sat: "Sobota: Po wcześniejszym uzgodnieniu", footer_rights: "© 2026 netjes TATTOO by Daria Wąs. Wszelkie prawa zastrzeżone."
+                footer_desc: "Autorskie studio tatuażu Darii Wąs. Precyzja, sterylność i wyjątkowa atmosfera.", footer_contact_title: "Kontakt & Lokalizacja", footer_location: "Polska / Holandia", footer_hours_title: "Godziny Otwarcia", footer_hours_week: "Poniedziałek – Sobota: 10:00 – 18:00", footer_hours_sun: "Niedziela: Zamknięte", footer_rights: "© 2026 netjes TATTOO by Daria Wąs. Wszelkie prawa zastrzeżone."
             },
             en: {
                 nav_about: "About Me", nav_portfolio: "Portfolio", nav_booking: "Online Booking", nav_contact: "Contact", nav_book_btn: "Book Appointment",
@@ -617,7 +618,7 @@
                 step_2_title: "2. Select Date & Time", day_mon: "Mon", day_tue: "Tue", day_wed: "Wed", day_thu: "Thu", day_fri: "Fri", day_sat: "Sat", day_sun: "Sun", hours_title: "Time Slots", click_day_prompt: "Select a date from calendar.", first_select_day: "First choose a date", btn_back: "Back", btn_next_details: "Next: Tattoo Details",
                 step_3_title: "3. Tattoo Description & Info", label_placement: "Body Placement *", label_size: "Approx Size (cm)", label_desc: "Design Idea *", label_images: "Inspiration Photos (Max 3)", label_images_hint: "Select up to 3 files from your device (JPG, PNG).", label_fullname: "Full Name *", label_phone: "Phone Number *", label_email: "Email Address *", btn_next_summary: "Next: Summary",
                 step_4_title: "4. Booking Summary", summary_selected_service: "Selected Service", summary_datetime: "Date & Time:", summary_client: "Client:", summary_place: "Placement:", summary_contact: "Contact:", summary_images_count: "Inspirations:", btn_confirm_booking: "Confirm & Reserve",
-                footer_desc: "Artistic tattoo studio by Daria Wąs. Precision, sterility, and unique atmosphere.", footer_contact_title: "Contact & Location", footer_location: "Poland / Netherlands", footer_hours_title: "Opening Hours", footer_hours_week: "Monday – Friday: 10:00 – 18:00", footer_hours_sat: "Saturday: By appointment only", footer_rights: "© 2026 netjes TATTOO by Daria Wąs. All rights reserved."
+                footer_desc: "Artistic tattoo studio by Daria Wąs. Precision, sterility, and unique atmosphere.", footer_contact_title: "Contact & Location", footer_location: "Poland / Netherlands", footer_hours_title: "Opening Hours", footer_hours_week: "Monday – Saturday: 10:00 – 18:00", footer_hours_sun: "Sunday: Closed", footer_rights: "© 2026 netjes TATTOO by Daria Wąs. All rights reserved."
             },
             nl: {
                 nav_about: "Over Mij", nav_portfolio: "Portfolio", nav_booking: "Online Boeken", nav_contact: "Contact", nav_book_btn: "Afspraak Maken",
@@ -632,7 +633,7 @@
                 step_2_title: "2. Kies Datum & Tijd", day_mon: "Ma", day_tue: "Di", day_wed: "Wo", day_thu: "Do", day_fri: "Vr", day_sat: "Za", day_sun: "Zo", hours_title: "Tijdsloten", click_day_prompt: "Kies een datum in de kalender.", first_select_day: "Kies eerst een datum", btn_back: "Terug", btn_next_details: "Volgende: Details",
                 step_3_title: "3. Beschrijving & Gegevens", label_placement: "Plek op het Lichaam *", label_size: "Afmeting (cm)", label_desc: "Beschrijving Wens *", label_images: "Inspiratie Foto's (Max 3)", label_images_hint: "Kies maximaal 3 bestanden op je apparaat (JPG, PNG).", label_fullname: "Naam & Achternaam *", label_phone: "Telefoonnummer *", label_email: "E-mailadres *", btn_next_summary: "Volgende: Overzicht",
                 step_4_title: "4. Overzicht Boeking", summary_selected_service: "Gekozen Dienst", summary_datetime: "Datum & Tijd:", summary_client: "Klant:", summary_place: "Plaatsing:", summary_contact: "Contact:", summary_images_count: "Inspiraties:", btn_confirm_booking: "Bevestigen & Boeken",
-                footer_desc: "Autentieke tattoostudio van Daria Wąs. Precisie, hygiëne en unieke sfeer.", footer_contact_title: "Contact & Locatie", footer_location: "Polen / Nederland", footer_hours_title: "Openingstijden", footer_hours_week: "Maandag – Vrijdag: 10:00 – 18:00", footer_hours_sat: "Zaterdag: Alleen op afspraak", footer_rights: "© 2026 netjes TATTOO door Daria Wąs. Alle rechten voorbehouden."
+                footer_desc: "Autentieke tattoostudio van Daria Wąs. Precisie, hygiëne en unieke sfeer.", footer_contact_title: "Contact & Locatie", footer_location: "Polen / Nederland", footer_hours_title: "Openingstijden", footer_hours_week: "Maandag – Zaterdag: 10:00 – 18:00", footer_hours_sun: "Zondag: Gesloten", footer_rights: "© 2026 netjes TATTOO door Daria Wąs. Alle rechten voorbehouden."
             }
         };
 
@@ -782,8 +783,8 @@
             }
         }
 
-        /* KALENDARZ */
-        function renderCalendar() {
+        /* KALENDARZ Z KOLOROWANIEM STOPNIA ZAJĘTOŚCI DNI */
+        async function renderCalendar() {
             const grid = document.getElementById('calendar-days-grid');
             const monthDisplay = document.getElementById('calendar-month-display');
             if(!grid || !monthDisplay) return;
@@ -808,11 +809,32 @@
 
             const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
 
+            // Pobranie danych rezerwacji dla całego widocznego miesiąca z Supabase
+            let monthBookingsCount = {};
+            if (db) {
+                const startDateStr = `${calendarYear}-${String(calendarMonth + 1).padStart(2, '0')}-01`;
+                const endDateStr = `${calendarYear}-${String(calendarMonth + 1).padStart(2, '0')}-${daysInMonth}`;
+                
+                const { data, error } = await db
+                    .from('bookings')
+                    .select('date')
+                    .gte('date', startDateStr)
+                    .lte('date', endDateStr);
+
+                if (!error && data) {
+                    data.forEach(b => {
+                        monthBookingsCount[b.date] = (monthBookingsCount[b.date] || 0) + 1;
+                    });
+                }
+            }
+
             for (let i = 0; i < firstDayIndex; i++) {
                 const emptyCell = document.createElement('div');
                 emptyCell.className = "h-12 w-full";
                 grid.appendChild(emptyCell);
             }
+
+            const totalSlotsPerDay = availableTimeSlots.length; // np. 4 terminy
 
             for (let day = 1; day <= daysInMonth; day++) {
                 const dayDate = new Date(calendarYear, calendarMonth, day);
@@ -828,14 +850,25 @@
 
                 const isPast = dayDate < today;
                 const isTooFar = dayDate > maxAllowedBookingDate;
-                const isSunday = (dayOfWeek === 0);
+                const isSunday = (dayOfWeek === 0); // Tylko Niedziela jest wyłączona
                 const isDisabled = isPast || isTooFar || isSunday;
 
                 if (isDisabled) {
-                    btn.className = "calendar-day-btn h-12 w-full rounded-xl border border-dark-border/40 text-xs text-gray-600 line-through bg-dark-base/40 cursor-not-allowed flex items-center justify-center font-medium select-none";
+                    btn.className = "calendar-day-btn h-12 w-full rounded-xl border border-dark-border/30 text-xs text-gray-600 line-through bg-dark-base/40 cursor-not-allowed flex items-center justify-center font-medium select-none";
                     btn.disabled = true;
                 } else {
-                    btn.className = "calendar-day-btn h-12 w-full rounded-xl border border-dark-border text-xs text-white hover:border-gold transition flex items-center justify-center font-medium cursor-pointer";
+                    const bookedCount = monthBookingsCount[dateStr] || 0;
+                    
+                    let bgBorderClass = "border-emerald-500/40 bg-emerald-950/20 text-emerald-200 hover:border-emerald-400"; // Zielony (brak rezerwacji)
+
+                    if (bookedCount >= totalSlotsPerDay) {
+                        bgBorderClass = "border-red-500/40 bg-red-950/20 text-red-200 hover:border-red-400"; // Czerwony (całkowicie zajęty)
+                    } else if (bookedCount > 0) {
+                        bgBorderClass = "border-amber-500/40 bg-amber-950/20 text-amber-200 hover:border-amber-400"; // Żółty (częściowo zajęty)
+                    }
+
+                    btn.className = `calendar-day-btn h-12 w-full rounded-xl border ${bgBorderClass} text-xs transition flex items-center justify-center font-semibold cursor-pointer shadow-sm`;
+
                     if (bookingState.selectedDate === dateStr) {
                         btn.classList.add('selected-day');
                     }
@@ -917,7 +950,7 @@
         async function uploadInspirations(files) {
             if (!db) return [];
             const uploadedUrls = [];
-            const filesToUpload = Array.from(files).slice(0, 3); // Max 3 pliki
+            const filesToUpload = Array.from(files).slice(0, 3);
 
             for (const file of filesToUpload) {
                 const cleanFileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
@@ -980,7 +1013,7 @@
                 if (error) console.error("Error Supabase Insert:", error);
             }
 
-            // 2. Wysyłka Powiadomienia na Email (z linkami do zdjęć)
+            // 2. Wysyłka Powiadomienia na Email
             const templateParams = {
                 client_name: nameVal,
                 client_email: emailVal,
@@ -1023,7 +1056,7 @@
             submitBtn.disabled = false;
 
             goToStep(1);
-            renderCalendar();
+            await renderCalendar();
         }
 
         /* LOGIKA PANELU ADMINA SUPABASE AUTH (#admin) */
@@ -1157,6 +1190,7 @@
             appBookings = appBookings.filter((b, idx) => (b.id !== undefined ? b.id !== idOrIndex : idx !== idOrIndex));
             localStorage.setItem('netjes_tattoo_bookings', JSON.stringify(appBookings));
             fetchAndRenderBookings();
+            await renderCalendar();
         }
 
         window.addEventListener('hashchange', checkHashRoute);
