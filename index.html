@@ -675,40 +675,39 @@
         function setLanguage(lang) {
             currentLang = lang;
             const dict = translations[lang];
-
+        
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (dict[key]) {
                     el.innerText = dict[key];
                 }
             });
-
+        
             const thumb = document.getElementById('switch-thumb');
             const flagPl = document.getElementById('flag-pl');
             const flagEn = document.getElementById('flag-en');
             const flagNl = document.getElementById('flag-nl');
-
+        
             flagPl.classList.remove('opacity-100'); flagPl.classList.add('opacity-40');
             flagEn.classList.remove('opacity-100'); flagEn.classList.add('opacity-40');
             flagNl.classList.remove('opacity-100'); flagNl.classList.add('opacity-40');
-
+        
+            // Znajdź kliknięty/wybrany przycisk
+            const activeBtn = document.querySelector(`button[onclick="setLanguage('${lang}')"]`);
+            if (activeBtn && thumb) {
+                // Ustaw pozycję podświetlenia na dokładnie taką samą, jaką ma wybrany przycisk
+                thumb.style.transform = `translateX(${activeBtn.offsetLeft - 4}px)`;
+            }
+        
             if (lang === 'pl') {
-                thumb.style.transform = 'translateX(0px)';
                 flagPl.classList.remove('opacity-40'); flagPl.classList.add('opacity-100');
             } else if (lang === 'en') {
-                thumb.style.transform = 'translateX(35px)';
                 flagEn.classList.remove('opacity-40'); flagEn.classList.add('opacity-100');
             } else if (lang === 'nl') {
-                thumb.style.transform = 'translateX(70px)';
                 flagNl.classList.remove('opacity-40'); flagNl.classList.add('opacity-100');
             }
-
+        
             renderCalendar();
-        }
-
-        function selectLanguageFromModal(lang) {
-            setLanguage(lang);
-            document.getElementById('language-modal').classList.add('hidden');
         }
 
         // LENIS SMOOTH SCROLL
