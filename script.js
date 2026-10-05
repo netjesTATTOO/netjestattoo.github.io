@@ -1485,6 +1485,9 @@
         /* ==========================================================================
            ANIMACJA PŁYWAJĄCYCH ZŁOTYCH ORBÓW W TLE (CANVAS BACKGROUND)
            ========================================================================== */
+        /* ==========================================================================
+           ANIMACJA ŚWIETLISTYCH, MNIEJSZYCH ZŁOTYCH ORBÓW W TLE (CANVAS)
+           ========================================================================== */
         function initAmbientOrbs() {
             const canvas = document.getElementById('ambient-canvas');
             if (!canvas) return;
@@ -1494,14 +1497,13 @@
             let width = 0;
             let height = 0;
 
-            // Paleta subtelnych, eleganckich złotych i ciepłych odcieni
-            const orbColors = [
-                { r: 197, g: 160, b: 89, a: 0.18 },   // Gold DEFAULT (#C5A059)
-                { r: 230, g: 200, b: 148, a: 0.14 },  // Gold Light (#E6C894)
-                { r: 154, g: 123, b: 62, a: 0.16 },   // Gold Dark (#9A7B3E)
-                { r: 212, g: 175, b: 55, a: 0.15 },   // Warm Gold Glow
-                { r: 180, g: 140, b: 70, a: 0.13 },   // Champagne Gold
-                { r: 220, g: 180, b: 100, a: 0.12 }   // Soft Aura
+            // Paleta wyrazistych, złotych odcieni o wyższej widoczności
+            const goldPalette = [
+                { r: 245, g: 215, b: 140, coreAlpha: 0.85, midAlpha: 0.45 }, // Jasne złoto / Glow
+                { r: 212, g: 175, b: 55,  coreAlpha: 0.80, midAlpha: 0.40 }, // Klasyczne złoto
+                { r: 229, g: 195, b: 110, coreAlpha: 0.82, midAlpha: 0.42 }, // Champagne Gold
+                { r: 197, g: 160, b: 89,  coreAlpha: 0.78, midAlpha: 0.38 }, // netjes Gold
+                { r: 255, g: 230, b: 170, coreAlpha: 0.90, midAlpha: 0.50 }  // Ciepłe białe złoto
             ];
 
             let orbs = [];
@@ -1514,19 +1516,16 @@
                 lastMove: 0
             };
 
-            function getBaseRadius() {
-                return Math.max(180, Math.min(width, height) * 0.35);
-            }
-
             function createOrbs() {
                 orbs = [];
-                const baseRadius = getBaseRadius();
-                const orbCount = width < 768 ? 4 : 6;
+                // Większa liczba mniejszych, wyraźnych orbów
+                const count = width < 768 ? 16 : 30;
 
-                for (let i = 0; i < orbCount; i++) {
-                    const color = orbColors[i % orbColors.length];
-                    const sizeScale = 0.8 + Math.random() * 0.6;
-                    
+                for (let i = 0; i < count; i++) {
+                    const color = goldPalette[i % goldPalette.length];
+                    // Zróżnicowane rozmiary: od małych świetlików (12px) do średnich miękkich kul (45px)
+                    const baseRadius = 12 + Math.random() * 32;
+
                     orbs.push({
                         anchorX: Math.random() * width,
                         anchorY: Math.random() * height,
@@ -1534,17 +1533,21 @@
                         y: Math.random() * height,
                         vx: 0,
                         vy: 0,
-                        sizeScale: sizeScale,
-                        radius: baseRadius * sizeScale,
+                        baseRadius: baseRadius,
+                        radius: baseRadius,
                         color: color,
+                        // Parametry delikatnego pulsowania
+                        pulseSpeed: 0.0015 + Math.random() * 0.002,
+                        pulsePhase: Math.random() * Math.PI * 2,
+                        // Płynne pływanie
                         phaseX: Math.random() * Math.PI * 2,
                         phaseY: Math.random() * Math.PI * 2,
-                        speedX: 0.00025 + Math.random() * 0.00035,
-                        speedY: 0.00025 + Math.random() * 0.00035,
-                        ampX: 80 + Math.random() * 120,
-                        ampY: 70 + Math.random() * 100,
-                        driftX: (Math.random() - 0.5) * 0.25,
-                        driftY: (Math.random() - 0.5) * 0.25
+                        speedX: 0.0004 + Math.random() * 0.0006,
+                        speedY: 0.0004 + Math.random() * 0.0006,
+                        ampX: 45 + Math.random() * 75,
+                        ampY: 40 + Math.random() * 65,
+                        driftX: (Math.random() - 0.5) * 0.35,
+                        driftY: (Math.random() - 0.5) * 0.35
                     });
                 }
             }
@@ -1557,15 +1560,10 @@
 
                 if (orbs.length === 0) {
                     createOrbs();
-                } else {
-                    const baseRadius = getBaseRadius();
-                    orbs.forEach(orb => {
-                        orb.radius = baseRadius * orb.sizeScale;
-                    });
                 }
             }
 
-            // Obsługa ruchu myszy / dotyku
+            // Obsługa kursora myszy i dotyku
             window.addEventListener('mousemove', (e) => {
                 mouse.targetX = e.clientX;
                 mouse.targetY = e.clientY;
@@ -1593,73 +1591,107 @@
                 lastTime = time;
 
                 if (mouse.active) {
-                    mouse.x += (mouse.targetX - mouse.x) * 0.15;
-                    mouse.y += (mouse.targetY - mouse.y) * 0.15;
+                    mouse.x += (mouse.targetX - mouse.x) * 0.18;
+                    mouse.y += (mouse.targetY - mouse.y) * 0.18;
 
-                    if (Date.now() - mouse.lastMove > 2500) {
+                    if (Date.now() - mouse.lastMove > 2200) {
                         mouse.active = false;
                     }
                 }
 
                 ctx.clearRect(0, 0, width, height);
-                ctx.globalCompositeOperation = 'screen';
+
+                // Subtelne połączenia liniowe pomiędzy bliskimi orbami (efekt konstelacji / sieci)
+                ctx.lineWidth = 0.6;
+                for (let i = 0; i < orbs.length; i++) {
+                    for (let j = i + 1; j < orbs.length; j++) {
+                        const dx = orbs[i].x - orbs[j].x;
+                        const dy = orbs[i].y - orbs[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        const maxDist = 120;
+
+                        if (dist < maxDist) {
+                            const lineAlpha = (1 - dist / maxDist) * 0.12;
+                            ctx.strokeStyle = `rgba(197, 160, 89, ${lineAlpha})`;
+                            ctx.beginPath();
+                            ctx.moveTo(orbs[i].x, orbs[i].y);
+                            ctx.lineTo(orbs[j].x, orbs[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // Rysowanie poszczególnych świetlistych orbów
+                ctx.globalCompositeOperation = 'lighter';
 
                 for (let i = 0; i < orbs.length; i++) {
                     const orb = orbs[i];
 
-                    // Płynny dryf kotwicy po ekranie
+                    // Powolny dryf kotwicy
                     orb.anchorX += orb.driftX * (dt * 0.06);
                     orb.anchorY += orb.driftY * (dt * 0.06);
 
-                    const margin = orb.radius * 0.8;
+                    const margin = orb.baseRadius + 50;
                     if (orb.anchorX < -margin) orb.anchorX = width + margin;
                     if (orb.anchorX > width + margin) orb.anchorX = -margin;
                     if (orb.anchorY < -margin) orb.anchorY = height + margin;
                     if (orb.anchorY > height + margin) orb.anchorY = -margin;
 
-                    // Docelowa pozycja harmoniczna (delikatne pływanie)
+                    // Harmoniczne pływanie
                     const targetX = orb.anchorX + Math.sin(time * orb.speedX + orb.phaseX) * orb.ampX;
                     const targetY = orb.anchorY + Math.cos(time * orb.speedY + orb.phaseY) * orb.ampY;
 
-                    // Odpychanie i rozpraszanie przez kursor
+                    // Odpychanie i rozpraszanie przez kursor myszy
                     if (mouse.active) {
                         const dx = orb.x - mouse.x;
                         const dy = orb.y - mouse.y;
                         const dist = Math.sqrt(dx * dx + dy * dy);
-                        const repelRadius = orb.radius * 0.85 + 130;
+                        const repelRadius = 160;
 
                         if (dist < repelRadius && dist > 1) {
-                            const force = Math.pow(1 - (dist / repelRadius), 1.8) * 4.5;
+                            const force = Math.pow(1 - (dist / repelRadius), 1.5) * 7.5;
                             const angle = Math.atan2(dy, dx);
                             orb.vx += Math.cos(angle) * force;
                             orb.vy += Math.sin(angle) * force;
                         }
                     }
 
-                    orb.vx *= 0.93;
-                    orb.vy *= 0.93;
+                    // Fizyka sprężystego powrotu
+                    orb.vx *= 0.92;
+                    orb.vy *= 0.92;
 
-                    orb.x += (targetX - orb.x) * 0.035 + orb.vx;
-                    orb.y += (targetY - orb.y) * 0.035 + orb.vy;
+                    orb.x += (targetX - orb.x) * 0.04 + orb.vx;
+                    orb.y += (targetY - orb.y) * 0.04 + orb.vy;
 
-                    // Rysowanie miękkiego rozmytego gradientu
+                    // Dynamiczny promień z delikatnym pulsowaniem
+                    const pulse = 1 + Math.sin(time * orb.pulseSpeed + orb.pulsePhase) * 0.15;
+                    const drawRadius = orb.baseRadius * pulse;
+
+                    // Wyrazisty, świecący gradient radialny
                     const gradient = ctx.createRadialGradient(
                         orb.x, orb.y, 0,
-                        orb.x, orb.y, orb.radius
+                        orb.x, orb.y, drawRadius
                     );
 
                     const c = orb.color;
-                    gradient.addColorStop(0, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.a * 1.0})`);
-                    gradient.addColorStop(0.35, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.a * 0.65})`);
-                    gradient.addColorStop(0.7, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.a * 0.25})`);
+                    gradient.addColorStop(0, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.coreAlpha})`);
+                    gradient.addColorStop(0.25, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.midAlpha})`);
+                    gradient.addColorStop(0.65, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.midAlpha * 0.3})`);
                     gradient.addColorStop(1, `rgba(${c.r}, ${c.g}, ${c.b}, 0)`);
 
                     ctx.fillStyle = gradient;
                     ctx.beginPath();
-                    ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
+                    ctx.arc(orb.x, orb.y, drawRadius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Mały jasny punkt w centrum każdego orba (efekt iskry / świetlika)
+                    ctx.fillStyle = `rgba(255, 250, 230, ${c.coreAlpha * 0.9})`;
+                    ctx.beginPath();
+                    ctx.arc(orb.x, orb.y, Math.max(1.5, drawRadius * 0.12), 0, Math.PI * 2);
                     ctx.fill();
                 }
 
+                ctx.globalCompositeOperation = 'source-over';
                 requestAnimationFrame(animate);
             }
 

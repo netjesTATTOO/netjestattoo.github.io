@@ -98,10 +98,8 @@ summary::marker {
     background: #C5A059;
 }
 
-/* Płynne, aksamitne rozmycie tła dla ambientowych orbów */
+/* Wyraziste, świetliste orby w tle */
 #ambient-canvas {
-    filter: blur(40px);
-    -webkit-filter: blur(40px);
     transform: translateZ(0);
     will-change: transform;
     pointer-events: none;
