@@ -1483,7 +1483,7 @@
         }
 
         /* ==========================================================================
-           ANIMACJA SUBTELNYCH, ŚWIETLISTYCH ZŁOTYCH ORBÓW W TLE (CANVAS)
+           ANIMACJA SPOKOJNYCH, MIĘKKICH ZŁOTYCH ORBÓW W TLE (CANVAS)
            ========================================================================== */
         function initAmbientOrbs() {
             const canvas = document.getElementById('ambient-canvas');
@@ -1494,13 +1494,13 @@
             let width = 0;
             let height = 0;
 
-            // Paleta delikatnych, subtelnie widocznych złotych odcieni (-70% intensywności)
+            // Niezwykle subtelna, ciepła paleta złota (spokojna poświata w tle)
             const goldPalette = [
-                { r: 245, g: 215, b: 140, coreAlpha: 0.26, midAlpha: 0.12 }, // Jasne złoto / Glow
-                { r: 212, g: 175, b: 55,  coreAlpha: 0.24, midAlpha: 0.11 }, // Klasyczne złoto
-                { r: 229, g: 195, b: 110, coreAlpha: 0.25, midAlpha: 0.12 }, // Champagne Gold
-                { r: 197, g: 160, b: 89,  coreAlpha: 0.23, midAlpha: 0.10 }, // netjes Gold
-                { r: 255, g: 230, b: 170, coreAlpha: 0.28, midAlpha: 0.14 }  // Ciepłe złoto
+                { r: 245, g: 215, b: 140, coreAlpha: 0.14, midAlpha: 0.05 }, // Delikatne jasne złoto
+                { r: 212, g: 175, b: 55,  coreAlpha: 0.12, midAlpha: 0.04 }, // Stonowane złoto
+                { r: 229, g: 195, b: 110, coreAlpha: 0.13, midAlpha: 0.05 }, // Szampańskie złoto
+                { r: 197, g: 160, b: 89,  coreAlpha: 0.11, midAlpha: 0.04 }, // netjes Gold
+                { r: 255, g: 225, b: 160, coreAlpha: 0.15, midAlpha: 0.06 }  // Ciepła aura
             ];
 
             let orbs = [];
@@ -1515,11 +1515,13 @@
 
             function createOrbs() {
                 orbs = [];
-                const count = width < 768 ? 16 : 28;
+                // Umiarkowana liczba orbow dla zachowania czystości i spokoju
+                const count = width < 768 ? 10 : 16;
 
                 for (let i = 0; i < count; i++) {
                     const color = goldPalette[i % goldPalette.length];
-                    const baseRadius = 12 + Math.random() * 30;
+                    // Nieco większe, miękkie kule (40px - 100px)
+                    const baseRadius = width < 768 ? (30 + Math.random() * 45) : (45 + Math.random() * 65);
 
                     orbs.push({
                         anchorX: Math.random() * width,
@@ -1529,18 +1531,18 @@
                         vx: 0,
                         vy: 0,
                         baseRadius: baseRadius,
-                        radius: baseRadius,
                         color: color,
-                        pulseSpeed: 0.0015 + Math.random() * 0.002,
+                        pulseSpeed: 0.0008 + Math.random() * 0.001,
                         pulsePhase: Math.random() * Math.PI * 2,
+                        // Bardzo powolne, majestatyczne pływanie
                         phaseX: Math.random() * Math.PI * 2,
                         phaseY: Math.random() * Math.PI * 2,
-                        speedX: 0.0004 + Math.random() * 0.0006,
-                        speedY: 0.0004 + Math.random() * 0.0006,
-                        ampX: 45 + Math.random() * 75,
-                        ampY: 40 + Math.random() * 65,
-                        driftX: (Math.random() - 0.5) * 0.35,
-                        driftY: (Math.random() - 0.5) * 0.35
+                        speedX: 0.00012 + Math.random() * 0.00018,
+                        speedY: 0.00012 + Math.random() * 0.00018,
+                        ampX: 60 + Math.random() * 90,
+                        ampY: 50 + Math.random() * 80,
+                        driftX: (Math.random() - 0.5) * 0.08,
+                        driftY: (Math.random() - 0.5) * 0.08
                     });
                 }
             }
@@ -1584,76 +1586,60 @@
                 lastTime = time;
 
                 if (mouse.active) {
-                    mouse.x += (mouse.targetX - mouse.x) * 0.18;
-                    mouse.y += (mouse.targetY - mouse.y) * 0.18;
+                    mouse.x += (mouse.targetX - mouse.x) * 0.1;
+                    mouse.y += (mouse.targetY - mouse.y) * 0.1;
 
-                    if (Date.now() - mouse.lastMove > 2200) {
+                    if (Date.now() - mouse.lastMove > 2500) {
                         mouse.active = false;
                     }
                 }
 
                 ctx.clearRect(0, 0, width, height);
-
-                // Subtelne połączenia liniowe pomiędzy bliskimi orbami
-                ctx.lineWidth = 0.5;
-                for (let i = 0; i < orbs.length; i++) {
-                    for (let j = i + 1; j < orbs.length; j++) {
-                        const dx = orbs[i].x - orbs[j].x;
-                        const dy = orbs[i].y - orbs[j].y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        const maxDist = 110;
-
-                        if (dist < maxDist) {
-                            const lineAlpha = (1 - dist / maxDist) * 0.04;
-                            ctx.strokeStyle = `rgba(197, 160, 89, ${lineAlpha})`;
-                            ctx.beginPath();
-                            ctx.moveTo(orbs[i].x, orbs[i].y);
-                            ctx.lineTo(orbs[j].x, orbs[j].y);
-                            ctx.stroke();
-                        }
-                    }
-                }
-
-                ctx.globalCompositeOperation = 'lighter';
+                ctx.globalCompositeOperation = 'screen';
 
                 for (let i = 0; i < orbs.length; i++) {
                     const orb = orbs[i];
 
+                    // Bardzo powolny, łagodny dryf
                     orb.anchorX += orb.driftX * (dt * 0.06);
                     orb.anchorY += orb.driftY * (dt * 0.06);
 
-                    const margin = orb.baseRadius + 50;
+                    const margin = orb.baseRadius + 60;
                     if (orb.anchorX < -margin) orb.anchorX = width + margin;
                     if (orb.anchorX > width + margin) orb.anchorX = -margin;
                     if (orb.anchorY < -margin) orb.anchorY = height + margin;
                     if (orb.anchorY > height + margin) orb.anchorY = -margin;
 
+                    // Kojący, powolny ruch harmoniczny
                     const targetX = orb.anchorX + Math.sin(time * orb.speedX + orb.phaseX) * orb.ampX;
                     const targetY = orb.anchorY + Math.cos(time * orb.speedY + orb.phaseY) * orb.ampY;
 
+                    // Delikatne, miękkie odpychanie przez kursor
                     if (mouse.active) {
                         const dx = orb.x - mouse.x;
                         const dy = orb.y - mouse.y;
                         const dist = Math.sqrt(dx * dx + dy * dy);
-                        const repelRadius = 160;
+                        const repelRadius = orb.baseRadius + 110;
 
                         if (dist < repelRadius && dist > 1) {
-                            const force = Math.pow(1 - (dist / repelRadius), 1.5) * 7.5;
+                            const force = Math.pow(1 - (dist / repelRadius), 2) * 2.8;
                             const angle = Math.atan2(dy, dx);
                             orb.vx += Math.cos(angle) * force;
                             orb.vy += Math.sin(angle) * force;
                         }
                     }
 
-                    orb.vx *= 0.92;
-                    orb.vy *= 0.92;
+                    orb.vx *= 0.94;
+                    orb.vy *= 0.94;
 
-                    orb.x += (targetX - orb.x) * 0.04 + orb.vx;
-                    orb.y += (targetY - orb.y) * 0.04 + orb.vy;
+                    orb.x += (targetX - orb.x) * 0.02 + orb.vx;
+                    orb.y += (targetY - orb.y) * 0.02 + orb.vy;
 
-                    const pulse = 1 + Math.sin(time * orb.pulseSpeed + orb.pulsePhase) * 0.15;
+                    // Subtelne, powolne pulsowanie promienia
+                    const pulse = 1 + Math.sin(time * orb.pulseSpeed + orb.pulsePhase) * 0.1;
                     const drawRadius = orb.baseRadius * pulse;
 
+                    // Miękki, aksamitny gradient bez ostrych krawędzi
                     const gradient = ctx.createRadialGradient(
                         orb.x, orb.y, 0,
                         orb.x, orb.y, drawRadius
@@ -1661,19 +1647,13 @@
 
                     const c = orb.color;
                     gradient.addColorStop(0, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.coreAlpha})`);
-                    gradient.addColorStop(0.25, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.midAlpha})`);
-                    gradient.addColorStop(0.65, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.midAlpha * 0.25})`);
+                    gradient.addColorStop(0.4, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.midAlpha})`);
+                    gradient.addColorStop(0.75, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.midAlpha * 0.3})`);
                     gradient.addColorStop(1, `rgba(${c.r}, ${c.g}, ${c.b}, 0)`);
 
                     ctx.fillStyle = gradient;
                     ctx.beginPath();
                     ctx.arc(orb.x, orb.y, drawRadius, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    // Bardzo subtelny punkt centralny
-                    ctx.fillStyle = `rgba(255, 250, 230, ${c.coreAlpha * 0.6})`;
-                    ctx.beginPath();
-                    ctx.arc(orb.x, orb.y, Math.max(1, drawRadius * 0.1), 0, Math.PI * 2);
                     ctx.fill();
                 }
 
