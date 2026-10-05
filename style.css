@@ -1,0 +1,85 @@
+/* ==========================================================================
+   netjes TATTOO - Style główne
+   ========================================================================== */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #0B0B0B;
+    color: #E5E5E5;
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+}
+
+.font-serif-title {
+    font-family: 'Cormorant Garamond', serif;
+}
+
+/* Gradienty złote */
+.gold-gradient-text {
+    background: linear-gradient(135deg, #F3E5AB 0%, #C5A059 50%, #9A7B3E 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gold-gradient-bg {
+    background: linear-gradient(135deg, #C5A059 0%, #9A7B3E 100%);
+}
+
+/* Szklany panel (Glassmorphism) */
+.glass-panel {
+    background: rgba(20, 20, 20, 0.75);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Kalendarz i godziny */
+.calendar-day-btn.selected-day {
+    background-color: #C5A059 !important;
+    color: #000000 !important;
+    font-weight: 700;
+    border-color: #C5A059 !important;
+}
+
+.time-slot-btn.selected-slot {
+    background-color: #C5A059 !important;
+    color: #000000 !important;
+    font-weight: 600;
+}
+
+/* Ukrywanie modalu wyboru języka gdy język został już wybrany */
+html.has-lang #language-modal {
+    display: none !important;
+}
+
+/* Ukrycie domyślnego trójkącika w znacznikach summary / details */
+summary::-webkit-details-marker,
+summary::marker {
+    display: none;
+}
+
+/* Animacja pojawiania się miniatur zdjęć */
+@keyframes previewFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-fade-in {
+    animation: previewFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Styl i animacja dla modali systemowych */
+#custom-modal-backdrop {
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+
