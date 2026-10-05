@@ -1483,10 +1483,7 @@
         }
 
         /* ==========================================================================
-           ANIMACJA PŁYWAJĄCYCH ZŁOTYCH ORBÓW W TLE (CANVAS BACKGROUND)
-           ========================================================================== */
-        /* ==========================================================================
-           ANIMACJA ŚWIETLISTYCH, MNIEJSZYCH ZŁOTYCH ORBÓW W TLE (CANVAS)
+           ANIMACJA SUBTELNYCH, ŚWIETLISTYCH ZŁOTYCH ORBÓW W TLE (CANVAS)
            ========================================================================== */
         function initAmbientOrbs() {
             const canvas = document.getElementById('ambient-canvas');
@@ -1497,13 +1494,13 @@
             let width = 0;
             let height = 0;
 
-            // Paleta wyrazistych, złotych odcieni o wyższej widoczności
+            // Paleta delikatnych, subtelnie widocznych złotych odcieni (-70% intensywności)
             const goldPalette = [
-                { r: 245, g: 215, b: 140, coreAlpha: 0.85, midAlpha: 0.45 }, // Jasne złoto / Glow
-                { r: 212, g: 175, b: 55,  coreAlpha: 0.80, midAlpha: 0.40 }, // Klasyczne złoto
-                { r: 229, g: 195, b: 110, coreAlpha: 0.82, midAlpha: 0.42 }, // Champagne Gold
-                { r: 197, g: 160, b: 89,  coreAlpha: 0.78, midAlpha: 0.38 }, // netjes Gold
-                { r: 255, g: 230, b: 170, coreAlpha: 0.90, midAlpha: 0.50 }  // Ciepłe białe złoto
+                { r: 245, g: 215, b: 140, coreAlpha: 0.26, midAlpha: 0.12 }, // Jasne złoto / Glow
+                { r: 212, g: 175, b: 55,  coreAlpha: 0.24, midAlpha: 0.11 }, // Klasyczne złoto
+                { r: 229, g: 195, b: 110, coreAlpha: 0.25, midAlpha: 0.12 }, // Champagne Gold
+                { r: 197, g: 160, b: 89,  coreAlpha: 0.23, midAlpha: 0.10 }, // netjes Gold
+                { r: 255, g: 230, b: 170, coreAlpha: 0.28, midAlpha: 0.14 }  // Ciepłe złoto
             ];
 
             let orbs = [];
@@ -1518,13 +1515,11 @@
 
             function createOrbs() {
                 orbs = [];
-                // Większa liczba mniejszych, wyraźnych orbów
-                const count = width < 768 ? 16 : 30;
+                const count = width < 768 ? 16 : 28;
 
                 for (let i = 0; i < count; i++) {
                     const color = goldPalette[i % goldPalette.length];
-                    // Zróżnicowane rozmiary: od małych świetlików (12px) do średnich miękkich kul (45px)
-                    const baseRadius = 12 + Math.random() * 32;
+                    const baseRadius = 12 + Math.random() * 30;
 
                     orbs.push({
                         anchorX: Math.random() * width,
@@ -1536,10 +1531,8 @@
                         baseRadius: baseRadius,
                         radius: baseRadius,
                         color: color,
-                        // Parametry delikatnego pulsowania
                         pulseSpeed: 0.0015 + Math.random() * 0.002,
                         pulsePhase: Math.random() * Math.PI * 2,
-                        // Płynne pływanie
                         phaseX: Math.random() * Math.PI * 2,
                         phaseY: Math.random() * Math.PI * 2,
                         speedX: 0.0004 + Math.random() * 0.0006,
@@ -1601,17 +1594,17 @@
 
                 ctx.clearRect(0, 0, width, height);
 
-                // Subtelne połączenia liniowe pomiędzy bliskimi orbami (efekt konstelacji / sieci)
-                ctx.lineWidth = 0.6;
+                // Subtelne połączenia liniowe pomiędzy bliskimi orbami
+                ctx.lineWidth = 0.5;
                 for (let i = 0; i < orbs.length; i++) {
                     for (let j = i + 1; j < orbs.length; j++) {
                         const dx = orbs[i].x - orbs[j].x;
                         const dy = orbs[i].y - orbs[j].y;
                         const dist = Math.sqrt(dx * dx + dy * dy);
-                        const maxDist = 120;
+                        const maxDist = 110;
 
                         if (dist < maxDist) {
-                            const lineAlpha = (1 - dist / maxDist) * 0.12;
+                            const lineAlpha = (1 - dist / maxDist) * 0.04;
                             ctx.strokeStyle = `rgba(197, 160, 89, ${lineAlpha})`;
                             ctx.beginPath();
                             ctx.moveTo(orbs[i].x, orbs[i].y);
@@ -1621,13 +1614,11 @@
                     }
                 }
 
-                // Rysowanie poszczególnych świetlistych orbów
                 ctx.globalCompositeOperation = 'lighter';
 
                 for (let i = 0; i < orbs.length; i++) {
                     const orb = orbs[i];
 
-                    // Powolny dryf kotwicy
                     orb.anchorX += orb.driftX * (dt * 0.06);
                     orb.anchorY += orb.driftY * (dt * 0.06);
 
@@ -1637,11 +1628,9 @@
                     if (orb.anchorY < -margin) orb.anchorY = height + margin;
                     if (orb.anchorY > height + margin) orb.anchorY = -margin;
 
-                    // Harmoniczne pływanie
                     const targetX = orb.anchorX + Math.sin(time * orb.speedX + orb.phaseX) * orb.ampX;
                     const targetY = orb.anchorY + Math.cos(time * orb.speedY + orb.phaseY) * orb.ampY;
 
-                    // Odpychanie i rozpraszanie przez kursor myszy
                     if (mouse.active) {
                         const dx = orb.x - mouse.x;
                         const dy = orb.y - mouse.y;
@@ -1656,18 +1645,15 @@
                         }
                     }
 
-                    // Fizyka sprężystego powrotu
                     orb.vx *= 0.92;
                     orb.vy *= 0.92;
 
                     orb.x += (targetX - orb.x) * 0.04 + orb.vx;
                     orb.y += (targetY - orb.y) * 0.04 + orb.vy;
 
-                    // Dynamiczny promień z delikatnym pulsowaniem
                     const pulse = 1 + Math.sin(time * orb.pulseSpeed + orb.pulsePhase) * 0.15;
                     const drawRadius = orb.baseRadius * pulse;
 
-                    // Wyrazisty, świecący gradient radialny
                     const gradient = ctx.createRadialGradient(
                         orb.x, orb.y, 0,
                         orb.x, orb.y, drawRadius
@@ -1676,7 +1662,7 @@
                     const c = orb.color;
                     gradient.addColorStop(0, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.coreAlpha})`);
                     gradient.addColorStop(0.25, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.midAlpha})`);
-                    gradient.addColorStop(0.65, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.midAlpha * 0.3})`);
+                    gradient.addColorStop(0.65, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.midAlpha * 0.25})`);
                     gradient.addColorStop(1, `rgba(${c.r}, ${c.g}, ${c.b}, 0)`);
 
                     ctx.fillStyle = gradient;
@@ -1684,10 +1670,10 @@
                     ctx.arc(orb.x, orb.y, drawRadius, 0, Math.PI * 2);
                     ctx.fill();
 
-                    // Mały jasny punkt w centrum każdego orba (efekt iskry / świetlika)
-                    ctx.fillStyle = `rgba(255, 250, 230, ${c.coreAlpha * 0.9})`;
+                    // Bardzo subtelny punkt centralny
+                    ctx.fillStyle = `rgba(255, 250, 230, ${c.coreAlpha * 0.6})`;
                     ctx.beginPath();
-                    ctx.arc(orb.x, orb.y, Math.max(1.5, drawRadius * 0.12), 0, Math.PI * 2);
+                    ctx.arc(orb.x, orb.y, Math.max(1, drawRadius * 0.1), 0, Math.PI * 2);
                     ctx.fill();
                 }
 
