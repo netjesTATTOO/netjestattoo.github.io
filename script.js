@@ -141,7 +141,7 @@
             );
 
             if (filtered.length === 0) {
-                listContainer.innerHTML = '<div class="text-[11px] text-gray-500 py-3 text-center">Brak wyników</div>';
+                listContainer.innerHTML = '<div class="text-xs text-gray-400 py-3 text-center">Brak wyników</div>';
                 return;
             }
 
@@ -149,13 +149,13 @@
                 const btn = document.createElement('button');
                 btn.type = "button";
                 const isSelected = (c.code === selectedCountry.code && c.iso === selectedCountry.iso);
-                btn.className = `w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-dark-surface transition text-left cursor-pointer group ${isSelected ? 'bg-gold/15 text-gold font-semibold' : 'text-gray-300'}`;
+                btn.className = `w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-dark-surface transition text-left cursor-pointer group ${isSelected ? 'bg-gold/15 text-gold font-semibold' : 'text-gray-200'}`;
                 btn.innerHTML = `
-                    <div class="flex items-center space-x-2.5">
-                        <span class="fi fi-${c.iso} text-base rounded-sm shadow-sm"></span>
-                        <span class="text-xs group-hover:text-white transition">${c.name}</span>
+                    <div class="flex items-center space-x-3">
+                        <span class="fi fi-${c.iso} text-lg rounded-sm shadow-sm"></span>
+                        <span class="text-sm group-hover:text-white transition">${c.name}</span>
                     </div>
-                    <span class="text-xs font-mono font-medium ${isSelected ? 'text-gold' : 'text-gray-400 group-hover:text-gold'}">${c.code}</span>
+                    <span class="text-sm font-mono font-medium ${isSelected ? 'text-gold' : 'text-gray-300 group-hover:text-gold'}">${c.code}</span>
                 `;
                 btn.onclick = (e) => {
                     e.stopPropagation();
@@ -517,93 +517,93 @@
             if (currentLang === 'pl') {
                 title = "Rezerwacja Wysłana!";
                 bodyHtml = `
-                    <p class="text-xs sm:text-sm text-gray-300 mb-5">
+                    <p class="text-sm sm:text-base text-gray-200 mb-5 leading-relaxed font-normal">
                         Dziękujemy, <strong class="text-white font-semibold">${name}</strong>! Twoja prośba o rezerwację terminu została pomyślnie przesłana do studia.
                     </p>
-                    <div class="bg-dark-base/90 border border-dark-border rounded-2xl p-4 text-left space-y-2.5 mb-5 shadow-inner">
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="text-gray-400 uppercase tracking-wider text-[10px]">Wybrana Usługa</span>
+                    <div class="bg-dark-base/90 border border-dark-border rounded-2xl p-5 text-left space-y-3 mb-5 shadow-inner">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-300 uppercase tracking-wider text-xs font-medium">Wybrana Usługa</span>
                             <span class="text-white font-semibold">${service}</span>
                         </div>
-                        <div class="flex justify-between items-center text-xs border-t border-dark-border/40 pt-2">
-                            <span class="text-gray-400 uppercase tracking-wider text-[10px]">Data i Godzina</span>
-                            <span class="text-gold font-bold text-sm">${date} @ ${time}</span>
+                        <div class="flex justify-between items-center text-sm border-t border-dark-border/40 pt-2.5">
+                            <span class="text-gray-300 uppercase tracking-wider text-xs font-medium">Data i Godzina</span>
+                            <span class="text-gold font-bold text-base">${date} @ ${time}</span>
                         </div>
-                        <div class="flex justify-between items-center text-xs border-t border-dark-border/40 pt-2">
-                            <span class="text-gray-400 uppercase tracking-wider text-[10px]">Miejsce na ciele</span>
+                        <div class="flex justify-between items-center text-sm border-t border-dark-border/40 pt-2.5">
+                            <span class="text-gray-300 uppercase tracking-wider text-xs font-medium">Miejsce na ciele</span>
                             <span class="text-white font-medium">${placement}</span>
                         </div>
                         ${imagesCount > 0 ? `
-                        <div class="flex justify-between items-center text-xs border-t border-dark-border/40 pt-2">
-                            <span class="text-gray-400 uppercase tracking-wider text-[10px]">Inspiracje</span>
+                        <div class="flex justify-between items-center text-sm border-t border-dark-border/40 pt-2.5">
+                            <span class="text-gray-300 uppercase tracking-wider text-xs font-medium">Inspiracje</span>
                             <span class="text-emerald-400 font-medium">${imagesCount} ${imagesCount === 1 ? 'załączone zdjęcie' : 'załączone zdjęcia'}</span>
                         </div>` : ''}
                     </div>
-                    <p class="text-[11px] text-gray-400 flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-envelope-circle-check text-gold"></i>
-                        Potwierdzenie zostało wysłane na adres <strong class="text-gray-200">${email}</strong>.
+                    <p class="text-xs sm:text-sm text-gray-300 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-envelope-circle-check text-gold text-base"></i>
+                        Potwierdzenie zostało wysłane na adres <strong class="text-white">${email}</strong>.
                     </p>
                 `;
                 btnText = "Wspaniale, dziękuję!";
             } else if (currentLang === 'en') {
                 title = "Booking Confirmed!";
                 bodyHtml = `
-                    <p class="text-xs sm:text-sm text-gray-300 mb-5">
+                    <p class="text-sm sm:text-base text-gray-200 mb-5 leading-relaxed font-normal">
                         Thank you, <strong class="text-white font-semibold">${name}</strong>! Your appointment request has been successfully sent to the studio.
                     </p>
-                    <div class="bg-dark-base/90 border border-dark-border rounded-2xl p-4 text-left space-y-2.5 mb-5 shadow-inner">
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="text-gray-400 uppercase tracking-wider text-[10px]">Service</span>
+                    <div class="bg-dark-base/90 border border-dark-border rounded-2xl p-5 text-left space-y-3 mb-5 shadow-inner">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-300 uppercase tracking-wider text-xs font-medium">Service</span>
                             <span class="text-white font-semibold">${service}</span>
                         </div>
-                        <div class="flex justify-between items-center text-xs border-t border-dark-border/40 pt-2">
-                            <span class="text-gray-400 uppercase tracking-wider text-[10px]">Date & Time</span>
-                            <span class="text-gold font-bold text-sm">${date} @ ${time}</span>
+                        <div class="flex justify-between items-center text-sm border-t border-dark-border/40 pt-2.5">
+                            <span class="text-gray-300 uppercase tracking-wider text-xs font-medium">Date & Time</span>
+                            <span class="text-gold font-bold text-base">${date} @ ${time}</span>
                         </div>
-                        <div class="flex justify-between items-center text-xs border-t border-dark-border/40 pt-2">
-                            <span class="text-gray-400 uppercase tracking-wider text-[10px]">Placement</span>
+                        <div class="flex justify-between items-center text-sm border-t border-dark-border/40 pt-2.5">
+                            <span class="text-gray-300 uppercase tracking-wider text-xs font-medium">Placement</span>
                             <span class="text-white font-medium">${placement}</span>
                         </div>
                         ${imagesCount > 0 ? `
-                        <div class="flex justify-between items-center text-xs border-t border-dark-border/40 pt-2">
-                            <span class="text-gray-400 uppercase tracking-wider text-[10px]">Inspirations</span>
+                        <div class="flex justify-between items-center text-sm border-t border-dark-border/40 pt-2.5">
+                            <span class="text-gray-300 uppercase tracking-wider text-xs font-medium">Inspirations</span>
                             <span class="text-emerald-400 font-medium">${imagesCount} attached</span>
                         </div>` : ''}
                     </div>
-                    <p class="text-[11px] text-gray-400 flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-envelope-circle-check text-gold"></i>
-                        A confirmation has been sent to <strong class="text-gray-200">${email}</strong>.
+                    <p class="text-xs sm:text-sm text-gray-300 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-envelope-circle-check text-gold text-base"></i>
+                        A confirmation has been sent to <strong class="text-white">${email}</strong>.
                     </p>
                 `;
                 btnText = "Wonderful, thanks!";
             } else {
                 title = "Boeking Bevestigd!";
                 bodyHtml = `
-                    <p class="text-xs sm:text-sm text-gray-300 mb-5">
+                    <p class="text-sm sm:text-base text-gray-200 mb-5 leading-relaxed font-normal">
                         Bedankt, <strong class="text-white font-semibold">${name}</strong>! Je boekingsaanvraag is succesvol verstuurd naar de studio.
                     </p>
-                    <div class="bg-dark-base/90 border border-dark-border rounded-2xl p-4 text-left space-y-2.5 mb-5 shadow-inner">
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="text-gray-400 uppercase tracking-wider text-[10px]">Dienst</span>
+                    <div class="bg-dark-base/90 border border-dark-border rounded-2xl p-5 text-left space-y-3 mb-5 shadow-inner">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-300 uppercase tracking-wider text-xs font-medium">Dienst</span>
                             <span class="text-white font-semibold">${service}</span>
                         </div>
-                        <div class="flex justify-between items-center text-xs border-t border-dark-border/40 pt-2">
-                            <span class="text-gray-400 uppercase tracking-wider text-[10px]">Datum & Tijd</span>
-                            <span class="text-gold font-bold text-sm">${date} @ ${time}</span>
+                        <div class="flex justify-between items-center text-sm border-t border-dark-border/40 pt-2.5">
+                            <span class="text-gray-300 uppercase tracking-wider text-xs font-medium">Datum & Tijd</span>
+                            <span class="text-gold font-bold text-base">${date} @ ${time}</span>
                         </div>
-                        <div class="flex justify-between items-center text-xs border-t border-dark-border/40 pt-2">
-                            <span class="text-gray-400 uppercase tracking-wider text-[10px]">Plek</span>
+                        <div class="flex justify-between items-center text-sm border-t border-dark-border/40 pt-2.5">
+                            <span class="text-gray-300 uppercase tracking-wider text-xs font-medium">Plek</span>
                             <span class="text-white font-medium">${placement}</span>
                         </div>
                         ${imagesCount > 0 ? `
-                        <div class="flex justify-between items-center text-xs border-t border-dark-border/40 pt-2">
-                            <span class="text-gray-400 uppercase tracking-wider text-[10px]">Foto's</span>
+                        <div class="flex justify-between items-center text-sm border-t border-dark-border/40 pt-2.5">
+                            <span class="text-gray-300 uppercase tracking-wider text-xs font-medium">Foto's</span>
                             <span class="text-emerald-400 font-medium">${imagesCount} bijgevoegd</span>
                         </div>` : ''}
                     </div>
-                    <p class="text-[11px] text-gray-400 flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-envelope-circle-check text-gold"></i>
-                        Een bevestiging is verstuurd naar <strong class="text-gray-200">${email}</strong>.
+                    <p class="text-xs sm:text-sm text-gray-300 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-envelope-circle-check text-gold text-base"></i>
+                        Een bevestiging is verstuurd naar <strong class="text-white">${email}</strong>.
                     </p>
                 `;
                 btnText = "Geweldig, bedankt!";
@@ -1051,9 +1051,9 @@
                 };
 
                 const overlay = document.createElement('div');
-                overlay.className = "absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-1.5 pt-3 pointer-events-none";
+                overlay.className = "absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-1.5 pt-3 pointer-events-none";
                 const nameText = document.createElement('p');
-                nameText.className = "text-[9px] text-gray-200 truncate";
+                nameText.className = "text-[11px] text-gray-100 font-medium truncate";
                 nameText.innerText = file.name;
                 overlay.appendChild(nameText);
 
@@ -1342,7 +1342,7 @@
 
             // Renderuj Aktywne Rezerwacje
             if (activeBookings.length === 0) {
-                activeBody.innerHTML = '<tr><td colspan="7" class="p-5 text-center text-gray-500">Brak nowych / oczekujących rezerwacji</td></tr>';
+                activeBody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-gray-400 text-sm">Brak nowych / oczekujących rezerwacji</td></tr>';
             } else {
                 activeBookings.forEach((b) => {
                     const createdAt = b.created_at ? new Date(b.created_at).toLocaleString('pl-PL') : '—';
@@ -1357,17 +1357,17 @@
 
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td class="p-5 text-gray-400 font-mono text-[11px]">${createdAt}</td>
-                        <td class="p-5 font-bold text-white">${name}<br><span class="text-xs text-gray-400 font-normal">${email} • ${phone}</span></td>
-                        <td class="p-5 text-gold font-medium">${b.service}</td>
-                        <td class="p-5">${b.date} (${b.time})</td>
-                        <td class="p-5">${placement} - ${description}</td>
+                        <td class="p-5 text-gray-300 font-mono text-xs sm:text-sm">${createdAt}</td>
+                        <td class="p-5 font-bold text-white text-sm sm:text-base">${name}<br><span class="text-xs sm:text-sm text-gray-300 font-normal">${email} • ${phone}</span></td>
+                        <td class="p-5 text-gold font-semibold text-sm sm:text-base">${b.service}</td>
+                        <td class="p-5 text-gray-200 text-sm sm:text-base">${b.date} (${b.time})</td>
+                        <td class="p-5 text-gray-200 text-sm sm:text-base leading-relaxed">${placement} - ${description}</td>
                         <td class="p-5">${imagesHtml}</td>
                         <td class="p-5 text-right space-x-2">
-                            <button onclick="updateBookingStatus(${bookingId}, 'zrealizowana')" title="Oznacz jako zrealizowaną" class="bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-500 hover:text-black font-semibold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">
+                            <button onclick="updateBookingStatus(${bookingId}, 'zrealizowana')" title="Oznacz jako zrealizowaną" class="bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-500 hover:text-black font-semibold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition cursor-pointer">
                                 <i class="fa-solid fa-check mr-1"></i> Zrealizowana
                             </button>
-                            <button onclick="updateBookingStatus(${bookingId}, 'anulowana')" title="Oznacz jako anulowaną" class="bg-amber-950/60 border border-amber-500/50 text-amber-300 hover:bg-amber-500 hover:text-black font-semibold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">
+                            <button onclick="updateBookingStatus(${bookingId}, 'anulowana')" title="Oznacz jako anulowaną" class="bg-amber-950/60 border border-amber-500/50 text-amber-300 hover:bg-amber-500 hover:text-black font-semibold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition cursor-pointer">
                                 <i class="fa-solid fa-xmark mr-1"></i> Anulowana
                             </button>
                         </td>
@@ -1378,7 +1378,7 @@
 
             // Renderuj Archiwum Rezerwacji
             if (archiveBookings.length === 0) {
-                archiveBody.innerHTML = '<tr><td colspan="8" class="p-5 text-center text-gray-500">Brak zrealizowanych lub anulowanych rezerwacji w archiwum</td></tr>';
+                archiveBody.innerHTML = '<tr><td colspan="8" class="p-6 text-center text-gray-400 text-sm">Brak zrealizowanych lub anulowanych rezerwacji w archiwum</td></tr>';
             } else {
                 archiveBookings.forEach((b) => {
                     const createdAt = b.created_at ? new Date(b.created_at).toLocaleString('pl-PL') : '—';
@@ -1396,12 +1396,12 @@
                     let deleteButtonHtml = '';
 
                     if (b.status === 'zrealizowana') {
-                        statusBadge = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-950/80 text-emerald-400 border border-emerald-500/40"><i class="fa-solid fa-circle-check mr-1.5"></i> Zrealizowana</span>';
-                        deleteButtonHtml = '<span class="text-gray-600 text-[11px] italic">Brak akcji</span>';
+                        statusBadge = '<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-950/80 text-emerald-400 border border-emerald-500/40"><i class="fa-solid fa-circle-check mr-1.5"></i> Zrealizowana</span>';
+                        deleteButtonHtml = '<span class="text-gray-400 text-xs italic">Brak akcji</span>';
                     } else if (b.status === 'anulowana') {
-                        statusBadge = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-950/80 text-amber-400 border border-amber-500/40"><i class="fa-solid fa-ban mr-1.5"></i> Anulowana</span>';
+                        statusBadge = '<span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-950/80 text-amber-400 border border-amber-500/40"><i class="fa-solid fa-ban mr-1.5"></i> Anulowana</span>';
                         deleteButtonHtml = `
-                            <button onclick="deleteBooking(${bookingId})" title="Usuń trwale z bazy" class="bg-red-950/40 border border-red-500/40 text-red-400 hover:bg-red-600 hover:text-white font-semibold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">
+                            <button onclick="deleteBooking(${bookingId})" title="Usuń trwale z bazy" class="bg-red-950/40 border border-red-500/40 text-red-400 hover:bg-red-600 hover:text-white font-semibold px-3.5 py-2 rounded-xl text-xs sm:text-sm transition cursor-pointer">
                                 <i class="fa-solid fa-trash mr-1"></i> Usuń
                             </button>
                         `;
@@ -1410,11 +1410,11 @@
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td class="p-5">${statusBadge}</td>
-                        <td class="p-5 text-gray-400 font-mono text-[11px]">${createdAt}</td>
-                        <td class="p-5 font-bold text-white">${name}<br><span class="text-xs text-gray-400 font-normal">${email} • ${phone}</span></td>
-                        <td class="p-5 text-gold font-medium">${b.service}</td>
-                        <td class="p-5">${b.date} (${b.time})</td>
-                        <td class="p-5">${placement} - ${description}</td>
+                        <td class="p-5 text-gray-300 font-mono text-xs sm:text-sm">${createdAt}</td>
+                        <td class="p-5 font-bold text-white text-sm sm:text-base">${name}<br><span class="text-xs sm:text-sm text-gray-300 font-normal">${email} • ${phone}</span></td>
+                        <td class="p-5 text-gold font-semibold text-sm sm:text-base">${b.service}</td>
+                        <td class="p-5 text-gray-200 text-sm sm:text-base">${b.date} (${b.time})</td>
+                        <td class="p-5 text-gray-200 text-sm sm:text-base leading-relaxed">${placement} - ${description}</td>
                         <td class="p-5">${imagesHtml}</td>
                         <td class="p-5 text-right">${deleteButtonHtml}</td>
                     `;
