@@ -664,10 +664,10 @@
                     }
 
                     // 2. Walidacja formatu adresu E-mail
-                    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     if (!emailRegex.test(email)) {
                         if (emailErrorEl) {
-                            emailErrorEl.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'pl' ? "Podaj poprawny adres e-mail (np. imie@domena.pl)" : (currentLang === 'en' ? "Enter a valid email address (e.g. name@domain.com)" : "Voer een geldig e-mailadres in (bijv. naam@domein.nl)")}`;
+                            emailErrorEl.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'pl' ? "Podaj poprawny adres e-mail (musi zawierać znak @ oraz domenę)" : (currentLang === 'en' ? "Enter a valid email address (must contain @ and domain)" : "Voer een geldig e-mailadres in (moet @ en domein bevatten)")}`;
                             emailErrorEl.classList.remove('hidden');
                         }
                         if (emailInput) {
@@ -687,11 +687,11 @@
                         return;
                     }
 
-                    // 3. Walidacja formatu Numeru Telefonu (min 6 cyfr, max 15)
+                    // 3. Walidacja formatu Numeru Telefonu (min 9 cyfr)
                     const cleanPhone = phone.replace(/\D/g, '');
-                    if (cleanPhone.length < 6 || cleanPhone.length > 15) {
+                    if (cleanPhone.length < 9) {
                         if (phoneErrorEl) {
-                            phoneErrorEl.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'pl' ? "Numer telefonu powinien zawierać min. 6 cyfr" : (currentLang === 'en' ? "Phone number should have at least 6 digits" : "Telefoonnummer moet minimaal 6 cijfers bevatten")}`;
+                            phoneErrorEl.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'pl' ? "Numer telefonu powinien zawierać min. 9 cyfr" : (currentLang === 'en' ? "Phone number should have at least 9 digits" : "Telefoonnummer moet minimaal 9 cijfers bevatten")}`;
                             phoneErrorEl.classList.remove('hidden');
                         }
                         if (phoneInput) {
@@ -702,10 +702,10 @@
                         await showCustomAlert({
                             title: currentLang === 'pl' ? "Niepoprawny Numer Telefonu" : (currentLang === 'en' ? "Invalid Phone Number" : "Ongeldig Telefoonnummer"),
                             message: currentLang === 'pl' 
-                                ? "Wprowadzony numer telefonu jest za krótki lub niepoprawny. Wpisz co najmniej 6 cyfr swojego numeru." 
+                                ? "Wprowadzony numer telefonu jest za krótki. Wpisz co najmniej 9 cyfr swojego numeru." 
                                 : (currentLang === 'en' 
-                                    ? "The entered phone number is too short or invalid. Please provide at least 6 digits." 
-                                    : "Het ingevoerde telefoonnummer is te kort of ongeldig. Voer minimaal 6 cijfers in."),
+                                    ? "The entered phone number is too short. Please provide at least 9 digits." 
+                                    : "Het ingevoerde telefoonnummer is te kort. Voer minimaal 9 cijfers in."),
                             type: 'warning'
                         });
                         return;
