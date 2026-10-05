@@ -103,6 +103,139 @@
 
         let currentLang = localStorage.getItem('netjes_language') || 'pl';
 
+        /* ==========================================================================
+           KONFIGURACJA KODÓW KIERUNKOWYCH DLA TELEFONU
+           ========================================================================== */
+        const countryList = [
+            { code: '+48', iso: 'pl', name: 'Polska' },
+            { code: '+31', iso: 'nl', name: 'Nederland' },
+            { code: '+49', iso: 'de', name: 'Deutschland' },
+            { code: '+44', iso: 'gb', name: 'United Kingdom' },
+            { code: '+32', iso: 'be', name: 'België' },
+            { code: '+33', iso: 'fr', name: 'France' },
+            { code: '+380', iso: 'ua', name: 'Україна / Ukraine' },
+            { code: '+420', iso: 'cz', name: 'Česko' },
+            { code: '+43', iso: 'at', name: 'Österreich' },
+            { code: '+41', iso: 'ch', name: 'Schweiz' },
+            { code: '+39', iso: 'it', name: 'Italia' },
+            { code: '+34', iso: 'es', name: 'España' },
+            { code: '+47', iso: 'no', name: 'Norge' },
+            { code: '+46', iso: 'se', name: 'Sverige' },
+            { code: '+45', iso: 'dk', name: 'Danmark' },
+            { code: '+353', iso: 'ie', name: 'Ireland' },
+            { code: '+1', iso: 'us', name: 'USA / Canada' }
+        ];
+
+        let selectedCountry = countryList[0]; // Domyślnie Polska (+48)
+
+        function renderCountryOptions(filterText = '') {
+            const listContainer = document.getElementById('country-options-list');
+            if (!listContainer) return;
+            listContainer.innerHTML = '';
+            
+            const q = (filterText || '').toLowerCase().trim();
+            const filtered = countryList.filter(c => 
+                c.name.toLowerCase().includes(q) || 
+                c.code.includes(q) || 
+                c.iso.includes(q)
+            );
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = '<div class="text-[11px] text-gray-500 py-3 text-center">Brak wyników</div>';
+                return;
+            }
+
+            filtered.forEach(c => {
+                const btn = document.createElement('button');
+                btn.type = "button";
+                const isSelected = (c.code === selectedCountry.code && c.iso === selectedCountry.iso);
+                btn.className = `w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-dark-surface transition text-left cursor-pointer group ${isSelected ? 'bg-gold/15 text-gold font-semibold' : 'text-gray-300'}`;
+                btn.innerHTML = `
+                    <div class="flex items-center space-x-2.5">
+                        <span class="fi fi-${c.iso} text-base rounded-sm shadow-sm"></span>
+                        <span class="text-xs group-hover:text-white transition">${c.name}</span>
+                    </div>
+                    <span class="text-xs font-mono font-medium ${isSelected ? 'text-gold' : 'text-gray-400 group-hover:text-gold'}">${c.code}</span>
+                `;
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    selectCountryCode(c.code, c.iso);
+                };
+                listContainer.appendChild(btn);
+            });
+        }
+
+        function toggleCountryDropdown(e) {
+            if (e) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+            const menu = document.getElementById('country-dropdown-menu');
+            const chevron = document.getElementById('prefix-chevron');
+            if (!menu) return;
+
+            const isHidden = menu.classList.contains('hidden');
+            if (isHidden) {
+                renderCountryOptions();
+                menu.classList.remove('hidden');
+                if (chevron) chevron.classList.add('rotate-180');
+                const searchInput = document.getElementById('country-search-input');
+                if (searchInput) {
+                    searchInput.value = '';
+                    setTimeout(() => searchInput.focus(), 60);
+                }
+            } else {
+                menu.classList.add('hidden');
+                if (chevron) chevron.classList.remove('rotate-180');
+            }
+        }
+
+        function selectCountryCode(code, iso) {
+            const found = countryList.find(c => c.code === code && c.iso === iso) || countryList.find(c => c.code === code) || { code, iso, name: '' };
+            selectedCountry = found;
+
+            const flagIcon = document.getElementById('selected-flag-icon');
+            const prefixText = document.getElementById('selected-prefix-text');
+            const menu = document.getElementById('country-dropdown-menu');
+            const chevron = document.getElementById('prefix-chevron');
+
+            if (flagIcon) flagIcon.className = `fi fi-${iso} text-base rounded-sm shadow-sm`;
+            if (prefixText) prefixText.innerText = code;
+            if (menu) menu.classList.add('hidden');
+            if (chevron) chevron.classList.remove('rotate-180');
+
+            const phoneInput = document.getElementById('input-client-phone');
+            if (phoneInput) phoneInput.focus();
+        }
+
+        function filterCountryDropdown(val) {
+            renderCountryOptions(val);
+        }
+
+        function getFullPhoneNumber() {
+            const phoneInput = document.getElementById('input-client-phone');
+            if (!phoneInput) return '';
+            const raw = phoneInput.value.trim();
+            if (!raw) return '';
+            if (raw.startsWith('+')) {
+                return raw;
+            }
+            return `${selectedCountry.code} ${raw}`;
+        }
+
+        // Zamykanie dropdowna przy kliknięciu poza nim
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('country-dropdown-menu');
+            const btn = document.getElementById('phone-prefix-btn');
+            const chevron = document.getElementById('prefix-chevron');
+            if (menu && !menu.classList.contains('hidden')) {
+                if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                    menu.classList.add('hidden');
+                    if (chevron) chevron.classList.remove('rotate-180');
+                }
+            }
+        });
+
         function selectLanguageFromModal(lang) {
             setLanguage(lang, true);
             const modal = document.getElementById('language-modal');
@@ -506,6 +639,17 @@
                     const place = document.getElementById('input-body-placement').value.trim();
                     const desc = document.getElementById('input-description').value.trim();
 
+                    const phoneInput = document.getElementById('input-client-phone');
+                    const emailInput = document.getElementById('input-client-email');
+                    const phoneErrorEl = document.getElementById('phone-error-msg');
+                    const emailErrorEl = document.getElementById('email-error-msg');
+
+                    if (phoneErrorEl) phoneErrorEl.classList.add('hidden');
+                    if (emailErrorEl) emailErrorEl.classList.add('hidden');
+                    if (phoneInput) phoneInput.classList.remove('border-red-500');
+                    if (emailInput) emailInput.classList.remove('border-red-500');
+
+                    // 1. Sprawdzenie czy wszystkie pola są wypełnione
                     if (!name || !phone || !email || !place || !desc) {
                         await showCustomAlert({
                             title: currentLang === 'pl' ? "Wymagane Dane" : (currentLang === 'en' ? "Required Fields" : "Verplichte Velden"),
@@ -514,6 +658,54 @@
                                 : (currentLang === 'en' 
                                     ? "Please fill in all required fields marked with an asterisk (<strong>*</strong>)." 
                                     : "Vul alle verplichte velden met een sterretje (<strong>*</strong>) in."),
+                            type: 'warning'
+                        });
+                        return;
+                    }
+
+                    // 2. Walidacja formatu adresu E-mail
+                    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                    if (!emailRegex.test(email)) {
+                        if (emailErrorEl) {
+                            emailErrorEl.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'pl' ? "Podaj poprawny adres e-mail (np. imie@domena.pl)" : (currentLang === 'en' ? "Enter a valid email address (e.g. name@domain.com)" : "Voer een geldig e-mailadres in (bijv. naam@domein.nl)")}`;
+                            emailErrorEl.classList.remove('hidden');
+                        }
+                        if (emailInput) {
+                            emailInput.classList.add('border-red-500');
+                            emailInput.focus();
+                        }
+
+                        await showCustomAlert({
+                            title: currentLang === 'pl' ? "Niepoprawny E-mail" : (currentLang === 'en' ? "Invalid Email" : "Ongeldig E-mailadres"),
+                            message: currentLang === 'pl' 
+                                ? "Wpisany adres e-mail (<strong>" + email + "</strong>) ma niepoprawny format. Upewnij się, że zawiera znak <strong>@</strong> oraz właściwą domenę." 
+                                : (currentLang === 'en' 
+                                    ? "The entered email address (<strong>" + email + "</strong>) is invalid. Make sure it contains an <strong>@</strong> and a valid domain." 
+                                    : "Het ingevoerde e-mailadres (<strong>" + email + "</strong>) is ongeldig. Zorg voor een <strong>@</strong> en een geldig domein."),
+                            type: 'warning'
+                        });
+                        return;
+                    }
+
+                    // 3. Walidacja formatu Numeru Telefonu (min 6 cyfr, max 15)
+                    const cleanPhone = phone.replace(/\D/g, '');
+                    if (cleanPhone.length < 6 || cleanPhone.length > 15) {
+                        if (phoneErrorEl) {
+                            phoneErrorEl.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${currentLang === 'pl' ? "Numer telefonu powinien zawierać min. 6 cyfr" : (currentLang === 'en' ? "Phone number should have at least 6 digits" : "Telefoonnummer moet minimaal 6 cijfers bevatten")}`;
+                            phoneErrorEl.classList.remove('hidden');
+                        }
+                        if (phoneInput) {
+                            phoneInput.classList.add('border-red-500');
+                            phoneInput.focus();
+                        }
+
+                        await showCustomAlert({
+                            title: currentLang === 'pl' ? "Niepoprawny Numer Telefonu" : (currentLang === 'en' ? "Invalid Phone Number" : "Ongeldig Telefoonnummer"),
+                            message: currentLang === 'pl' 
+                                ? "Wprowadzony numer telefonu jest za krótki lub niepoprawny. Wpisz co najmniej 6 cyfr swojego numeru." 
+                                : (currentLang === 'en' 
+                                    ? "The entered phone number is too short or invalid. Please provide at least 6 digits." 
+                                    : "Het ingevoerde telefoonnummer is te kort of ongeldig. Voer minimaal 6 cijfers in."),
                             type: 'warning'
                         });
                         return;
@@ -886,7 +1078,7 @@
             document.getElementById('summary-datetime').innerText = `${bookingState.selectedDate} @ ${bookingState.selectedTime}`;
             document.getElementById('summary-client').innerText = document.getElementById('input-client-name').value;
             document.getElementById('summary-placement').innerText = document.getElementById('input-body-placement').value;
-            document.getElementById('summary-contact').innerText = `${document.getElementById('input-client-phone').value} • ${document.getElementById('input-client-email').value}`;
+            document.getElementById('summary-contact').innerText = `${getFullPhoneNumber()} • ${document.getElementById('input-client-email').value}`;
 
             let countText = 'Brak załączonych zdjęć';
             if (filesCount > 0) {
@@ -962,11 +1154,11 @@
             submitBtn.innerText = "Wysyłanie plików i rezerwacja...";
             submitBtn.disabled = true;
 
-            const nameVal = document.getElementById('input-client-name').value;
-            const emailVal = document.getElementById('input-client-email').value;
-            const phoneVal = document.getElementById('input-client-phone').value;
-            const placeVal = document.getElementById('input-body-placement').value;
-            const descVal = document.getElementById('input-description').value;
+            const nameVal = document.getElementById('input-client-name').value.trim();
+            const emailVal = document.getElementById('input-client-email').value.trim();
+            const phoneVal = getFullPhoneNumber();
+            const placeVal = document.getElementById('input-body-placement').value.trim();
+            const descVal = document.getElementById('input-description').value.trim();
 
             // Przesyłanie zdjęć
             let imageUrls = [];
@@ -1305,6 +1497,26 @@
                 const modal = document.getElementById('language-modal');
                 if (modal) modal.style.display = 'flex';
                 setLanguage('pl', false);
+            }
+
+            // Automatyczne czyszczenie błędów walidacji podczas wpisywania
+            const emailInput = document.getElementById('input-client-email');
+            const phoneInput = document.getElementById('input-client-phone');
+            const emailErrorEl = document.getElementById('email-error-msg');
+            const phoneErrorEl = document.getElementById('phone-error-msg');
+
+            if (emailInput) {
+                emailInput.addEventListener('input', () => {
+                    emailInput.classList.remove('border-red-500');
+                    if (emailErrorEl) emailErrorEl.classList.add('hidden');
+                });
+            }
+
+            if (phoneInput) {
+                phoneInput.addEventListener('input', () => {
+                    phoneInput.classList.remove('border-red-500');
+                    if (phoneErrorEl) phoneErrorEl.classList.add('hidden');
+                });
             }
         });
         window.addEventListener('load', () => {

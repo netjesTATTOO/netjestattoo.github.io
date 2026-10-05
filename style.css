@@ -82,4 +82,20 @@ summary::marker {
     -webkit-backdrop-filter: blur(14px);
 }
 
+/* Stylizowany scrollbar dla listy krajów */
+#country-dropdown-menu::-webkit-scrollbar {
+    width: 6px;
+}
+#country-dropdown-menu::-webkit-scrollbar-track {
+    background: rgba(20, 20, 20, 0.6);
+    border-radius: 8px;
+}
+#country-dropdown-menu::-webkit-scrollbar-thumb {
+    background: #333333;
+    border-radius: 8px;
+}
+#country-dropdown-menu::-webkit-scrollbar-thumb:hover {
+    background: #C5A059;
+}
+
 
