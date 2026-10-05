@@ -1482,8 +1482,195 @@
             await renderCalendar();
         }
 
+        /* ==========================================================================
+           ANIMACJA PŁYWAJĄCYCH ZŁOTYCH ORBÓW W TLE (CANVAS BACKGROUND)
+           ========================================================================== */
+        function initAmbientOrbs() {
+            const canvas = document.getElementById('ambient-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+
+            let width = 0;
+            let height = 0;
+
+            // Paleta subtelnych, eleganckich złotych i ciepłych odcieni
+            const orbColors = [
+                { r: 197, g: 160, b: 89, a: 0.18 },   // Gold DEFAULT (#C5A059)
+                { r: 230, g: 200, b: 148, a: 0.14 },  // Gold Light (#E6C894)
+                { r: 154, g: 123, b: 62, a: 0.16 },   // Gold Dark (#9A7B3E)
+                { r: 212, g: 175, b: 55, a: 0.15 },   // Warm Gold Glow
+                { r: 180, g: 140, b: 70, a: 0.13 },   // Champagne Gold
+                { r: 220, g: 180, b: 100, a: 0.12 }   // Soft Aura
+            ];
+
+            let orbs = [];
+            const mouse = {
+                x: -1000,
+                y: -1000,
+                targetX: -1000,
+                targetY: -1000,
+                active: false,
+                lastMove: 0
+            };
+
+            function getBaseRadius() {
+                return Math.max(180, Math.min(width, height) * 0.35);
+            }
+
+            function createOrbs() {
+                orbs = [];
+                const baseRadius = getBaseRadius();
+                const orbCount = width < 768 ? 4 : 6;
+
+                for (let i = 0; i < orbCount; i++) {
+                    const color = orbColors[i % orbColors.length];
+                    const sizeScale = 0.8 + Math.random() * 0.6;
+                    
+                    orbs.push({
+                        anchorX: Math.random() * width,
+                        anchorY: Math.random() * height,
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        vx: 0,
+                        vy: 0,
+                        sizeScale: sizeScale,
+                        radius: baseRadius * sizeScale,
+                        color: color,
+                        phaseX: Math.random() * Math.PI * 2,
+                        phaseY: Math.random() * Math.PI * 2,
+                        speedX: 0.00025 + Math.random() * 0.00035,
+                        speedY: 0.00025 + Math.random() * 0.00035,
+                        ampX: 80 + Math.random() * 120,
+                        ampY: 70 + Math.random() * 100,
+                        driftX: (Math.random() - 0.5) * 0.25,
+                        driftY: (Math.random() - 0.5) * 0.25
+                    });
+                }
+            }
+
+            function resize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+
+                if (orbs.length === 0) {
+                    createOrbs();
+                } else {
+                    const baseRadius = getBaseRadius();
+                    orbs.forEach(orb => {
+                        orb.radius = baseRadius * orb.sizeScale;
+                    });
+                }
+            }
+
+            // Obsługa ruchu myszy / dotyku
+            window.addEventListener('mousemove', (e) => {
+                mouse.targetX = e.clientX;
+                mouse.targetY = e.clientY;
+                mouse.active = true;
+                mouse.lastMove = Date.now();
+            }, { passive: true });
+
+            window.addEventListener('touchmove', (e) => {
+                if (e.touches.length > 0) {
+                    mouse.targetX = e.touches[0].clientX;
+                    mouse.targetY = e.touches[0].clientY;
+                    mouse.active = true;
+                    mouse.lastMove = Date.now();
+                }
+            }, { passive: true });
+
+            window.addEventListener('mouseleave', () => {
+                mouse.active = false;
+            });
+
+            let lastTime = performance.now();
+
+            function animate(time) {
+                const dt = Math.min(50, time - lastTime);
+                lastTime = time;
+
+                if (mouse.active) {
+                    mouse.x += (mouse.targetX - mouse.x) * 0.15;
+                    mouse.y += (mouse.targetY - mouse.y) * 0.15;
+
+                    if (Date.now() - mouse.lastMove > 2500) {
+                        mouse.active = false;
+                    }
+                }
+
+                ctx.clearRect(0, 0, width, height);
+                ctx.globalCompositeOperation = 'screen';
+
+                for (let i = 0; i < orbs.length; i++) {
+                    const orb = orbs[i];
+
+                    // Płynny dryf kotwicy po ekranie
+                    orb.anchorX += orb.driftX * (dt * 0.06);
+                    orb.anchorY += orb.driftY * (dt * 0.06);
+
+                    const margin = orb.radius * 0.8;
+                    if (orb.anchorX < -margin) orb.anchorX = width + margin;
+                    if (orb.anchorX > width + margin) orb.anchorX = -margin;
+                    if (orb.anchorY < -margin) orb.anchorY = height + margin;
+                    if (orb.anchorY > height + margin) orb.anchorY = -margin;
+
+                    // Docelowa pozycja harmoniczna (delikatne pływanie)
+                    const targetX = orb.anchorX + Math.sin(time * orb.speedX + orb.phaseX) * orb.ampX;
+                    const targetY = orb.anchorY + Math.cos(time * orb.speedY + orb.phaseY) * orb.ampY;
+
+                    // Odpychanie i rozpraszanie przez kursor
+                    if (mouse.active) {
+                        const dx = orb.x - mouse.x;
+                        const dy = orb.y - mouse.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        const repelRadius = orb.radius * 0.85 + 130;
+
+                        if (dist < repelRadius && dist > 1) {
+                            const force = Math.pow(1 - (dist / repelRadius), 1.8) * 4.5;
+                            const angle = Math.atan2(dy, dx);
+                            orb.vx += Math.cos(angle) * force;
+                            orb.vy += Math.sin(angle) * force;
+                        }
+                    }
+
+                    orb.vx *= 0.93;
+                    orb.vy *= 0.93;
+
+                    orb.x += (targetX - orb.x) * 0.035 + orb.vx;
+                    orb.y += (targetY - orb.y) * 0.035 + orb.vy;
+
+                    // Rysowanie miękkiego rozmytego gradientu
+                    const gradient = ctx.createRadialGradient(
+                        orb.x, orb.y, 0,
+                        orb.x, orb.y, orb.radius
+                    );
+
+                    const c = orb.color;
+                    gradient.addColorStop(0, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.a * 1.0})`);
+                    gradient.addColorStop(0.35, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.a * 0.65})`);
+                    gradient.addColorStop(0.7, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.a * 0.25})`);
+                    gradient.addColorStop(1, `rgba(${c.r}, ${c.g}, ${c.b}, 0)`);
+
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+            requestAnimationFrame(animate);
+        }
+
         window.addEventListener('hashchange', checkHashRoute);
         window.addEventListener('DOMContentLoaded', () => {
+            initAmbientOrbs();
             checkHashRoute();
             const savedLang = localStorage.getItem('netjes_language');
             if (savedLang && translations[savedLang]) {
