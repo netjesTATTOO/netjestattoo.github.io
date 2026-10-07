@@ -184,12 +184,13 @@
                     </div>
                 </div>
 
-                <div class="hidden md:flex items-center space-x-12 text-sm uppercase tracking-widest font-medium">
+                <div class="hidden md:flex items-center space-x-10 lg:space-x-12 text-sm uppercase tracking-widest font-medium">
                     <a href="#about" data-i18n="nav_about" class="hover:text-gold transition">O mnie</a>
                     <a href="#portfolio" data-i18n="nav_portfolio" class="hover:text-gold transition">Portfolio</a>
                     <a href="#rezerwacja" data-i18n="nav_booking" class="text-gold hover:underline">Rezerwacja Online</a>
-                    <a href="#contact" data-i18n="nav_contact" class="hover:text-gold transition">Kontakt</a>
+                    <a href="#testimonials" data-i18n="nav_testimonials" class="hover:text-gold transition">Opinie</a>
                     <a href="#faq" data-i18n="nav_faq" class="hover:text-gold transition">FAQ</a>
+                    <a href="#contact" data-i18n="nav_contact" class="hover:text-gold transition">Kontakt</a>
                 </div>
 
                 <div class="flex items-center">
@@ -211,18 +212,18 @@
             <div class="absolute inset-0 bg-gradient-to-b from-dark-base/60 via-dark-base/80 to-dark-base z-0"></div>
             
             <div class="relative z-10 max-w-6xl mx-auto text-center px-6 pt-12 pb-24 flex flex-col items-center">
-                <div class="h-52 sm:h-[480px] w-auto overflow-hidden flex items-center justify-center mt-0 sm:mt-0 -mb-4">
+                <div class="h-52 sm:h-[480px] w-auto overflow-hidden flex items-center justify-center mt-0 sm:mt-0 -mb-4 reveal-on-scroll">
                     <img src="netjes-logo.png" alt="netjes TATTOO" class="w-full max-w-2xl sm:max-w-4xl h-auto object-contain -my-10 sm:-my-20 drop-shadow-2xl">
                 </div>
                 
-                <span data-i18n="hero_subtitle" class="text-xs sm:text-sm uppercase tracking-[0.35em] text-gold font-semibold block mb-4">Studio Tatuażu • Daria Wąs</span>
-                <h1 class="font-serif-title text-4xl sm:text-8xl font-normal text-white mb-8 leading-tight">
+                <span data-i18n="hero_subtitle" class="text-xs sm:text-sm uppercase tracking-[0.35em] text-gold font-semibold block mb-4 reveal-on-scroll reveal-delay-1">Studio Tatuażu • Daria Wąs</span>
+                <h1 class="font-serif-title text-4xl sm:text-8xl font-normal text-white mb-8 leading-tight reveal-on-scroll reveal-delay-2">
                     <span data-i18n="hero_title_1">Precyzja, Delikatność i</span> <span data-i18n="hero_title_2" class="gold-gradient-text italic">Sztuka</span> <span data-i18n="hero_title_3">na Twojej Skórze</span>
                 </h1>
-                <p data-i18n="hero_desc" class="text-base sm:text-xl text-gray-200 max-w-3xl mx-auto font-normal mb-12 leading-relaxed">
+                <p data-i18n="hero_desc" class="text-base sm:text-xl text-gray-200 max-w-3xl mx-auto font-normal mb-12 leading-relaxed reveal-on-scroll reveal-delay-3">
                     Specjalizuję się w autorskich tatuażach typu Fineline, mikrorealizmie oraz delikatnych kompozycjach roślinnych i geometrycznych.
                 </p>
-                <div class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 w-full max-w-md sm:max-w-none sm:w-auto">
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 w-full max-w-md sm:max-w-none sm:w-auto reveal-on-scroll reveal-delay-4">
                     <!-- PRZYCISK ZAREZERWUJ TERMIN (CAŁY NA TELEFONIE / PIERWSZY NA KOMPUTERZE) -->
                     <a href="#rezerwacja" data-i18n="hero_btn_book" class="w-full sm:w-auto gold-gradient-bg text-black font-semibold px-10 py-5 rounded-full text-xs sm:text-sm uppercase tracking-widest hover:shadow-xl hover:shadow-gold/20 transition text-center whitespace-nowrap sm:order-1">
                         Zarezerwuj Termin
@@ -248,7 +249,7 @@
         <section id="about" class="py-28 border-t border-dark-border bg-dark-surface/30">
             <div class="max-w-[1500px] mx-auto px-6 sm:px-8 lg:px-12">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                    <div class="relative">
+                    <div class="relative reveal-on-scroll">
                         <div class="aspect-[4/5] rounded-3xl overflow-hidden border border-dark-border">
                             <img src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=1000&auto=format&fit=crop" alt="Daria Wąs" class="w-full h-full object-cover">
                         </div>
@@ -257,7 +258,7 @@
                             <span data-i18n="about_badge" class="text-xs sm:text-sm text-gray-300 uppercase tracking-wider font-medium">Sterylność & Pasja</span>
                         </div>
                     </div>
-                    <div class="space-y-8">
+                    <div class="space-y-8 reveal-on-scroll reveal-delay-2">
                         <span data-i18n="about_tag" class="text-sm uppercase tracking-widest text-gold font-semibold block">O Mnie</span>
                         <h2 class="font-serif-title text-5xl sm:text-6xl text-white">Daria Wąs — netjes TATTOO</h2>
                         <p data-i18n="about_text_1" class="text-base sm:text-lg text-gray-200 font-normal leading-relaxed">
@@ -284,29 +285,82 @@
         <!-- PORTFOLIO SECTION -->
         <section id="portfolio" class="py-28 border-t border-dark-border">
             <div class="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12">
-                <div class="text-center mb-20">
+                <div class="text-center mb-20 reveal-on-scroll">
                     <span data-i18n="portfolio_tag" class="text-sm uppercase tracking-widest text-gold font-semibold block">Moje Prace</span>
                     <h2 data-i18n="portfolio_title" class="font-serif-title text-5xl sm:text-6xl text-white mt-2">Galeria Portfolio</h2>
                     <div class="w-16 h-[1px] bg-gold mx-auto mt-4"></div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="aspect-square rounded-3xl overflow-hidden border border-dark-border group relative cursor-pointer">
-                        <img src="https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center p-6">
-                            <span class="text-sm uppercase tracking-widest text-gold font-semibold">Fineline Flora</span>
+                    <!-- Portfolio Item 1 -->
+                    <div onclick="openLightbox(0)" class="aspect-square rounded-3xl overflow-hidden border border-dark-border group relative cursor-pointer reveal-on-scroll">
+                        <img src="https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?q=80&w=800&auto=format&fit=crop" alt="Fineline Flora" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col items-center justify-center p-6 text-center">
+                            <div class="w-12 h-12 rounded-full bg-black/70 border border-gold/40 text-gold flex items-center justify-center mb-3 transform translate-y-3 group-hover:translate-y-0 transition duration-300">
+                                <i class="fa-solid fa-magnifying-glass-plus text-lg"></i>
+                            </div>
+                            <span data-i18n="portfolio_item_1" class="text-sm uppercase tracking-widest text-gold font-semibold">Fineline Flora</span>
+                            <span data-i18n="portfolio_click_to_zoom" class="text-xs text-gray-300 mt-1">Kliknij, aby powiększyć</span>
                         </div>
                     </div>
-                    <div class="aspect-square rounded-3xl overflow-hidden border border-dark-border group relative cursor-pointer">
-                        <img src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center p-6">
+
+                    <!-- Portfolio Item 2 -->
+                    <div onclick="openLightbox(1)" class="aspect-square rounded-3xl overflow-hidden border border-dark-border group relative cursor-pointer reveal-on-scroll reveal-delay-1">
+                        <img src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?q=80&w=800&auto=format&fit=crop" alt="Mikrorealizm" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col items-center justify-center p-6 text-center">
+                            <div class="w-12 h-12 rounded-full bg-black/70 border border-gold/40 text-gold flex items-center justify-center mb-3 transform translate-y-3 group-hover:translate-y-0 transition duration-300">
+                                <i class="fa-solid fa-magnifying-glass-plus text-lg"></i>
+                            </div>
                             <span data-i18n="portfolio_item_2" class="text-sm uppercase tracking-widest text-gold font-semibold">Mikrorealizm</span>
+                            <span data-i18n="portfolio_click_to_zoom" class="text-xs text-gray-300 mt-1">Kliknij, aby powiększyć</span>
                         </div>
                     </div>
-                    <div class="aspect-square rounded-3xl overflow-hidden border border-dark-border group relative cursor-pointer">
-                        <img src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center p-6">
+
+                    <!-- Portfolio Item 3 -->
+                    <div onclick="openLightbox(2)" class="aspect-square rounded-3xl overflow-hidden border border-dark-border group relative cursor-pointer reveal-on-scroll reveal-delay-2">
+                        <img src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=800&auto=format&fit=crop" alt="Subtelny Napis" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col items-center justify-center p-6 text-center">
+                            <div class="w-12 h-12 rounded-full bg-black/70 border border-gold/40 text-gold flex items-center justify-center mb-3 transform translate-y-3 group-hover:translate-y-0 transition duration-300">
+                                <i class="fa-solid fa-magnifying-glass-plus text-lg"></i>
+                            </div>
                             <span data-i18n="portfolio_item_3" class="text-sm uppercase tracking-widest text-gold font-semibold">Subtelny Napis</span>
+                            <span data-i18n="portfolio_click_to_zoom" class="text-xs text-gray-300 mt-1">Kliknij, aby powiększyć</span>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 4 -->
+                    <div onclick="openLightbox(3)" class="aspect-square rounded-3xl overflow-hidden border border-dark-border group relative cursor-pointer reveal-on-scroll">
+                        <img src="https://images.unsplash.com/photo-1612015900986-4c4d017d1648?q=80&w=800&auto=format&fit=crop" alt="Kompozycja Botaniczna" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col items-center justify-center p-6 text-center">
+                            <div class="w-12 h-12 rounded-full bg-black/70 border border-gold/40 text-gold flex items-center justify-center mb-3 transform translate-y-3 group-hover:translate-y-0 transition duration-300">
+                                <i class="fa-solid fa-magnifying-glass-plus text-lg"></i>
+                            </div>
+                            <span data-i18n="portfolio_item_4" class="text-sm uppercase tracking-widest text-gold font-semibold">Kompozycja Botaniczna</span>
+                            <span data-i18n="portfolio_click_to_zoom" class="text-xs text-gray-300 mt-1">Kliknij, aby powiększyć</span>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 5 -->
+                    <div onclick="openLightbox(4)" class="aspect-square rounded-3xl overflow-hidden border border-dark-border group relative cursor-pointer reveal-on-scroll reveal-delay-1">
+                        <img src="https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?q=80&w=800&auto=format&fit=crop" alt="Minimalistyczna Geometria" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col items-center justify-center p-6 text-center">
+                            <div class="w-12 h-12 rounded-full bg-black/70 border border-gold/40 text-gold flex items-center justify-center mb-3 transform translate-y-3 group-hover:translate-y-0 transition duration-300">
+                                <i class="fa-solid fa-magnifying-glass-plus text-lg"></i>
+                            </div>
+                            <span data-i18n="portfolio_item_5" class="text-sm uppercase tracking-widest text-gold font-semibold">Minimalistyczna Geometria</span>
+                            <span data-i18n="portfolio_click_to_zoom" class="text-xs text-gray-300 mt-1">Kliknij, aby powiększyć</span>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 6 -->
+                    <div onclick="openLightbox(5)" class="aspect-square rounded-3xl overflow-hidden border border-dark-border group relative cursor-pointer reveal-on-scroll reveal-delay-2">
+                        <img src="https://images.unsplash.com/photo-1542728928-1413d1894ed1?q=80&w=800&auto=format&fit=crop" alt="Autorski Projekt Fineline" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col items-center justify-center p-6 text-center">
+                            <div class="w-12 h-12 rounded-full bg-black/70 border border-gold/40 text-gold flex items-center justify-center mb-3 transform translate-y-3 group-hover:translate-y-0 transition duration-300">
+                                <i class="fa-solid fa-magnifying-glass-plus text-lg"></i>
+                            </div>
+                            <span data-i18n="portfolio_item_6" class="text-sm uppercase tracking-widest text-gold font-semibold">Autorski Projekt Fineline</span>
+                            <span data-i18n="portfolio_click_to_zoom" class="text-xs text-gray-300 mt-1">Kliknij, aby powiększyć</span>
                         </div>
                     </div>
                 </div>
@@ -316,13 +370,13 @@
         <!-- BOOKING SYSTEM SECTION -->
         <section id="rezerwacja" class="py-28 border-t border-dark-border bg-dark-surface/20">
             <div class="max-w-6xl mx-auto px-6">
-                <div class="text-center mb-12">
+                <div class="text-center mb-12 reveal-on-scroll">
                     <span data-i18n="booking_tag" class="text-sm uppercase tracking-widest text-gold font-semibold">System Rezerwacji</span>
                     <h2 data-i18n="booking_title" class="font-serif-title text-5xl sm:text-6xl text-white mt-2">Zarezerwuj Termin Online</h2>
                     <div class="w-16 h-[1px] bg-gold mx-auto mt-4"></div>
                 </div>
 
-                <div class="bg-dark-card border border-dark-border rounded-3xl shadow-2xl glass-panel relative z-10">
+                <div class="bg-dark-card border border-dark-border rounded-3xl shadow-2xl glass-panel relative z-10 reveal-on-scroll reveal-delay-1">
                     
                     <!-- Progress Bar Header -->
                     <div class="border-b border-dark-border bg-dark-surface/60 p-6 sm:p-8 rounded-t-3xl">
@@ -563,10 +617,118 @@
             </div>
         </section>
 
+        <!-- TESTIMONIALS / REVIEWS SECTION -->
+        <section id="testimonials" class="py-28 border-t border-dark-border bg-dark-surface/30">
+            <div class="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12">
+                <div class="text-center mb-20 reveal-on-scroll">
+                    <span data-i18n="testimonials_tag" class="text-sm uppercase tracking-widest text-gold font-semibold block">Opinie Klientów</span>
+                    <h2 data-i18n="testimonials_title" class="font-serif-title text-5xl sm:text-6xl text-white mt-2">Co Mówią Moi Klienci</h2>
+                    <p data-i18n="testimonials_desc" class="text-sm sm:text-base text-gray-300 font-normal mt-4 max-w-xl mx-auto">
+                        Prawdziwe doświadczenia, zaufanie i zadowolenie z każdej precyzyjnie wykonanej kreski.
+                    </p>
+                    <div class="w-16 h-[1px] bg-gold mx-auto mt-6"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Opinia 1 -->
+                    <div class="bg-dark-card border border-dark-border rounded-3xl p-8 glass-panel flex flex-col justify-between hover:border-gold/40 transition duration-300 reveal-on-scroll">
+                        <div>
+                            <div class="flex items-center space-x-1 text-gold text-sm mb-4">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <p data-i18n="review_1_text" class="text-sm sm:text-base text-gray-200 leading-relaxed italic mb-6">
+                                "Daria to prawdziwa artystka! Mój tatuaż ze wzorem peonii wyszedł niesamowicie subtelnie i dokładnie tak, jak sobie wymarzyłam. W studiu panuje przemiła atmosfera, a poziom higieny jest na najwyższym poziomie!"
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-dark-border/60 flex items-center justify-between">
+                            <div>
+                                <h4 class="text-white font-semibold text-sm">Klaudia M.</h4>
+                                <span data-i18n="review_1_service" class="text-xs text-gold font-medium">Fineline Flora</span>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-wider bg-gold/10 text-gold border border-gold/30 px-2.5 py-1 rounded-full font-medium" data-i18n="review_verified">Zweryfikowana wizyta</span>
+                        </div>
+                    </div>
+
+                    <!-- Opinia 2 -->
+                    <div class="bg-dark-card border border-dark-border rounded-3xl p-8 glass-panel flex flex-col justify-between hover:border-gold/40 transition duration-300 reveal-on-scroll reveal-delay-1">
+                        <div>
+                            <div class="flex items-center space-x-1 text-gold text-sm mb-4">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <p data-i18n="review_2_text" class="text-sm sm:text-base text-gray-200 leading-relaxed italic mb-6">
+                                "Precyzja mikrorealizmu przerosła moje oczekiwania. Detale są ostre jak brzytwa, a sam proces był niemal bezbolesny. Pełen profesjonalizm i świetny kontakt od momentu rezerwacji."
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-dark-border/60 flex items-center justify-between">
+                            <div>
+                                <h4 class="text-white font-semibold text-sm">Michał K.</h4>
+                                <span data-i18n="review_2_service" class="text-xs text-gold font-medium">Mikrorealizm</span>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-wider bg-gold/10 text-gold border border-gold/30 px-2.5 py-1 rounded-full font-medium" data-i18n="review_verified">Zweryfikowana wizyta</span>
+                        </div>
+                    </div>
+
+                    <!-- Opinia 3 -->
+                    <div class="bg-dark-card border border-dark-border rounded-3xl p-8 glass-panel flex flex-col justify-between hover:border-gold/40 transition duration-300 reveal-on-scroll reveal-delay-2">
+                        <div>
+                            <div class="flex items-center space-x-1 text-gold text-sm mb-4">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <p data-i18n="review_3_text" class="text-sm sm:text-base text-gray-200 leading-relaxed italic mb-6">
+                                "Mój pierwszy tatuaż i nie mogłam trafić w lepsze ręce! Daria cierpliwie pomogła dobrać idealne ułożenie i wielkość. Wszystko dokładnie wyjaśnione. Na pewno wrócę po kolejny!"
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-dark-border/60 flex items-center justify-between">
+                            <div>
+                                <h4 class="text-white font-semibold text-sm">Aleksandra W.</h4>
+                                <span data-i18n="review_3_service" class="text-xs text-gold font-medium">Subtelny Napis</span>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-wider bg-gold/10 text-gold border border-gold/30 px-2.5 py-1 rounded-full font-medium" data-i18n="review_verified">Zweryfikowana wizyta</span>
+                        </div>
+                    </div>
+
+                    <!-- Opinia 4 -->
+                    <div class="bg-dark-card border border-dark-border rounded-3xl p-8 glass-panel flex flex-col justify-between hover:border-gold/40 transition duration-300 reveal-on-scroll reveal-delay-3">
+                        <div>
+                            <div class="flex items-center space-x-1 text-gold text-sm mb-4">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <p data-i18n="review_4_text" class="text-sm sm:text-base text-gray-200 leading-relaxed italic mb-6">
+                                "Fantastyczne doświadczenie! Piękne, cieniutkie linie i niesamowicie ciepła, uspokajająca atmosfera. Daria naprawdę poświęca czas i doradza przy projekcie. Jestem zachwycona!"
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-dark-border/60 flex items-center justify-between">
+                            <div>
+                                <h4 class="text-white font-semibold text-sm">Sophie van Dijk</h4>
+                                <span data-i18n="review_4_service" class="text-xs text-gold font-medium">Fineline Botanica</span>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-wider bg-gold/10 text-gold border border-gold/30 px-2.5 py-1 rounded-full font-medium" data-i18n="review_verified">Zweryfikowana wizyta</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- FAQ SECTION -->
         <section id="faq" class="py-28 border-t border-dark-border bg-dark-surface/20">
             <div class="max-w-4xl mx-auto px-6">
-                <div class="text-center mb-16">
+                <div class="text-center mb-16 reveal-on-scroll">
                     <span data-i18n="faq_tag" class="text-sm uppercase tracking-widest text-gold font-semibold block">Warto Wiedzieć</span>
                     <h2 data-i18n="faq_title" class="font-serif-title text-5xl sm:text-6xl text-white mt-2">Często Zadawane Pytania</h2>
                     <p data-i18n="faq_desc" class="text-sm sm:text-base text-gray-300 font-normal mt-4 max-w-xl mx-auto">
@@ -577,7 +739,7 @@
 
                 <div class="space-y-4">
                     <!-- Pytanie 1: Czy robienie tatuażu boli? -->
-                    <details class="group bg-dark-card border border-dark-border hover:border-gold/40 rounded-2xl p-6 sm:p-7 transition-all duration-300 open:border-gold/60 select-none">
+                    <details class="group bg-dark-card border border-dark-border hover:border-gold/40 rounded-2xl p-6 sm:p-7 transition-all duration-300 open:border-gold/60 select-none reveal-on-scroll">
                         <summary class="flex justify-between items-center cursor-pointer list-none font-semibold text-white group-hover:text-gold transition">
                             <span data-i18n="faq_q1" class="text-base sm:text-lg flex items-center gap-3">
                                 <i class="fa-solid fa-feather text-gold text-sm"></i>
@@ -593,7 +755,7 @@
                     </details>
 
                     <!-- Pytanie 2: Jak się przygotować? -->
-                    <details class="group bg-dark-card border border-dark-border hover:border-gold/40 rounded-2xl p-6 sm:p-7 transition-all duration-300 open:border-gold/60 select-none">
+                    <details class="group bg-dark-card border border-dark-border hover:border-gold/40 rounded-2xl p-6 sm:p-7 transition-all duration-300 open:border-gold/60 select-none reveal-on-scroll reveal-delay-1">
                         <summary class="flex justify-between items-center cursor-pointer list-none font-semibold text-white group-hover:text-gold transition">
                             <span data-i18n="faq_q2" class="text-base sm:text-lg flex items-center gap-3">
                                 <i class="fa-solid fa-mug-hot text-gold text-sm"></i>
@@ -609,7 +771,7 @@
                     </details>
 
                     <!-- Pytanie 3: Jak dbać o tatuaż? -->
-                    <details class="group bg-dark-card border border-dark-border hover:border-gold/40 rounded-2xl p-6 sm:p-7 transition-all duration-300 open:border-gold/60 select-none">
+                    <details class="group bg-dark-card border border-dark-border hover:border-gold/40 rounded-2xl p-6 sm:p-7 transition-all duration-300 open:border-gold/60 select-none reveal-on-scroll reveal-delay-2">
                         <summary class="flex justify-between items-center cursor-pointer list-none font-semibold text-white group-hover:text-gold transition">
                             <span data-i18n="faq_q3" class="text-base sm:text-lg flex items-center gap-3">
                                 <i class="fa-solid fa-heart text-gold text-sm"></i>
@@ -625,7 +787,7 @@
                     </details>
 
                     <!-- Pytanie 4: Czy projekt indywidualny? -->
-                    <details class="group bg-dark-card border border-dark-border hover:border-gold/40 rounded-2xl p-6 sm:p-7 transition-all duration-300 open:border-gold/60 select-none">
+                    <details class="group bg-dark-card border border-dark-border hover:border-gold/40 rounded-2xl p-6 sm:p-7 transition-all duration-300 open:border-gold/60 select-none reveal-on-scroll">
                         <summary class="flex justify-between items-center cursor-pointer list-none font-semibold text-white group-hover:text-gold transition">
                             <span data-i18n="faq_q4" class="text-base sm:text-lg flex items-center gap-3">
                                 <i class="fa-solid fa-pen-nib text-gold text-sm"></i>
@@ -641,7 +803,7 @@
                     </details>
 
                     <!-- Pytanie 5: Ile się goi? -->
-                    <details class="group bg-dark-card border border-dark-border hover:border-gold/40 rounded-2xl p-6 sm:p-7 transition-all duration-300 open:border-gold/60 select-none">
+                    <details class="group bg-dark-card border border-dark-border hover:border-gold/40 rounded-2xl p-6 sm:p-7 transition-all duration-300 open:border-gold/60 select-none reveal-on-scroll reveal-delay-1">
                         <summary class="flex justify-between items-center cursor-pointer list-none font-semibold text-white group-hover:text-gold transition">
                             <span data-i18n="faq_q5" class="text-base sm:text-lg flex items-center gap-3">
                                 <i class="fa-solid fa-clock-rotate-left text-gold text-sm"></i>
@@ -657,7 +819,7 @@
                     </details>
 
                     <!-- Pytanie 6: Bezpieczeństwo i sterylność -->
-                    <details class="group bg-dark-card border border-dark-border hover:border-gold/40 rounded-2xl p-6 sm:p-7 transition-all duration-300 open:border-gold/60 select-none">
+                    <details class="group bg-dark-card border border-dark-border hover:border-gold/40 rounded-2xl p-6 sm:p-7 transition-all duration-300 open:border-gold/60 select-none reveal-on-scroll reveal-delay-2">
                         <summary class="flex justify-between items-center cursor-pointer list-none font-semibold text-white group-hover:text-gold transition">
                             <span data-i18n="faq_q6" class="text-base sm:text-lg flex items-center gap-3">
                                 <i class="fa-solid fa-shield-halved text-gold text-sm"></i>
@@ -678,7 +840,7 @@
         <!-- FOOTER / CONTACT SECTION -->
         <footer id="contact" class="bg-dark-surface border-t border-dark-border py-20">
             <div class="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 text-center">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 text-center reveal-on-scroll">
                     <div class="flex flex-col items-center">
                         <img src="netjes-logo.png" alt="netjes TATTOO Logo" class="h-16 sm:h-[55px] w-auto object-contain mb-6">
                         <p data-i18n="footer_desc" class="text-sm sm:text-base text-gray-300 font-normal leading-relaxed max-w-sm">
@@ -697,8 +859,18 @@
                         <p data-i18n="footer_hours_sun" class="text-sm sm:text-base text-gray-200 mt-2.5">Niedziela: Zamknięte</p>
                     </div>
                 </div>
-                <div data-i18n="footer_rights" class="border-t border-dark-border pt-10 text-center text-sm text-gray-400">
-                    © 2026 netjes TATTOO by Daria Wąs. Wszelkie prawa zastrzeżone.
+                <div class="border-t border-dark-border pt-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-sm text-gray-400">
+                    <div data-i18n="footer_rights">
+                        © 2026 netjes TATTOO by Daria Wąs. Wszelkie prawa zastrzeżone.
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <button type="button" onclick="openPrivacyModal()" data-i18n="footer_privacy_link" class="text-gray-400 hover:text-gold transition cursor-pointer underline underline-offset-4">
+                            Regulamin & Prywatność
+                        </button>
+                        <button type="button" onclick="openCookieSettings()" data-i18n="footer_cookies_link" class="text-gray-400 hover:text-gold transition cursor-pointer underline underline-offset-4">
+                            Ustawienia Cookies
+                        </button>
+                    </div>
                 </div>
             </div>
         </footer>
@@ -801,6 +973,152 @@
 
         </div>
 
+    </div>
+
+    <!-- ==========================================
+         PORTFOLIO LIGHTBOX MODAL
+         ========================================== -->
+    <div id="portfolio-lightbox" class="fixed inset-0 z-50 bg-black/90 flex flex-col justify-between p-4 sm:p-8 hidden" role="dialog" aria-modal="true" onclick="handleLightboxBackdropClick(event)">
+        <!-- Pasek górny z licznikiem i przyciskiem zamknięcia -->
+        <div class="flex justify-between items-center w-full max-w-6xl mx-auto z-10 select-none">
+            <span id="lightbox-counter" class="text-xs sm:text-sm font-mono tracking-widest text-gold bg-dark-card/80 border border-dark-border px-3.5 py-1.5 rounded-full">
+                1 / 6
+            </span>
+            <button type="button" onclick="closeLightbox()" class="w-11 h-11 rounded-full bg-dark-card/80 border border-dark-border text-gray-300 hover:text-gold hover:border-gold transition flex items-center justify-center cursor-pointer text-lg" title="Zamknij (Esc)">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Środkowa część ze zdjęciem i nawigacją -->
+        <div class="relative flex-1 flex items-center justify-center my-2 select-none" id="lightbox-image-container">
+            <!-- Strzałka Poprzednie -->
+            <button type="button" onclick="prevLightboxImage(event)" class="absolute left-2 sm:left-4 z-10 w-12 h-12 rounded-full bg-dark-card/80 border border-dark-border text-white hover:text-gold hover:border-gold transition flex items-center justify-center cursor-pointer shadow-xl text-base" title="Poprzednie (←)">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <!-- Właściwe powiększone zdjęcie -->
+            <img id="lightbox-img" src="" alt="Portfolio preview" class="rounded-2xl border border-dark-border max-h-[72vh] max-w-[88vw] sm:max-w-[80vw] object-contain shadow-2xl transition-all duration-300">
+
+            <!-- Strzałka Następne -->
+            <button type="button" onclick="nextLightboxImage(event)" class="absolute right-2 sm:right-4 z-10 w-12 h-12 rounded-full bg-dark-card/80 border border-dark-border text-white hover:text-gold hover:border-gold transition flex items-center justify-center cursor-pointer shadow-xl text-base" title="Następne (→)">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Pasek dolny z tytułem pracy -->
+        <div class="text-center w-full max-w-xl mx-auto z-10 select-none pb-2">
+            <h3 id="lightbox-title" class="font-serif-title text-2xl sm:text-3xl text-white"></h3>
+            <p id="lightbox-subtitle" class="text-xs sm:text-sm text-gold tracking-widest uppercase mt-1">netjes TATTOO • Daria Wąs</p>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         PASEK COOKIES (COOKIE BANNER)
+         ========================================== -->
+    <div id="cookie-banner" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-40 bg-dark-card/95 border border-gold/30 rounded-3xl p-5 sm:p-6 shadow-2xl glass-panel hidden transform translate-y-8 opacity-0">
+        <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-2xl bg-gold/15 border border-gold/30 flex items-center justify-center text-gold shrink-0 mt-0.5">
+                <i class="fa-solid fa-cookie-bite text-lg"></i>
+            </div>
+            <div class="space-y-3 flex-1">
+                <h4 data-i18n="cookie_title" class="text-sm font-semibold text-white uppercase tracking-wider">Prywatność i Pliki Cookies</h4>
+                <p data-i18n="cookie_text" class="text-xs text-gray-300 leading-relaxed">
+                    Ta strona korzysta z niezbędnych plików cookie oraz pamięci lokalnej do prawidłowej obsługi rezerwacji i preferencji językowych.
+                </p>
+                <div class="flex flex-wrap items-center gap-2 pt-1">
+                    <button type="button" onclick="acceptCookies()" data-i18n="cookie_btn_accept" class="gold-gradient-bg text-black font-bold px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider hover:opacity-90 transition cursor-pointer">
+                        Akceptuję
+                    </button>
+                    <button type="button" onclick="openPrivacyModal()" data-i18n="cookie_btn_info" class="border border-dark-border hover:border-gold text-gray-300 hover:text-gold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer font-medium">
+                        Regulamin & Prywatność
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL: REGULAMIN STUDIA & POLITYKA PRYWATNOŚCI
+         ========================================== -->
+    <div id="privacy-modal" class="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 sm:p-6 hidden select-none" role="dialog" aria-modal="true">
+        <div id="privacy-modal-backdrop" class="absolute inset-0" onclick="closePrivacyModal()"></div>
+        <div class="relative bg-dark-card border border-dark-border rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl z-10 glass-panel overflow-hidden animate-fade-in">
+            <!-- Nagłówek modalu -->
+            <div class="p-6 border-b border-dark-border flex justify-between items-center bg-dark-surface/60">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center text-gold">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <div>
+                        <h3 data-i18n="privacy_modal_title" class="font-serif-title text-2xl text-white">Regulamin Studia & Prywatność</h3>
+                        <p class="text-xs text-gold uppercase tracking-wider">netjes TATTOO • Zasady & Bezpieczeństwo</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closePrivacyModal()" class="w-10 h-10 rounded-xl bg-dark-base border border-dark-border text-gray-300 hover:text-gold hover:border-gold transition flex items-center justify-center cursor-pointer text-base">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Treść scrollowalna -->
+            <div class="p-6 sm:p-8 overflow-y-auto space-y-6 text-sm text-gray-200 leading-relaxed select-text">
+                <!-- Punkt 1: Rezerwacja i Zadatek -->
+                <div class="border-b border-dark-border/50 pb-5">
+                    <h4 data-i18n="policy_sec_1_title" class="text-base font-semibold text-white flex items-center gap-2 mb-2">
+                        <span class="text-gold font-mono text-sm">01.</span> Rezerwacja Terminu i Zadatek
+                    </h4>
+                    <p data-i18n="policy_sec_1_desc" class="text-gray-300 text-xs sm:text-sm">
+                        Złożenie rezerwacji przez formularz online stanowi wstępną deklarację chęci wykonania tatuażu. Potwierdzenie rezerwacji następuje po wpłacie zadatku (€30 / €50), który zostaje w całości odliczony od ostatecznej ceny tatuażu w dniu sesji. Zmiana terminu jest możliwa bez utraty zadatku z minimum 48-godzinnym wyprzedzeniem telefonicznym.
+                    </p>
+                </div>
+
+                <!-- Punkt 2: Przygotowanie do Sesji -->
+                <div class="border-b border-dark-border/50 pb-5">
+                    <h4 data-i18n="policy_sec_2_title" class="text-base font-semibold text-white flex items-center gap-2 mb-2">
+                        <span class="text-gold font-mono text-sm">02.</span> Przygotowanie i Wiek Klienta
+                    </h4>
+                    <p data-i18n="policy_sec_2_desc" class="text-gray-300 text-xs sm:text-sm">
+                        Zabiegi wykonujemy wyłącznie osobom pełnoletnim (18+). W dniu sesji klient powinien być wypoczęty, po posiłku oraz w stanie trzeźwości. Przeciwwskazaniami do wykonania tatuażu są: ciąża, karmienie piersią, aktywne stany zapalne skóry, spożycie alkoholu lub substancji odurzających w ciągu ostatnich 24 godzin.
+                    </p>
+                </div>
+
+                <!-- Punkt 3: Sterylność i Higiena -->
+                <div class="border-b border-dark-border/50 pb-5">
+                    <h4 data-i18n="policy_sec_3_title" class="text-base font-semibold text-white flex items-center gap-2 mb-2">
+                        <span class="text-gold font-mono text-sm">03.</span> Sterylność i Standardy Sanitarne
+                    </h4>
+                    <p data-i18n="policy_sec_3_desc" class="text-gray-300 text-xs sm:text-sm">
+                        Bezpieczeństwo jest priorytetem w studio netjes TATTOO. Używamy wyłącznie jednorazowych, fabrycznie sterylnych kartridży (igieł) otwieranych w obecności klienta, certyfikowanych wegańskich pigmentów zgodnych z normami EU REACH oraz medycznych środków do dezynfekcji.
+                    </p>
+                </div>
+
+                <!-- Punkt 4: Pielęgnacja Pozabiegowa -->
+                <div class="border-b border-dark-border/50 pb-5">
+                    <h4 data-i18n="policy_sec_4_title" class="text-base font-semibold text-white flex items-center gap-2 mb-2">
+                        <span class="text-gold font-mono text-sm">04.</span> Pielęgnacja po Sesji
+                    </h4>
+                    <p data-i18n="policy_sec_4_desc" class="text-gray-300 text-xs sm:text-sm">
+                        Bezpośrednio po zabiegu tatuaż zabezpieczany jest paroprzepuszczalną folią medyczną (second skin). Klient zobowiązany jest do przestrzegania instrukcji pielęgnacji (przemywanie letnią wodą, dedykowana maść, unikanie kąpieli, sauny, basenu i intensywnego słońca przez minimum 2-3 tygodnie).
+                    </p>
+                </div>
+
+                <!-- Punkt 5: Polityka Prywatności & RODO / GDPR -->
+                <div>
+                    <h4 data-i18n="policy_sec_5_title" class="text-base font-semibold text-white flex items-center gap-2 mb-2">
+                        <span class="text-gold font-mono text-sm">05.</span> Ochrona Danych Osobowych (RODO / GDPR)
+                    </h4>
+                    <p data-i18n="policy_sec_5_desc" class="text-gray-300 text-xs sm:text-sm">
+                        Administratorem danych osobowych jest studio netjes TATTOO Daria Wąs. Podane dane (imię, telefon, e-mail, opis projektu, załączone inspiracje) przetwarzane są wyłącznie w celu obsługi rezerwacji, przygotowania projektu tatuażu oraz kontaktu organizacyjnego. Dane nie są przekazywane osobom trzecim ani wykorzystywane do celów marketingowych bez wyraźnej zgody.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Stopka modalu -->
+            <div class="p-5 border-t border-dark-border bg-dark-surface/60 flex justify-end">
+                <button type="button" onclick="closePrivacyModal()" data-i18n="privacy_modal_close" class="gold-gradient-bg text-black font-bold px-8 py-3.5 rounded-xl text-xs sm:text-sm uppercase tracking-wider hover:opacity-90 transition cursor-pointer">
+                    Rozumiem & Zamknij
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Logika aplikacji -->

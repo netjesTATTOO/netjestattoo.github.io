@@ -105,4 +105,66 @@ summary::marker {
     pointer-events: none;
 }
 
+/* ==========================================================================
+   PŁYNNE ANIMACJE POJAWIANIA SIĘ NA SCROLL (SCROLL REVEAL)
+   ========================================================================== */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ==========================================================================
+   PORTFOLIO LIGHTBOX
+   ========================================================================== */
+#portfolio-lightbox {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s ease;
+}
+
+#portfolio-lightbox.hidden {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+#portfolio-lightbox:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+}
+
+#lightbox-image-container img {
+    max-height: 80vh;
+    max-width: 90vw;
+    object-fit: contain;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   PASEK COOKIES & MINI-REGULAMIN
+   ========================================================================== */
+#cookie-banner {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+#privacy-modal-backdrop {
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+
 

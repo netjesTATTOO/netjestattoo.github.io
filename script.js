@@ -1,6 +1,14 @@
-        // INICJALIZACJA EMAILJS
+        // KONFIGURACJA I INICJALIZACJA EMAILJS
+        const EMAILJS_PUBLIC_KEY = "Zdb3EviGAr7ZNTaeA";
+        const EMAILJS_SERVICE_ID = "service_vf32q58";
+        const EMAILJS_ADMIN_TEMPLATE_ID = "template_73a85e8"; // Szablon powiadomienia dla studia
+        const EMAILJS_CLIENT_TEMPLATE_ID = "template_i28lri9"; // Szablon potwierdzenia dla klienta
+        const STUDIO_PHONE_NUMBER = "+48 123 456 789";
+
         (function() {
-            emailjs.init("Zdb3EviGAr7ZNTaeA");
+            if (typeof emailjs !== 'undefined') {
+                emailjs.init(EMAILJS_PUBLIC_KEY);
+            }
         })();
 
         // DEKLARACJA STANU ZMIENNYCH
@@ -33,19 +41,26 @@
 
         const translations = {
             pl: {
-                nav_about: "O mnie", nav_portfolio: "Portfolio", nav_booking: "Rezerwacja Online", nav_faq: "FAQ", nav_contact: "Kontakt", nav_book_btn: "Zarezerwuj Wizytę",
+                nav_about: "O mnie", nav_portfolio: "Portfolio", nav_booking: "Rezerwacja Online", nav_testimonials: "Opinie", nav_faq: "FAQ", nav_contact: "Kontakt", nav_book_btn: "Zarezerwuj Wizytę",
                 hero_subtitle: "Studio Tatuażu • Daria Wąs", hero_title_1: "Precyzja, Delikatność i", hero_title_2: "Sztuka", hero_title_3: "na Twojej Skórze",
                 hero_desc: "Specjalizuję się w autorskich tatuażach typu Fineline, mikrorealizmie oraz delikatnych kompozycjach roślinnych i geometrycznych.",
                 hero_btn_book: "Zarezerwuj Termin", hero_btn_portfolio: "Zobacz Portfolio", about_tag: "O Mnie", about_badge: "Sterylność & Pasja",
                 about_text_1: "Cześć! Nazywam się Daria i tworzę tatuaże, które stają się subtelną ozdobą Twojego ciała. W mojej pracy najważniejsza jest precyzja cienkiej linii (fineline) oraz komfort i bezpieczeństwo podczas każdej sesji.",
                 about_text_2: "Dbam o kameralną i przyjazną atmosferę w studiu, tak aby każda wizyta była dla Ciebie przyjemnym doświadczeniem.",
                 about_feature_1_title: "Cienka Linia", about_feature_1_desc: "Precyzyjne, subtelne detale", about_feature_2_title: "Indywidualność", about_feature_2_desc: "Projekt dopasowany do Ciebie",
-                portfolio_tag: "Moje Prace", portfolio_title: "Galeria Portfolio", portfolio_item_2: "Mikrorealizm", portfolio_item_3: "Subtelny Napis",
+                portfolio_tag: "Moje Prace", portfolio_title: "Galeria Portfolio",
+                portfolio_item_1: "Fineline Flora", portfolio_item_2: "Mikrorealizm", portfolio_item_3: "Subtelny Napis", portfolio_item_4: "Kompozycja Botaniczna", portfolio_item_5: "Minimalistyczna Geometria", portfolio_item_6: "Autorski Projekt Fineline", portfolio_click_to_zoom: "Kliknij, aby powiększyć",
                 booking_tag: "System Rezerwacji", booking_title: "Zarezerwuj Termin Online", step_1_tab: "Usługa", step_2_tab: "Termin", step_3_tab: "Szczegóły", step_4_tab: "Podsumowanie",
                 step_1_title: "1. Wybierz Rodzaj Usługi", service_small_title: "Mały Tatuaż / Fineline", service_small_desc: "Rozmiar do ~7 cm. Proste symbole, napisy.", service_medium_title: "Średni Tatuaż / Detal", service_medium_desc: "Rozmiar 8-15 cm. Szczegółowy motyw.", deposit_label: "Zaliczka", btn_next_date: "Dalej: Wybór Daty",
                 step_2_title: "2. Wybierz Datę i Godzinę", day_mon: "Pon", day_tue: "Wt", day_wed: "Śr", day_thu: "Czw", day_fri: "Pt", day_sat: "Sob", day_sun: "Niedz", hours_title: "Godziny", click_day_prompt: "Kliknij dzień z kalendarza.", first_select_day: "Najpierw wybierz dzień", btn_back: "Wstecz", btn_next_details: "Dalej: Opis Tatuażu",
                 step_3_title: "3. Opis Tatuażu & Twoje Dane", label_placement: "Miejsce na Ciele *", label_size: "Wymiar (cm)", label_desc: "Opis Wzoru *", label_images: "Zdjęcia Inspiracji (Maksymalnie 3)", label_images_hint: "Wybierz do 3 zdjęć ze swojego urządzenia. Kliknij ikonę kosza, aby usunąć wybrane zdjęcie.", btn_add_file: "Dodaj plik", label_fullname: "Imię i Nazwisko *", label_phone: "Telefon *", label_email: "Email *", btn_next_summary: "Dalej: Podsumowanie",
                 step_4_title: "4. Podsumowanie Rezerwacji", summary_selected_service: "Wybrana Usługa", summary_datetime: "Data i Godzina:", summary_client: "Klient:", summary_place: "Miejsce:", summary_contact: "Kontakt:", summary_images_count: "Inspiracje:", label_rodo_consent: "Wyrażam zgodę na przetwarzanie moich danych osobowych (RODO) w celu realizacji rezerwacji terminu oraz kontaktu ze mną.", btn_confirm_booking: "Potwierdzam & Rezerwuję",
+                testimonials_tag: "Opinie Klientów", testimonials_title: "Co Mówią Moi Klienci", testimonials_desc: "Prawdziwe doświadczenia, zaufanie i zadowolenie z każdej precyzyjnie wykonanej kreski.",
+                review_1_text: "\"Daria to prawdziwa artystka! Mój tatuaż ze wzorem peonii wyszedł niesamowicie subtelnie i dokładnie tak, jak sobie wymarzyłam. W studiu panuje przemiła atmosfera, a poziom higieny jest na najwyższym poziomie!\"", review_1_service: "Fineline Flora",
+                review_2_text: "\"Precyzja mikrorealizmu przerosła moje oczekiwania. Detale są ostre jak brzytwa, a sam proces był niemal bezbolesny. Pełen profesjonalizm i świetny kontakt od momentu rezerwacji.\"", review_2_service: "Mikrorealizm",
+                review_3_text: "\"Mój pierwszy tatuaż i nie mogłam trafić w lepsze ręce! Daria cierpliwie pomogła dobrać idealne ułożenie i wielkość. Wszystko dokładnie wyjaśnione. Na pewno wrócę po kolejny!\"", review_3_service: "Subtelny Napis",
+                review_4_text: "\"Fantastyczne doświadczenie! Piękne, cieniutkie linie i niesamowicie ciepła, uspokajająca atmosfera. Daria naprawdę poświęca czas i doradza przy projekcie. Jestem zachwycona!\"", review_4_service: "Fineline Botanica",
+                review_verified: "Zweryfikowana wizyta",
                 faq_tag: "Warto Wiedzieć", faq_title: "Często Zadawane Pytania", faq_desc: "Masz pytania lub wątpliwości przed wizytą? Poniżej znajdziesz odpowiedzi na najczęściej zadawane pytania.",
                 faq_q1: "Czy robienie tatuażu boli?", faq_a1: "Spokojnie, to znacznie mniej straszne niż myślisz! Technika Fineline wykorzystuje wyjątkowo cienkie igły, dzięki czemu odczucia przypominają raczej delikatne drapanie. W studiu dbam o kameralną, bezstresową atmosferę – zawsze możemy zrobić przerwę na herbatę, kawę i chwilę oddechu.",
                 faq_q2: "Jak przygotować się do sesji?", faq_a2: "Przede wszystkim wyśpij się i zjedz pożywny posiłek przed wizytą. Dzień wcześniej zrezygnuj z alkoholu oraz zadbaj o dobre nawodnienie (pij dużo wody). Załóż wygodne, luźne ubranie, które nie będzie uciskać tatuowanego miejsca. O resztę zadbam ja!",
@@ -53,21 +68,36 @@
                 faq_q4: "Czy projekt tworzysz indywidualnie?", faq_a4: "Tak, każdy tatuaż tworzę na podstawie Twojej wizji, przesłanych inspiracji oraz anatomii Twojego ciała. Wzór wspólnie dopasowujemy na początku sesji – nanosimy kalkę, oceniamy wielkość oraz ułożenie i nanosimy ewentualne poprawki, aż poczujesz pełne zadowolenie.",
                 faq_q5: "Ile czasu goi się tatuaż?", faq_a5: "Wstępne gojenie naskórka trwa zazwyczaj około 2–3 tygodni – w tym czasie tatuaż może się delikatnie łuszczyć. Pełna regeneracja głębszych warstw skóry następuje po około miesiącu. Przez cały ten okres możesz śmiało do mnie napisać, jeśli będziesz mieć jakiekolwiek pytania!",
                 faq_q6: "Czy w studiu jest bezpiecznie i sterylnie?", faq_a6: "Higiena i bezpieczeństwo to mój bezwzględny priorytet. Używam wyłącznie jednorazowych, sterylnych igieł (kartridży) otwieranych w Twojej obecności, certyfikowanych środków medycznych oraz wegańskich tuszy najwyższej jakości, zgodnych z normami EU REACH.",
-                footer_desc: "Autorskie studio tatuażu Darii Wąs. Precyzja, sterylność i wyjątkowa atmosfera.", footer_contact_title: "Kontakt & Lokalizacja", footer_location: "Polska / Holandia", footer_hours_title: "Godziny Otwarcia", footer_hours_week: "Poniedziałek – Sobota: 10:00 – 18:00", footer_hours_sun: "Niedziela: Zamknięte", footer_rights: "© 2026 netjes TATTOO by Daria Wąs. Wszelkie prawa zastrzeżone."
+                footer_desc: "Autorskie studio tatuażu Darii Wąs. Precyzja, sterylność i wyjątkowa atmosfera.", footer_contact_title: "Kontakt & Lokalizacja", footer_location: "Polska / Holandia", footer_hours_title: "Godziny Otwarcia", footer_hours_week: "Poniedziałek – Sobota: 10:00 – 18:00", footer_hours_sun: "Niedziela: Zamknięte", footer_rights: "© 2026 netjes TATTOO by Daria Wąs. Wszelkie prawa zastrzeżone.",
+                footer_privacy_link: "Regulamin & Prywatność", footer_cookies_link: "Ustawienia Cookies",
+                cookie_title: "Prywatność i Pliki Cookies", cookie_text: "Ta strona korzysta z niezbędnych plików cookie oraz pamięci lokalnej do prawidłowej obsługi rezerwacji i preferencji językowych.", cookie_btn_accept: "Akceptuję", cookie_btn_info: "Regulamin & Prywatność",
+                privacy_modal_title: "Regulamin Studia & Prywatność", privacy_modal_close: "Rozumiem & Zamknij",
+                policy_sec_1_title: "01. Rezerwacja Terminu i Zadatek", policy_sec_1_desc: "Złożenie rezerwacji przez formularz online stanowi wstępną deklarację chęci wykonania tatuażu. Potwierdzenie rezerwacji następuje po wpłacie zadatku (€30 / €50), który zostaje w całości odliczony od ostatecznej ceny tatuażu w dniu sesji. Zmiana terminu jest możliwa bez utraty zadatku z minimum 48-godzinnym wyprzedzeniem telefonicznym.",
+                policy_sec_2_title: "02. Przygotowanie i Wiek Klienta", policy_sec_2_desc: "Zabiegi wykonujemy wyłącznie osobom pełnoletnim (18+). W dniu sesji klient powinien być wypoczęty, po posiłku oraz w stanie trzeźwości. Przeciwwskazaniami do wykonania tatuażu są: ciąża, karmienie piersią, aktywne stany zapalne skóry, spożycie alkoholu lub substancji odurzających w ciągu ostatnich 24 godzin.",
+                policy_sec_3_title: "03. Sterylność i Standardy Sanitarne", policy_sec_3_desc: "Bezpieczeństwo jest priorytetem w studio netjes TATTOO. Używamy wyłącznie jednorazowych, fabrycznie sterylnych kartridży (igieł) otwieranych w obecności klienta, certyfikowanych wegańskich pigmentów zgodnych z normami EU REACH oraz medycznych środków do dezynfekcji.",
+                policy_sec_4_title: "04. Pielęgnacja po Sesji", policy_sec_4_desc: "Bezpośrednio po zabiegu tatuaż zabezpieczany jest paroprzepuszczalną folią medyczną (second skin). Klient zobowiązany jest do przestrzegania instrukcji pielęgnacji (przemywanie letnią wodą, dedykowana maść, unikanie kąpieli, sauny, basenu i intensywnego słońca przez minimum 2-3 tygodnie).",
+                policy_sec_5_title: "05. Ochrona Danych Osobowych (RODO / GDPR)", policy_sec_5_desc: "Administratorem danych osobowych jest studio netjes TATTOO Daria Wąs. Podane dane (imię, telefon, e-mail, opis projektu, załączone inspiracje) przetwarzane są wyłącznie w celu obsługi rezerwacji, przygotowania projektu tatuażu oraz kontaktu organizacyjnego. Dane nie są przekazywane osobom trzecim ani wykorzystywane do celów marketingowych bez wyraźnej zgody."
             },
-            en: {
-                nav_about: "About Me", nav_portfolio: "Portfolio", nav_booking: "Online Booking", nav_faq: "FAQ", nav_contact: "Contact", nav_book_btn: "Book Appointment",
+                    en: {
+                nav_about: "About Me", nav_portfolio: "Portfolio", nav_booking: "Online Booking", nav_testimonials: "Reviews", nav_faq: "FAQ", nav_contact: "Contact", nav_book_btn: "Book Appointment",
                 hero_subtitle: "Tattoo Studio • Daria Wąs", hero_title_1: "Precision, Delicacy and", hero_title_2: "Art", hero_title_3: "on Your Skin",
                 hero_desc: "Specializing in fine-line tattoos, micro-realism, and delicate floral or geometric designs.", hero_btn_book: "Book Your Date", hero_btn_portfolio: "View Portfolio", about_tag: "About Me", about_badge: "Sterility & Passion",
                 about_text_1: "Hi! My name is Daria and I create subtle tattoo art that enhances your body. My focus is on fine-line precision, comfort, and safety during every session.",
                 about_text_2: "I ensure a cozy, friendly atmosphere in the studio so every visit feels special and relaxed.",
                 about_feature_1_title: "Fine Line", about_feature_1_desc: "Precise, subtle details", about_feature_2_title: "Custom Designs", about_feature_2_desc: "Tailored to your vision",
-                portfolio_tag: "My Works", portfolio_title: "Portfolio Gallery", portfolio_item_2: "Microrealism", portfolio_item_3: "Subtle Script",
+                portfolio_tag: "My Works", portfolio_title: "Portfolio Gallery",
+                portfolio_item_1: "Fineline Flora", portfolio_item_2: "Microrealism", portfolio_item_3: "Subtle Script", portfolio_item_4: "Botanical Composition", portfolio_item_5: "Minimalist Geometry", portfolio_item_6: "Custom Fineline Artwork", portfolio_click_to_zoom: "Click to enlarge",
                 booking_tag: "Booking System", booking_title: "Book Online", step_1_tab: "Service", step_2_tab: "Date", step_3_tab: "Details", step_4_tab: "Summary",
                 step_1_title: "1. Choose Service Type", service_small_title: "Small Tattoo / Fineline", service_small_desc: "Up to ~7 cm. Simple symbols, lettering.", service_medium_title: "Medium Tattoo / Detail", service_medium_desc: "8-15 cm. Detailed custom work.", deposit_label: "Deposit", btn_next_date: "Next: Choose Date",
                 step_2_title: "2. Select Date & Time", day_mon: "Mon", day_tue: "Tue", day_wed: "Wed", day_thu: "Thu", day_fri: "Fri", day_sat: "Sat", day_sun: "Sun", hours_title: "Time Slots", click_day_prompt: "Select a date from calendar.", first_select_day: "First choose a date", btn_back: "Back", btn_next_details: "Next: Tattoo Details",
                 step_3_title: "3. Tattoo Description & Info", label_placement: "Body Placement *", label_size: "Approx Size (cm)", label_desc: "Design Idea *", label_images: "Inspiration Photos (Max 3)", label_images_hint: "Select up to 3 photos from your device. Click the trash icon to remove a chosen photo.", btn_add_file: "Add photo", label_fullname: "Full Name *", label_phone: "Phone Number *", label_email: "Email Address *", btn_next_summary: "Next: Summary",
                 step_4_title: "4. Booking Summary", summary_selected_service: "Selected Service", summary_datetime: "Date & Time:", summary_client: "Client:", summary_place: "Placement:", summary_contact: "Contact:", summary_images_count: "Inspirations:", label_rodo_consent: "I consent to the processing of my personal data (GDPR) for the purpose of booking my appointment and contact.", btn_confirm_booking: "Confirm & Reserve",
+                testimonials_tag: "Client Reviews", testimonials_title: "What My Clients Say", testimonials_desc: "Real experiences, trust, and satisfaction with every precisely drawn line.",
+                review_1_text: "\"Daria is a true artist! My peony tattoo turned out incredibly subtle and exactly as I dreamed. The studio has a wonderfully cozy atmosphere and the hygiene standards are top-notch!\"", review_1_service: "Fineline Flora",
+                review_2_text: "\"The precision of the microrealism exceeded all my expectations. The details are razor-sharp and the session was surprisingly gentle. Absolute professionalism from start to finish.\"", review_2_service: "Microrealism",
+                review_3_text: "\"My very first tattoo and I couldn't have chosen a better artist! Daria patiently helped find the perfect placement and size. Everything was thoroughly explained. I will definitely be back!\"", review_3_service: "Subtle Script",
+                review_4_text: "\"Fantastic experience! Gorgeous fine lines and an incredibly warm, calming atmosphere. Daria takes her time and truly collaborates on the design. Absolutely thrilled!\"", review_4_service: "Fineline Botanica",
+                review_verified: "Verified appointment",
                 faq_tag: "Good to Know", faq_title: "Frequently Asked Questions", faq_desc: "Have questions or concerns before your appointment? Here are answers to the most common questions.",
                 faq_q1: "Does getting a tattoo hurt?", faq_a1: "Don't worry, it's much less intimidating than you might think! Fineline technique uses ultra-thin needles, so the sensation feels more like gentle scratching than sharp pain. I ensure a cozy, stress-free atmosphere in the studio – we can always take breaks whenever you need.",
                 faq_q2: "How should I prepare for my session?", faq_a2: "Get a good night's sleep and eat a nourishing meal beforehand. Avoid alcohol the day before and stay well-hydrated. Wear comfortable, loose clothing that won't rub against the tattooed area. I'll take care of the rest!",
@@ -75,21 +105,36 @@
                 faq_q4: "Do you design custom tattoos?", faq_a4: "Absolutely! Every tattoo is created based on your personal vision, inspiration references, and body anatomy. We finalize the design together at the start of your appointment – adjusting placement, size, and details until you feel 100% in love with it.",
                 faq_q5: "How long does a tattoo take to heal?", faq_a5: "The surface layer typically heals in about 2–3 weeks, during which minor peeling is normal. Complete deep-tissue healing takes about 4–6 weeks. Feel free to message me anytime during your healing journey if you have questions!",
                 faq_q6: "Is the studio sterile and safe?", faq_a6: "Hygiene and safety are my absolute priorities. I exclusively use single-use, sterile needle cartridges opened in front of you, hospital-grade disinfectants, and premium vegan inks compliant with EU REACH standards.",
-                footer_desc: "Artistic tattoo studio by Daria Wąs. Precision, sterility, and unique atmosphere.", footer_contact_title: "Contact & Location", footer_location: "Poland / Netherlands", footer_hours_title: "Opening Hours", footer_hours_week: "Monday – Saturday: 10:00 – 18:00", footer_hours_sun: "Sunday: Closed", footer_rights: "© 2026 netjes TATTOO by Daria Wąs. All rights reserved."
+                footer_desc: "Artistic tattoo studio by Daria Wąs. Precision, sterility, and unique atmosphere.", footer_contact_title: "Contact & Location", footer_location: "Poland / Netherlands", footer_hours_title: "Opening Hours", footer_hours_week: "Monday – Saturday: 10:00 – 18:00", footer_hours_sun: "Sunday: Closed", footer_rights: "© 2026 netjes TATTOO by Daria Wąs. All rights reserved.",
+                footer_privacy_link: "Terms & Privacy", footer_cookies_link: "Cookie Settings",
+                cookie_title: "Privacy & Cookies", cookie_text: "This website uses essential cookies and local storage to ensure proper functioning of booking services and language preferences.", cookie_btn_accept: "Accept", cookie_btn_info: "Terms & Privacy",
+                privacy_modal_title: "Studio Rules & Privacy Policy", privacy_modal_close: "Got It & Close",
+                policy_sec_1_title: "01. Appointment Booking & Deposit", policy_sec_1_desc: "Submitting an online booking acts as an initial request for a tattoo session. Confirmation occurs upon deposit payment (€30 / €50), which is fully deducted from the final price on session day. Rescheduling without losing your deposit requires at least 48 hours advance notice by phone.",
+                policy_sec_2_title: "02. Preparation & Age Requirement", policy_sec_2_desc: "Tattoos are performed strictly for adults (18+). On the day of your session, please arrive well-rested, nourished, and sober. Contraindications include pregnancy, breastfeeding, active skin infections, and alcohol/substance consumption within 24 hours.",
+                policy_sec_3_title: "03. Sterility & Sanitary Standards", policy_sec_3_desc: "Your safety is paramount at netjes TATTOO. We exclusively utilize single-use, factory-sealed sterile needle cartridges opened in your presence, certified vegan inks compliant with EU REACH standards, and hospital-grade disinfectants.",
+                policy_sec_4_title: "04. Post-Session Aftercare", policy_sec_4_desc: "Immediately after tattooing, the area is sealed with breathable medical film (second skin). The client agrees to follow all aftercare steps (lukewarm water rinsing, mild soap, aftercare ointment, and avoiding pools, saunas, baths, and direct UV sunlight for 2-3 weeks).",
+                policy_sec_5_title: "05. Personal Data Protection (GDPR)", policy_sec_5_desc: "The data controller is netjes TATTOO Daria Wąs. Information provided (name, phone, email, tattoo idea, inspiration files) is processed solely for booking logistics and design consultations. Data is never shared with third parties or used for unsolicited marketing."
             },
             nl: {
-                nav_about: "Over Mij", nav_portfolio: "Portfolio", nav_booking: "Online Boeken", nav_faq: "FAQ", nav_contact: "Contact", nav_book_btn: "Afspraak Maken",
+                nav_about: "Over Mij", nav_portfolio: "Portfolio", nav_booking: "Online Boeken", nav_testimonials: "Beoordelingen", nav_faq: "FAQ", nav_contact: "Contact", nav_book_btn: "Afspraak Maken",
                 hero_subtitle: "Tattoostudio • Daria Wąs", hero_title_1: "Precisie, Subtielheid en", hero_title_2: "Kunst", hero_title_3: "op Jouw Huid",
                 hero_desc: "Gespecialiseerd in verfijnde Fineline-tattoos, micro-realisme en elegante botanische of geometrische ontwerpen.", hero_btn_book: "Boek een Datum", hero_btn_portfolio: "Bekijk Portfolio", about_tag: "Over Mij", about_badge: "Steriliteit & Passie",
                 about_text_1: "Hoi! Ik ben Daria en ik maak subtiele tatoeages die je lichaam sieren. In mijn werk staan fineline-precisie, comfort en hygiëne voorop.",
                 about_text_2: "Ik zorg voor een ontspannen en gastvrije sfeer in de studio, zodat elke afspraak een fijne ervaring is.",
                 about_feature_1_title: "Fine Line", about_feature_1_desc: "Nauwkeurige, subtiele details", about_feature_2_title: "Uniek Ontwerp", about_feature_2_desc: "Aangepast aan jouw wensen",
-                portfolio_tag: "Mijn Werk", portfolio_title: "Portfolio Galerij", portfolio_item_2: "Micro-realisme", portfolio_item_3: "Subtiele Tekst",
+                portfolio_tag: "Mijn Werk", portfolio_title: "Portfolio Galerij",
+                portfolio_item_1: "Fineline Flora", portfolio_item_2: "Micro-realisme", portfolio_item_3: "Subtiele Tekst", portfolio_item_4: "Botanische Compositie", portfolio_item_5: "Minimalistische Geometrie", portfolio_item_6: "Uniek Fineline Ontwerp", portfolio_click_to_zoom: "Klik om te vergroten",
                 booking_tag: "Boekingssysteem", booking_title: "Online Afspraak Maken", step_1_tab: "Dienst", step_2_tab: "Datum", step_3_tab: "Details", step_4_tab: "Overzicht",
                 step_1_title: "1. Kies Soort Tattoo", service_small_title: "Kleine Tattoo / Fineline", service_small_desc: "Tot ~7 cm. Eenvoudige symbolen, tekst.", service_medium_title: "Middelgrote Tattoo / Detail", service_medium_desc: "8-15 cm. Gedetailleerd ontwerp.", deposit_label: "Aanbetaling", btn_next_date: "Volgende: Datum Kiezen",
                 step_2_title: "2. Kies Datum & Tijd", day_mon: "Ma", day_tue: "Di", day_wed: "Wo", day_thu: "Do", day_fri: "Vr", day_sat: "Za", day_sun: "Zo", hours_title: "Tijdsloten", click_day_prompt: "Kies een datum in de kalender.", first_select_day: "Kies eerst een datum", btn_back: "Terug", btn_next_details: "Volgende: Details",
                 step_3_title: "3. Beschrijving & Gegevens", label_placement: "Plek op het Lichaam *", label_size: "Afmeting (cm)", label_desc: "Beschrijving Wens *", label_images: "Inspiratie Foto's (Max 3)", label_images_hint: "Kies maximaal 3 foto's van je apparaat. Klik op het prullenbak-icoon om een foto te verwijderen.", btn_add_file: "Foto toevoegen", label_fullname: "Naam & Achternaam *", label_phone: "Telefoonnummer *", label_email: "E-mailadres *", btn_next_summary: "Volgende: Overzicht",
                 step_4_title: "4. Overzicht Boeking", summary_selected_service: "Gekozen Dienst", summary_datetime: "Datum & Tijd:", summary_client: "Klant:", summary_place: "Plaatsing:", summary_contact: "Contact:", summary_images_count: "Inspiraties:", label_rodo_consent: "Ik ga akkoord met de verwerking van mijn persoonsgegevens (AVG) voor de reservering van mijn afspraak en contact.", btn_confirm_booking: "Bevestigen & Boeken",
+                testimonials_tag: "Klantbeoordelingen", testimonials_title: "Wat Mijn Klanten Zeggen", testimonials_desc: "Echte ervaringen, vertrouwen en tevredenheid bij elke verfijnde lijn.",
+                review_1_text: "\"Daria is een echte kunstenares! Mijn pioenroos tattoo is zo ongelooflijk verfijnd en precies zoals ik droomde. De sfeer in de studio is heel ontspannen en de hygiëne is top!\"", review_1_service: "Fineline Flora",
+                review_2_text: "\"De precisie van het micro-realisme overtrof al mijn verwachtingen. De details zijn vlijmscherp en de sessie was heel comfortabel. Professioneel van begin tot eind.\"", review_2_service: "Micro-realisme",
+                review_3_text: "\"Mijn allereerste tattoo en ik had geen betere plek kunnen wensen! Daria nam alle tijd voor de juiste plaatsing en afmeting. Alles werd duidelijk uitgelegd. Ik kom zeker terug!\"", review_3_service: "Subtiele Tekst",
+                review_4_text: "\"Fantastische ervaring! Prachtige fijne lijnen en een super gastvrije, rustgevende sfeer. Daria neemt echt de tijd voor je en denkt perfect mee met het ontwerp. Heel erg blij!\"", review_4_service: "Fineline Botanica",
+                review_verified: "Geverifieerde afspraak",
                 faq_tag: "Goed om te Weten", faq_title: "Veelgestelde Vragen", faq_desc: "Heb je vragen of twijfels voor je afspraak? Hieronder vind je antwoorden op de meest gestelde vragen.",
                 faq_q1: "Doet het zetten van een tattoo pijn?", faq_a1: "Geen zorgen, het valt reuze mee! De Fineline-techniek maakt gebruik van extreem dunne naalden, waardoor het gevoel eerder lijkt op een lichte kriebel of krasje. Ik zorg voor een ontspannen en rustige sfeer in de studio – we kunnen altijd pauzeren voor koffie of thee.",
                 faq_q2: "Hoe bereid ik me voor op de sessie?", faq_a2: "Zorg dat je goed uitgerust bent en eet van tevoren een voedzame maaltijd. Vermijd alcohol de dag ervoor en drink voldoende water. Draag comfortabele, losse kleding die niet knelt op de te tatoeëren plek. Ik zorg voor de rest!",
@@ -97,7 +142,15 @@
                 faq_q4: "Maak je ook unieke ontwerpen op maat?", faq_a4: "Jazeker! Elke tattoo wordt op maat ontworpen aan de hand van jouw wensen, inspiraties en lichaamsanatomie. Aan het begin van de sessie plaatsen we het sjabloon en passen we de afmeting en positie aan totdat je helemaal tevreden bent.",
                 faq_q5: "Hoe lang duurt de genezing?", faq_a5: "De opperhuid geneest meestal binnen 2–3 weken – lichte schilfering is normaal. Volledige diepe genezing duurt ongeveer 4 weken. Je mag me tijdens het herstel altijd een berichtje sturen met vragen!",
                 faq_q6: "Is de studio hygiënisch en veilig?", faq_a6: "Hygiëne en veiligheid staan op nummer één. Ik gebruik uitsluitend steriele wegwerpnaalden die in jouw bijzijn worden geopend, medische desinfectiemiddelen en hoogwaardige veganistische inkten die voldoen aan de strenge EU REACH-normen.",
-                footer_desc: "Autentieke tattoostudio van Daria Wąs. Precisie, hygiëne en unieke sfeer.", footer_contact_title: "Contact & Locatie", footer_location: "Polen / Nederland", footer_hours_title: "Openingstijden", footer_hours_week: "Maandag – Zaterdag: 10:00 – 18:00", footer_hours_sun: "Zondag: Gesloten", footer_rights: "© 2026 netjes TATTOO door Daria Wąs. Alle rechten voorbehouden."
+                footer_desc: "Autentieke tattoostudio van Daria Wąs. Precisie, hygiëne en unieke sfeer.", footer_contact_title: "Contact & Locatie", footer_location: "Polen / Nederland", footer_hours_title: "Openingstijden", footer_hours_week: "Maandag – Zaterdag: 10:00 – 18:00", footer_hours_sun: "Zondag: Gesloten", footer_rights: "© 2026 netjes TATTOO door Daria Wąs. Alle rechten voorbehouden.",
+                footer_privacy_link: "Voorwaarden & Privacy", footer_cookies_link: "Cookie Instellingen",
+                cookie_title: "Privacy & Cookies", cookie_text: "Deze website maakt gebruik van noodzakelijke cookies en lokale opslag voor een goede werking van het boekingssysteem en taalvoorkeuren.", cookie_btn_accept: "Accepteren", cookie_btn_info: "Voorwaarden & Privacy",
+                privacy_modal_title: "Studioregels & Privacybeleid", privacy_modal_close: "Begrepen & Sluiten",
+                policy_sec_1_title: "01. Afspraak Boeken & Aanbetaling", policy_sec_1_desc: "Een online boeking geldt als aanvraag voor een tattoosessie. De bevestiging volgt na de aanbetaling (€30 / €50), die bij de afspraak volledig in mindering wordt gebracht op de totaalprijs. Verzetten kan kosteloos tot minimaal 48 uur van tevoren per telefoon.",
+                policy_sec_2_title: "02. Voorbereiding & Leeftijd", policy_sec_2_desc: "Behandelingen zijn uitsluitend voor volwassenen (18+). Kom uitgerust, nuchter en na een maaltijd naar de studio. Contra-indicaties zijn: zwangerschap, borstvoeding, actieve huidinfecties en alcohol- of drugsgebruik binnen 24 uur voor de sessie.",
+                policy_sec_3_title: "03. Hygiëne & Veiligheidsnormen", policy_sec_3_desc: "Veiligheid staat voorop bij netjes TATTOO. Wij werken uitsluitend met steriele wegwerpnaalden (cartridges) die in uw bijzijn worden geopend, REACH-gecertificeerde veganistische inkten en medische desinfectie.",
+                policy_sec_4_title: "04. Nazorg na de Sessie", policy_sec_4_desc: "Direct na de sessie wordt de tattoo beschermd met een ademende medische folie (second skin). De klant volgt de nazorginstructies op (wassen met lauw water, milde zeep, zalf en 2-3 weken zwemmen, sauna en direct zonlicht vermijden).",
+                policy_sec_5_title: "05. Privacy & Gegevensbescherming (AVG)", policy_sec_5_desc: "De verwerkingsverantwoordelijke is netjes TATTOO Daria Wąs. De verstrekte gegevens (naam, telefoon, e-mail, wensen en inspiratiefoto's) worden alleen gebruikt voor de afspraak en het ontwerp. Gegevens worden nooit gedeeld met derden."
             }
         };
 
@@ -1187,8 +1240,11 @@
                 if (error) console.error("Error Supabase Insert:", error);
             }
 
-            // 2. Wysyłka Powiadomienia na Email
-            const templateParams = {
+            // 2. Wysyłka Powiadomień EmailJS (Studio + Klient)
+            let isEmailSuccess = true;
+
+            // Parametry dla powiadomienia studia / administratora
+            const adminTemplateParams = {
                 client_name: nameVal,
                 client_email: emailVal,
                 client_phone: phoneVal,
@@ -1200,12 +1256,35 @@
                 images_links: imageUrls.length > 0 ? imageUrls.join('\n') : 'Brak dołączonych zdjęć'
             };
 
-            let isEmailSuccess = true;
+            // Parametry dla e-maila potwierdzającego dla Klienta
+            const clientTemplateParams = {
+                to_name: nameVal,
+                to_email: emailVal,
+                client_name: nameVal,
+                client_email: emailVal,
+                client_phone: phoneVal,
+                service_name: bookingState.selectedServiceName,
+                booking_date: bookingState.selectedDate,
+                booking_time: bookingState.selectedTime,
+                body_placement: placeVal,
+                description: descVal,
+                studio_phone: STUDIO_PHONE_NUMBER,
+                cancellation_info: "W przypadku chęci anulowania lub zmiany terminu rezerwacji, prosimy o kontakt telefoniczny pod numerem: " + STUDIO_PHONE_NUMBER
+            };
+
+            // Wysyłka powiadomienia do studia / admina
             try {
-                await emailjs.send('service_vf32q58', 'template_73a85e8', templateParams);
-            } catch (emailErr) {
-                console.error("Błąd wysyłania EmailJS:", emailErr);
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_ADMIN_TEMPLATE_ID, adminTemplateParams);
+            } catch (adminEmailErr) {
+                console.error("Błąd wysyłania EmailJS do studia:", adminEmailErr);
                 isEmailSuccess = false;
+            }
+
+            // Wysyłka potwierdzenia bezpośrednio do klienta
+            try {
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CLIENT_TEMPLATE_ID, clientTemplateParams);
+            } catch (clientEmailErr) {
+                console.warn("Błąd wysyłania EmailJS do klienta:", clientEmailErr);
             }
 
             // 3. Zapis w pamięci podręcznej przeglądarki
@@ -1666,9 +1745,222 @@
             requestAnimationFrame(animate);
         }
 
+        /* ==========================================================================
+           PORTFOLIO LIGHTBOX
+           ========================================================================== */
+        const portfolioGalleryData = [
+            {
+                src: "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?q=80&w=1600&auto=format&fit=crop",
+                key: "portfolio_item_1",
+                fallbackTitle: "Fineline Flora"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?q=80&w=1600&auto=format&fit=crop",
+                key: "portfolio_item_2",
+                fallbackTitle: "Mikrorealizm"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=1600&auto=format&fit=crop",
+                key: "portfolio_item_3",
+                fallbackTitle: "Subtelny Napis"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1612015900986-4c4d017d1648?q=80&w=1600&auto=format&fit=crop",
+                key: "portfolio_item_4",
+                fallbackTitle: "Kompozycja Botaniczna"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?q=80&w=1600&auto=format&fit=crop",
+                key: "portfolio_item_5",
+                fallbackTitle: "Minimalistyczna Geometria"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1542728928-1413d1894ed1?q=80&w=1600&auto=format&fit=crop",
+                key: "portfolio_item_6",
+                fallbackTitle: "Autorski Projekt Fineline"
+            }
+        ];
+
+        let currentLightboxIndex = 0;
+
+        function updateLightboxView() {
+            const item = portfolioGalleryData[currentLightboxIndex];
+            if (!item) return;
+
+            const imgEl = document.getElementById('lightbox-img');
+            const titleEl = document.getElementById('lightbox-title');
+            const counterEl = document.getElementById('lightbox-counter');
+
+            if (imgEl) {
+                imgEl.style.opacity = '0.3';
+                imgEl.style.transform = 'scale(0.96)';
+                
+                const tempImg = new Image();
+                tempImg.onload = () => {
+                    imgEl.src = item.src;
+                    imgEl.style.opacity = '1';
+                    imgEl.style.transform = 'scale(1)';
+                };
+                tempImg.src = item.src;
+            }
+
+            if (titleEl) {
+                const dict = translations[currentLang] || translations.pl;
+                titleEl.innerText = dict[item.key] || item.fallbackTitle;
+            }
+
+            if (counterEl) {
+                counterEl.innerText = `${currentLightboxIndex + 1} / ${portfolioGalleryData.length}`;
+            }
+        }
+
+        function openLightbox(index = 0) {
+            currentLightboxIndex = Math.max(0, Math.min(index, portfolioGalleryData.length - 1));
+            const lightbox = document.getElementById('portfolio-lightbox');
+            if (lightbox) {
+                lightbox.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                updateLightboxView();
+            }
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('portfolio-lightbox');
+            if (lightbox) {
+                lightbox.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function prevLightboxImage(e) {
+            if (e) e.stopPropagation();
+            currentLightboxIndex = (currentLightboxIndex - 1 + portfolioGalleryData.length) % portfolioGalleryData.length;
+            updateLightboxView();
+        }
+
+        function nextLightboxImage(e) {
+            if (e) e.stopPropagation();
+            currentLightboxIndex = (currentLightboxIndex + 1) % portfolioGalleryData.length;
+            updateLightboxView();
+        }
+
+        function handleLightboxBackdropClick(e) {
+            if (e.target.id === 'portfolio-lightbox' || e.target.id === 'lightbox-image-container') {
+                closeLightbox();
+            }
+        }
+
+        // Obsługa klawiszy (Esc, Strzałki)
+        window.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('portfolio-lightbox');
+            const isLightboxOpen = lightbox && !lightbox.classList.contains('hidden');
+
+            const privacyModal = document.getElementById('privacy-modal');
+            const isPrivacyOpen = privacyModal && !privacyModal.classList.contains('hidden');
+
+            if (e.key === 'Escape') {
+                if (isLightboxOpen) closeLightbox();
+                if (isPrivacyOpen) closePrivacyModal();
+            }
+
+            if (isLightboxOpen) {
+                if (e.key === 'ArrowLeft') {
+                    prevLightboxImage();
+                } else if (e.key === 'ArrowRight') {
+                    nextLightboxImage();
+                }
+            }
+        });
+
+        /* ==========================================================================
+           PŁYNNE ANIMACJE POJAWIANIA SIĘ ELEMENTÓW (SCROLL REVEAL)
+           ========================================================================== */
+        function initScrollReveal() {
+            const revealElements = document.querySelectorAll('.reveal-on-scroll');
+            if (!revealElements.length) return;
+
+            if ('IntersectionObserver' in window) {
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -40px 0px'
+                };
+
+                const revealObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-revealed');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, observerOptions);
+
+                revealElements.forEach(el => revealObserver.observe(el));
+            } else {
+                // Fallback dla przeglądarek bez IntersectionObserver
+                revealElements.forEach(el => el.classList.add('is-revealed'));
+            }
+        }
+
+        /* ==========================================================================
+           PASEK COOKIES & POLITYKA PRYWATNOŚCI
+           ========================================================================== */
+        function initCookieBanner() {
+            const consent = localStorage.getItem('netjes_cookie_consent');
+            const banner = document.getElementById('cookie-banner');
+            if (!banner) return;
+
+            if (!consent) {
+                setTimeout(() => {
+                    banner.classList.remove('hidden');
+                    requestAnimationFrame(() => {
+                        banner.classList.remove('translate-y-8', 'opacity-0');
+                    });
+                }, 1000);
+            }
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('netjes_cookie_consent', 'accepted');
+            const banner = document.getElementById('cookie-banner');
+            if (banner) {
+                banner.classList.add('translate-y-8', 'opacity-0');
+                setTimeout(() => {
+                    banner.classList.add('hidden');
+                }, 400);
+            }
+        }
+
+        function openCookieSettings() {
+            const banner = document.getElementById('cookie-banner');
+            if (banner) {
+                banner.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    banner.classList.remove('translate-y-8', 'opacity-0');
+                });
+            }
+        }
+
+        function openPrivacyModal() {
+            const modal = document.getElementById('privacy-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closePrivacyModal() {
+            const modal = document.getElementById('privacy-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
         window.addEventListener('hashchange', checkHashRoute);
         window.addEventListener('DOMContentLoaded', () => {
             initAmbientOrbs();
+            initScrollReveal();
+            initCookieBanner();
             checkHashRoute();
             const savedLang = localStorage.getItem('netjes_language');
             if (savedLang && translations[savedLang]) {
